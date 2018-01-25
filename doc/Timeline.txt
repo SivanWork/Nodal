@@ -1,0 +1,37 @@
+IT1	5-Feb-18	50K	
+IT2	19-Feb-18	40K	
+IT3	5-Mar-18	30K	
+
+
+IT	Req#	Items
+ 	 	Login
+IT1	RQ1	Login screen - User/Admin - UI
+IT1	 	Forgot password
+IT1	 	Change password
+ 	 	 
+ 	 	Admin
+IT1	 	User creation/Registration
+IT1	 	Add/Update/Delete item details
+IT1	 	Add/Update/Delete customer details
+IT1	 	Add/Update/Delete GST details
+IT1	 	Add/Update/Delete Scheme details
+IT1	 	Add/Update/Delete Scheme details
+IT1	 	Add/Update/Delete with Excel inputs
+ 	 	 
+ 	 	Order
+IT1	 	Add/Update/Delete Order details
+IT2	 	Pay due amount - Screen (Pop-up)
+IT2	 	Order Split - For out of stock
+ 	 	 
+ 	 	Return
+IT2	 	Return order screen
+ 	 	 
+ 	 	Reports
+IT2	 	Mail - Weekly - Late payment details- Orders to Mail
+IT2	 	Print - Order/Bill - Print option
+IT3	 	Return - Report
+IT3	 	Product- Time report
+IT3	 	Customer payment report
+IT3	 	Stock Report
+IT3	 	Sales report
+IT3	 	Weekly - Late payment details- Orders to Mail

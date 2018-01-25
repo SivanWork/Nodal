@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="background">#bab9b8</color>
+    <color name="back">#E0790B</color>
+    <color name="order_background">#1d9364</color>
+    <color name="billing_background">#2208ce</color>
+    <color name="return_background">#d12608</color>
+
+</resources>

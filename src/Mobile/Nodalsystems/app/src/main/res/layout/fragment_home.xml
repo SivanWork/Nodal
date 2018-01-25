@@ -1,0 +1,28 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="com.example.ranad.nodalsystems.fragment.HomeFragment">
+
+    <LinearLayout
+        android:id="@+id/placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="16dp"
+        android:gravity="center">
+
+    <GridView
+        android:id="@+id/home_grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="2"
+        android:verticalSpacing="16dp"
+        android:horizontalSpacing="16dp"
+        android:drawSelectorOnTop="true"></GridView>
+
+    </LinearLayout>
+
+</FrameLayout>

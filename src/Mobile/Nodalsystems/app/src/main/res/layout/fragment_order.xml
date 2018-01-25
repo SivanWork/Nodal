@@ -1,0 +1,189 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.ranad.nodalsystems.fragment.OrderFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            app:hintTextAppearance="@style/floating_hint"
+            android:layout_height="wrap_content">
+
+            <AutoCompleteTextView
+                android:id="@+id/cName"
+                android:layout_marginLeft="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="Customer Name"
+                android:textSize="16sp"
+                android:theme="@style/EdittextTheme" />
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/black"/>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            app:hintTextAppearance="@style/floating_hint"
+            android:layout_height="wrap_content">
+
+            <AutoCompleteTextView
+                android:layout_marginLeft="8dp"
+                android:id="@+id/cNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="Contact Number"
+                android:textSize="16sp"
+                android:inputType="phone"
+                android:theme="@style/EdittextTheme" />
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/black"/>
+
+        <Spinner
+            android:id="@+id/material"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"></Spinner>
+
+        <ImageView
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@android:color/black"/>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            app:hintTextAppearance="@style/floating_hint"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/order_tax"
+                android:layout_marginLeft="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="Tax (CGST, SGST, IGST)"
+                android:inputType="number"
+                android:textSize="16sp"
+                android:theme="@style/EdittextTheme" />
+        </android.support.design.widget.TextInputLayout>
+        <ImageView
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/black"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            app:hintTextAppearance="@style/floating_hint"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/quantity"
+                android:layout_marginLeft="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="Quantity"
+                android:inputType="number"
+                android:textSize="16sp"
+                android:theme="@style/EdittextTheme" />
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/black"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            app:hintTextAppearance="@style/floating_hint"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/order_discount"
+                android:layout_marginLeft="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="Discount"
+                android:inputType="numberDecimal"
+                android:textSize="16sp"
+                android:theme="@style/EdittextTheme" />
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/black"/>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            app:hintTextAppearance="@style/floating_hint"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/order_price"
+                android:layout_marginLeft="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:background="@android:color/transparent"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="Net Price"
+                android:textSize="16sp"
+                android:theme="@style/EdittextTheme" />
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/black"/>
+
+        <Button
+            android:id="@+id/submit"
+            style="@style/AppTheme.RoundedCornerMaterialButton"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button_ripple"
+            android:fontFamily="sans-serif-condensed"
+            android:foreground="?attr/selectableItemBackground"
+            android:text="SUBMIT"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

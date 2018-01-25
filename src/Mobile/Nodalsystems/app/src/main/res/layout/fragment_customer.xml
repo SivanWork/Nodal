@@ -1,0 +1,212 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.ranad.nodalsystems.fragment.CustomerFragment">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                app:hintTextAppearance="@style/floating_hint"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/cust_name"
+                    android:layout_marginLeft="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="Customer Name"
+                    android:textSize="16sp"
+                    android:theme="@style/EdittextTheme" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/black"/>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                app:hintTextAppearance="@style/floating_hint"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_marginLeft="8dp"
+                    android:id="@+id/cust_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="Customer code"
+                    android:textSize="16sp"
+                    android:inputType="phone"
+                    android:theme="@style/EdittextTheme" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/black"/>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                app:hintTextAppearance="@style/floating_hint"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_marginLeft="8dp"
+                    android:id="@+id/amt_limit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="Amount Limit"
+                    android:textSize="16sp"
+                    android:inputType="number"
+                    android:theme="@style/EdittextTheme" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/black"/>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                app:hintTextAppearance="@style/floating_hint"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_marginLeft="8dp"
+                    android:id="@+id/cust_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="Contact Number"
+                    android:textSize="16sp"
+                    android:inputType="phone"
+                    android:theme="@style/EdittextTheme" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/black"/>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                app:hintTextAppearance="@style/floating_hint"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_marginLeft="8dp"
+                    android:id="@+id/cust_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="Email id"
+                    android:textSize="16sp"
+                    android:theme="@style/EdittextTheme" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/black"/>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                app:hintTextAppearance="@style/floating_hint"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/cust_address"
+                    android:layout_marginLeft="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="Address"
+                    android:textSize="16sp"
+                    android:theme="@style/EdittextTheme" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@android:color/black"/>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                app:hintTextAppearance="@style/floating_hint"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_marginLeft="8dp"
+                    android:id="@+id/cust_altaddrs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="Alternate ddress"
+                    android:textSize="16sp"
+                    android:theme="@style/EdittextTheme" />
+            </android.support.design.widget.TextInputLayout>
+
+
+
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@android:color/black"/>
+
+
+            <Button
+                android:id="@+id/add"
+                style="@style/AppTheme.RoundedCornerMaterialButton"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/button_ripple"
+                android:fontFamily="sans-serif-condensed"
+                android:foreground="?attr/selectableItemBackground"
+                android:text="ADD"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+
+</LinearLayout>
