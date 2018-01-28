@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nodal.Common", "Nodal.Commo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nodal.DataAccess", "Nodal.DataAccess\Nodal.DataAccess.csproj", "{93843A63-841A-4DBF-ACBF-454ABA9D8637}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Nodal.Database", "Nodal.Database\Nodal.Database.sqlproj", "{7DBB9CF4-58D2-46F3-87EF-AF48B2FFC930}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,12 @@ Global
 		{93843A63-841A-4DBF-ACBF-454ABA9D8637}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93843A63-841A-4DBF-ACBF-454ABA9D8637}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93843A63-841A-4DBF-ACBF-454ABA9D8637}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DBB9CF4-58D2-46F3-87EF-AF48B2FFC930}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DBB9CF4-58D2-46F3-87EF-AF48B2FFC930}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DBB9CF4-58D2-46F3-87EF-AF48B2FFC930}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{7DBB9CF4-58D2-46F3-87EF-AF48B2FFC930}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DBB9CF4-58D2-46F3-87EF-AF48B2FFC930}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DBB9CF4-58D2-46F3-87EF-AF48B2FFC930}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
