@@ -10,16 +10,20 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
 
 
-public class CustomerFragment extends Fragment {
-    View view;
+public class CustomerFragment extends Fragment implements View.OnClickListener {
+    View view, add_customer;
     EditText name, code, amount, email,addrs, alt_addrs, number;
-    Button add;
+    Button add, btncancel;
+    ImageView ivAdd;
+    ListView listView;
 
 
     public CustomerFragment() {
@@ -51,6 +55,10 @@ public class CustomerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_customer, container, false);
+        listView = (ListView) view.findViewById(R.id.customer_list);
+        ivAdd = (ImageView) view.findViewById(R.id.ivAdd);
+        ivAdd.setOnClickListener(this);
+        add_customer = (View) view.findViewById(R.id.add_customer);
         name = (EditText) view.findViewById(R.id.cust_name);
         code = (EditText) view.findViewById(R.id.cust_code);
         amount = (EditText) view.findViewById(R.id.amt_limit);
@@ -59,13 +67,9 @@ public class CustomerFragment extends Fragment {
         addrs = (EditText) view.findViewById(R.id.cust_address);
         alt_addrs = (EditText) view.findViewById(R.id.cust_altaddrs);
         add = (Button) view.findViewById(R.id.add);
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
+        add.setOnClickListener(this);
+        btncancel = (Button) view.findViewById(R.id.btnCancel);
+        btncancel.setOnClickListener(this);
 
         return view;
     }
@@ -89,4 +93,23 @@ public class CustomerFragment extends Fragment {
     }
 
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.ivAdd:
+                add_customer.setVisibility(View.VISIBLE);
+                ivAdd.setVisibility(View.GONE);
+                MainActivity.setAppTitle(R.string.add_customer);
+                break;
+            case R.id.add:
+
+                break;
+            case R.id.btnCancel:
+                add_customer.setVisibility(View.GONE);
+                ivAdd.setVisibility(View.VISIBLE);
+                MainActivity.setAppTitle(R.string.customer_title);
+                break;
+        }
+
+    }
 }
