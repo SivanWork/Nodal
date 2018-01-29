@@ -10,7 +10,7 @@ namespace Nodal.Web.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            ViewBag.Title = "Nodal Home";
 
             return View();
         }
