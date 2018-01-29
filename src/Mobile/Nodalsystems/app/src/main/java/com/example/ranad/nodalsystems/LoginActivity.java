@@ -11,15 +11,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ranad.nodalsystems.fragment.ChangePassword;
 import com.example.ranad.nodalsystems.fragment.HomeFragment;
 import com.example.ranad.nodalsystems.fragment.OrderFragment;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     public static EditText userName;
     public static EditText pwd;
     Button login;
+    TextView forgot_pwd;
     LinearLayout main_contenier;
     public static String user="";
 
@@ -27,25 +30,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-       // userName = (EditText) findViewById(R.id.user_name);
+        userName = (EditText) findViewById(R.id.user_name);
         pwd = (EditText) findViewById(R.id.password);
         login = (Button) findViewById(R.id.login);
+        forgot_pwd = (TextView) findViewById(R.id.forgot_pwd);
+        forgot_pwd.setOnClickListener(this);
         main_contenier = (LinearLayout)findViewById(R.id.main_contenier);
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getUserType();
-                Log.d("user", user);
-                if (user.equals("Admin") || user.equals("customer")){
-               Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-               startActivity(intent);
-               finish();
-                }else{
-                    Toast.makeText(getApplicationContext(), "Please enter valid username or password", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
+        login.setOnClickListener(this);
     }
 
     public static String getUserType(){
@@ -54,7 +45,29 @@ public class LoginActivity extends AppCompatActivity {
         }else if (userName.getText().toString().equals("testuser")  && pwd.getText().toString().equals("user@123")){
             user = "customer";
         }
-            return user;
+        return user;
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.forgot_pwd:
+                ChangePassword changePassword = new ChangePassword();
+                changePassword.show(getSupportFragmentManager(), "Change Password");
+
+                break;
+            case R.id.login:
+                getUserType();
+                Log.d("user", user);
+                if (user.equals("Admin") || user.equals("customer")){
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    Toast.makeText(getApplicationContext(), "Please enter valid username or password", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+        }
+    }
 }

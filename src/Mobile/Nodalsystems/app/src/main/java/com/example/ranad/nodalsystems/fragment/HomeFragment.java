@@ -68,7 +68,7 @@ public class HomeFragment extends Fragment{
 
         homeGridElements.clear();
         if (LoginActivity.user.equals("Admin")){
-            homeGridElements.add(new HomeGridElement("ADD CUSTOMER", R.drawable.add_customer, android.R.color.white, FRAGMENT_CUSTOMER));
+            homeGridElements.add(new HomeGridElement("CUSTOMERS", R.drawable.customer, android.R.color.white, FRAGMENT_CUSTOMER));
             homeGridElements.add(new HomeGridElement("SCHEME",R.drawable.scheme, android.R.color.white, FRAGMENT_SCHEME));
             homeGridElements.add(new HomeGridElement("REPORT", R.drawable.report, android.R.color.white, FRAGMENT_REPORT));
             homeGridElements.add(new HomeGridElement("DISCOUNT", R.drawable.discount, android.R.color.white, FRAGMENT_DISCOUNT));

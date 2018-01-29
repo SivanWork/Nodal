@@ -8,9 +8,10 @@
     <string name="billing_title">BILLING</string>
     <string name="order_title">ORDER</string>
     <string name="return_title">RETURN</string>
-    <string name="customer_title">ADD CUSTOMER</string>
+    <string name="customer_title">CUSTOMERS</string>
     <string name="report_title">REPORT</string>
     <string name="scheme_title">SCHEME</string>
+    <string name="add_customer">ADD CUSTOMER</string>
 
     <string name="discount_title">DISCOUNT</string>
 </resources>
