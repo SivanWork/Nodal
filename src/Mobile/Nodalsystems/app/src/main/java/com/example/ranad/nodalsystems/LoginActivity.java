@@ -17,6 +17,13 @@ import android.widget.Toast;
 import com.example.ranad.nodalsystems.fragment.ChangePassword;
 import com.example.ranad.nodalsystems.fragment.HomeFragment;
 import com.example.ranad.nodalsystems.fragment.OrderFragment;
+import com.example.ranad.nodalsystems.model.Login;
+import com.example.ranad.nodalsystems.restapi.ApiClient;
+import com.example.ranad.nodalsystems.restapi.ApiInterface;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     public static EditText userName;
@@ -57,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
             case R.id.login:
-                getUserType();
+               /* getUserType();
                 Log.d("user", user);
                 if (user.equals("Admin") || user.equals("customer")){
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -65,7 +72,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     finish();
                 }else{
                     Toast.makeText(getApplicationContext(), "Please enter valid username or password", Toast.LENGTH_SHORT).show();
-                }
+                }*/
+
+                ApiInterface loginService =
+                        ApiClient.createService(ApiInterface.class, userName.getText().toString(), pwd.getText().toString());
+                Call<Login> call = loginService.basicLogin();
+                call.enqueue(new Callback<Login>() {
+                    @Override
+                    public void onResponse(Call<Login> call, Response<Login> response) {
+                        if (response.isSuccessful()) {
+                            // user object available
+                            Log.d("response", response.body().toString());
+
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            // error response, no access to resource?
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Login> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
 
                 break;
         }

@@ -23,6 +23,7 @@ import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.adapter.HomeGridAdapter;
 import com.example.ranad.nodalsystems.data_holder.HomeGridElement;
 import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
+import com.example.ranad.nodalsystems.model.Users;
 
 import java.util.ArrayList;
 
@@ -67,7 +68,7 @@ public class HomeFragment extends Fragment{
         placeholder = (LinearLayout) view.findViewById(R.id.placeholder);
 
         homeGridElements.clear();
-        if (LoginActivity.user.equals("Admin")){
+        if (Users.getUserTypeCode().equals("Admin")){
             homeGridElements.add(new HomeGridElement("CUSTOMERS", R.drawable.customer, android.R.color.white, FRAGMENT_CUSTOMER));
             homeGridElements.add(new HomeGridElement("SCHEME",R.drawable.scheme, android.R.color.white, FRAGMENT_SCHEME));
             homeGridElements.add(new HomeGridElement("REPORT", R.drawable.report, android.R.color.white, FRAGMENT_REPORT));
@@ -76,7 +77,7 @@ public class HomeFragment extends Fragment{
             homeGridElements.add(new HomeGridElement("BILLING", R.drawable.biiling_2, android.R.color.white, FRAGMENT_BILLING));
             homeGridElements.add(new HomeGridElement("RETURN", R.drawable.return_2, android.R.color.white, FRAGMENT_RETURN));
 
-        }else if ((LoginActivity.user.equals("customer") )) {
+        }else if (Users.getUserTypeCode().equals("Customer")) {
             homeGridElements.add(new HomeGridElement("ORDER", R.drawable.order_2, android.R.color.white, FRAGMENT_ORDER));
             homeGridElements.add(new HomeGridElement("BILLING", R.drawable.biiling_2, android.R.color.white, FRAGMENT_BILLING));
             homeGridElements.add(new HomeGridElement("RETURN", R.drawable.return_2, android.R.color.white, FRAGMENT_RETURN));
