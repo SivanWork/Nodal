@@ -74,5 +74,6 @@
     <Build Include="Tables\Schemes.sql" />
     <Build Include="Tables\Users.sql" />
     <None Include="Scripts\ScriptsIgnoredOnImport.sql" />
+    <Build Include="Tables\Tokens.sql" />
   </ItemGroup>
 </Project>

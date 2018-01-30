@@ -59,3 +59,12 @@ src/Server/Nodal.MobileOrderSystem/.vs/Nodal.MobileOrderSystem/v15/Server/sqlite
 src/Server/Nodal.MobileOrderSystem/.vs/Nodal.MobileOrderSystem/v15/Server/sqlite3/storage.ide
 src/Server/Nodal.MobileOrderSystem/.vs/Nodal.MobileOrderSystem/v15/Server/sqlite3/storage.ide-shm
 src/Server/Nodal.MobileOrderSystem/.vs/Nodal.MobileOrderSystem/v15/Server/sqlite3/storage.ide-wal
+/src/Server/Nodal.MobileOrderSystem/Nodal.BusinessAccess/obj
+/src/Server/Nodal.MobileOrderSystem/Nodal.Common/obj
+/src/Server/Nodal.MobileOrderSystem/Nodal.Database/obj/Debug
+/src/Server/Nodal.MobileOrderSystem/Nodal.DataAccess/obj
+/src/Server/Nodal.MobileOrderSystem/Nodal.Web/obj
+/src/Server/Nodal.MobileOrderSystem/Nodal.Web/Properties/PublishProfiles
+/src/Server/Nodal.MobileOrderSystem/packages
+/src/Server/Nodal.MobileOrderSystem/Nodal.Database/Nodal.Database.jfm
+/src/Server/Nodal.MobileOrderSystem/Nodal.Database/Nodal.Database.dbmdl
