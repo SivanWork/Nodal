@@ -11,14 +11,7 @@ import android.view.ViewGroup;
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ReportFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ReportFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ReportFragment extends Fragment {
     View view;
     public ReportFragment() {

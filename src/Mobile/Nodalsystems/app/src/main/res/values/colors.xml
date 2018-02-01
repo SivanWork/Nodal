@@ -8,5 +8,6 @@
     <color name="order_background">#1d9364</color>
     <color name="billing_background">#2208ce</color>
     <color name="return_background">#d12608</color>
+    <color name="btn_bg">#ed7702</color>
 
 </resources>

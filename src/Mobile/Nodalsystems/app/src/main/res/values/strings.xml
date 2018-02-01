@@ -6,12 +6,13 @@
     <string name="appbar_scrolling_view_behaviour" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="home_title">NODAL SYSTEMS</string>
     <string name="billing_title">BILLING</string>
-    <string name="order_title">ORDER</string>
+    <string name="order_title">ORDERS</string>
     <string name="return_title">RETURN</string>
     <string name="customer_title">CUSTOMERS</string>
     <string name="report_title">REPORT</string>
     <string name="scheme_title">SCHEME</string>
     <string name="add_customer">ADD CUSTOMER</string>
+    <string name="add_order">ADD ORDER</string>
 
     <string name="discount_title">DISCOUNT</string>
 </resources>

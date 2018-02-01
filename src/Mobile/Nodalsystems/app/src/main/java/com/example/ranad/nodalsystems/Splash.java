@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.ranad.nodalsystems.model.Login;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,10 +25,24 @@ public class Splash extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Intent intent;
+                        try {
+                            Intent intent;
                         intent = new Intent(Splash.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
+                            /*if (Login.getInstance(Splash.this) == null) {
+                                intent = new Intent(Splash.this, LoginActivity.class);
+                            } else {
+                                if (Login.getInstance(Splash.this).getAuthToken() == null) {
+                                    intent = new Intent(Splash.this, LoginActivity.class);
+                                } else {
+                                    intent = new Intent(Splash.this, MainActivity.class);
+                                }
+                            }
+                            startActivity(intent);*/
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                 });
             }

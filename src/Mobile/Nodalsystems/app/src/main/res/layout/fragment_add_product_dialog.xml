@@ -1,0 +1,34 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_dialog"
+    android:padding="10dp"
+    tools:context="com.example.ranad.nodalsystems.fragment.AddProductDialog">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:text="Add Product"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@android:color/black"/>
+
+       <Spinner
+           android:layout_marginTop="20dp"
+           android:id="@+id/prod_spinner"
+           android:layout_width="match_parent"
+           android:layout_height="48dp"
+           ></Spinner>
+    </LinearLayout>
+
+</LinearLayout>
