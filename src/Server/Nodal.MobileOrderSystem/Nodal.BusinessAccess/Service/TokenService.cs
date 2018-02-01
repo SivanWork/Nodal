@@ -19,7 +19,7 @@ namespace Nodal.BusinessAccess.Service
 
         public Token GenerateToken(int userID)
         {
-            string token = Guid.NewGuid().ToString();
+            var token = Guid.NewGuid();
             DateTime issuedOn = DateTime.UtcNow;
             var tokendomain = new Token
             {

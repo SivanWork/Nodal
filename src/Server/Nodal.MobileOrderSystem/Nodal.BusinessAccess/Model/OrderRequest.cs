@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Nodal.BusinessAccess.Model
 {
-    public class UserProfileResponse : BaseResponse
+    public class OrderRequest
     {
-        public UserProfile User { get; set; }
-
-        public Guid AuthToken { get; set; }
+        public Order order { get; set; }
     }
 }

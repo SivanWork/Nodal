@@ -14,7 +14,7 @@ namespace Nodal.Web.ActionFilters
 {
     public class AuthorizationRequiredAttribute : ActionFilterAttribute
     {
-        private const string Token = "AuthToken";
+        private const string Token = "Authorization";
         public override void OnActionExecuting(HttpActionContext filterContext)
         {
             if (SkipAuthorization(filterContext))
