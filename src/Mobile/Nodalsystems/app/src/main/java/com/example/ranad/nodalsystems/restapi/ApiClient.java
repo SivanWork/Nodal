@@ -1,14 +1,11 @@
 package com.example.ranad.nodalsystems.restapi;
 
 import android.content.Context;
-import android.os.Build;
 import android.text.TextUtils;
 
 import com.example.ranad.nodalsystems.Api;
 
 import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.SSLContext;
 
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
@@ -23,22 +20,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class ApiClient {
 
-   /* public static Api getApi(Context context){
-        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.readTimeout(120, TimeUnit.SECONDS);
-        builder.connectTimeout(60, TimeUnit.SECONDS);
-        builder.addInterceptor(httpLoggingInterceptor);
 
-        Retrofit.Builder retrofit = new Retrofit.Builder()
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit r = retrofit.client(builder.build()).build();
-
-        return r.create(Api.class);
-    }*/
 
     public static final String API_BASE_URL = "http://nodalmos.azurewebsites.net";
 
@@ -68,6 +50,13 @@ public class ApiClient {
 
     public static <S> S createService(
             Class<S> serviceClass, final String authToken) {
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+        if (!httpClient.interceptors().contains(httpLoggingInterceptor)) {
+            httpClient.addInterceptor(httpLoggingInterceptor);
+        }
+
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         if (!TextUtils.isEmpty(authToken)) {
             AuthenticationInterceptor interceptor =
                     new AuthenticationInterceptor(authToken);
@@ -81,5 +70,23 @@ public class ApiClient {
         }
 
         return retrofit.create(serviceClass);
+    }
+
+     public static OrderApi createorders(Context context){
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.readTimeout(120, TimeUnit.SECONDS);
+        builder.connectTimeout(60, TimeUnit.SECONDS);
+        builder.addInterceptor(httpLoggingInterceptor);
+
+        Retrofit.Builder retrofit = new Retrofit.Builder()
+                .baseUrl(API_BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit r = retrofit.client(builder.build()).build();
+
+        return r.create(OrderApi.class);
     }
 }

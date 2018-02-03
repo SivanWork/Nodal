@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.ranad.nodalsystems.fragment.OrderFragment">
     <ScrollView
+        android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <LinearLayout
@@ -32,12 +33,6 @@
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@android:color/black"/>
-
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/order_list"
             android:layout_width="match_parent"
@@ -45,13 +40,13 @@
 
 
         <Button
-            android:layout_marginTop="5dp"
             android:id="@+id/save_prod"
             style="@style/AppTheme.RoundedCornerMaterialButton"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:text="SUBMIT"
             android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:text="SUBMIT"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
     </LinearLayout>
@@ -280,7 +275,7 @@
         android:layout_height="58dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="10dp"
-        android:visibility="gone"
-        android:background="@drawable/float_btn" />
+        android:background="@drawable/float_btn"
+        android:visibility="gone" />
 
 </FrameLayout>

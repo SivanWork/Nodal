@@ -1,45 +1,50 @@
 package com.example.ranad.nodalsystems.fragment;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 
+import com.example.ranad.nodalsystems.App;
+import com.example.ranad.nodalsystems.CartItem;
+import com.example.ranad.nodalsystems.CartItemDao;
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.adapter.OrderAdapter;
-import com.example.ranad.nodalsystems.data_holder.OrderData;
+import com.example.ranad.nodalsystems.interfaces.OrderAction;
 import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class OrderFragment extends Fragment implements View.OnClickListener{
-   View view;
-   AutoCompleteTextView cName, cNumber;
-   EditText quantity, discount, price,order_tax;
-   Spinner material, customers;
-   Button submit, cancel,add_prod;
-   ImageView  btnAddOrder;
-   LinearLayout lvAddOrder;
+public class OrderFragment extends Fragment implements View.OnClickListener, OrderAction {
+    View view;
+    AutoCompleteTextView cName, cNumber;
+    EditText quantity, discount, price, order_tax;
+    Spinner material, customers;
+    Button submit, cancel, add_prod, save_prod;
+    ImageView btnAddOrder;
+    LinearLayout lvAddOrder;
     RecyclerView order_list;
     OrderAdapter orderAdapter;
-    ArrayList<OrderData> orderData = new ArrayList<>();
     List<String> list = new ArrayList<String>();
     List<String> cust = new ArrayList<>();
+    ScrollView lists;
 
     public OrderFragment() {
         // Required empty public constructor
@@ -52,21 +57,27 @@ public class OrderFragment extends Fragment implements View.OnClickListener{
         return fragment;
     }
 
-    public void Construct(SwitchFragment switchFragment){
+    public void Construct(SwitchFragment switchFragment) {
 
     }
+
+    CartItemDao cartItemDao = App.getDaoSession().getCartItemDao();
 
     @Override
     public void onResume() {
         super.onResume();
         MainActivity.setAppTitle(R.string.order_title);
+        cart.clear();
+        List<CartItem> tempCart = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(cust.get(customers.getSelectedItemPosition()))).list();
+        cart.addAll(tempCart);
+        orderAdapter.notifyDataSetChanged();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view =  inflater.inflate(R.layout.fragment_order, container, false);
+        view = inflater.inflate(R.layout.fragment_order, container, false);
         cName = (AutoCompleteTextView) view.findViewById(R.id.cName);
         lvAddOrder = (LinearLayout) view.findViewById(R.id.lvAddOrder);
         cNumber = (AutoCompleteTextView) view.findViewById(R.id.cNumber);
@@ -74,12 +85,13 @@ public class OrderFragment extends Fragment implements View.OnClickListener{
         discount = (EditText) view.findViewById(R.id.order_discount);
         material = (Spinner) view.findViewById(R.id.material);
         order_tax = (EditText) view.findViewById(R.id.order_tax);
-        price = (EditText) view.findViewById(R.id.order_price) ;
+        price = (EditText) view.findViewById(R.id.order_price);
         customers = (Spinner) view.findViewById(R.id.cust_spinner);
         submit = (Button) view.findViewById(R.id.submit);
         submit.setOnClickListener(this);
         btnAddOrder = (ImageView) view.findViewById(R.id.btnAddOrder);
         btnAddOrder.setOnClickListener(this);
+        lists = (ScrollView) view.findViewById(R.id.list);
         cancel = (Button) view.findViewById(R.id.cancel_add);
         cancel.setOnClickListener(this);
         add_prod = (Button) view.findViewById(R.id.add_prod);
@@ -87,15 +99,17 @@ public class OrderFragment extends Fragment implements View.OnClickListener{
         order_list = (RecyclerView) view.findViewById(R.id.order_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         order_list.setLayoutManager(linearLayoutManager);
-        orderAdapter = new OrderAdapter(orderData, getContext());
+        orderAdapter = new OrderAdapter(cart, getContext(), this);
         order_list.setAdapter(orderAdapter);
+        save_prod = (Button) view.findViewById(R.id.save_prod);
+        save_prod.setOnClickListener(this);
 
         list.add("Item 1");
         list.add("Item 2");
         list.add("Item 3");
         list.add("Item 4");
         list.add("Item 5");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item, list);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         material.setAdapter(dataAdapter);
 
@@ -107,18 +121,32 @@ public class OrderFragment extends Fragment implements View.OnClickListener{
         ArrayAdapter<String> customer = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, cust);
         customer.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         customers.setAdapter(customer);
+        customers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("changing cust to", i + " ");
+                cart.clear();
+                List<CartItem> tempCart = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(cust.get(i))).list();
+                cart.addAll(tempCart);
+                orderAdapter.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
+            }
+        });
 
         return view;
     }
 
 
-
-
     @Override
     public void onPause() {
         super.onPause();
+        List<CartItem> deleteList = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(cust.get(customers.getSelectedItemPosition()))).list();
+        cartItemDao.deleteInTx(deleteList);
+        cartItemDao.insertOrReplaceInTx(cart);
     }
 
     @Override
@@ -130,25 +158,73 @@ public class OrderFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.submit:
+              /* OrderApi create = ApiClient.createorders(getContext());
+               OrderPojo orderPojo = new OrderPojo();
+                Call<OrderPojo> call = create.createOrder(orderPojo);
+                call.enqueue(new Callback<OrderPojo>() {
+                    @Override
+                    public void onResponse(Call<OrderPojo> call, Response<OrderPojo> response) {
+                        Log.d("response", response.body().toString());
+                    }
+
+                    @Override
+                    public void onFailure(Call<OrderPojo> call, Throwable t) {
+
+                    }
+                });*/
+
 
                 break;
             case R.id.btnAddOrder:
                 lvAddOrder.setVisibility(View.VISIBLE);
                 MainActivity.setAppTitle(R.string.add_order);
                 btnAddOrder.setVisibility(View.GONE);
+                lists.setVisibility(View.GONE);
                 break;
             case R.id.cancel_add:
                 lvAddOrder.setVisibility(View.GONE);
                 MainActivity.setAppTitle(R.string.order_title);
                 btnAddOrder.setVisibility(View.VISIBLE);
+                lists.setVisibility(View.VISIBLE);
                 break;
             case R.id.add_prod:
-                AddProductDialog addProductDialog = new AddProductDialog();
-               addProductDialog.show(getActivity().getFragmentManager(),"simple dialog");
+                final AddProductDialog addProductDialog = new AddProductDialog();
+                addProductDialog.setOnProductAddListener(new AddProductDialog.OnProductAddListener() {
+                    @Override
+                    public void onProductAdd(CartItem cartItemItem) {
+                        cartItemItem.setCustomerId(cust.get(customers.getSelectedItemPosition()));
+                        int i = cart.indexOf(cartItemItem);
+
+                        if (i >= 0) {
+                            CartItem tempcart = cart.get(i);
+
+                            tempcart.setQuantity(tempcart.getQuantity() + cartItemItem.getQuantity());
+                            cart.remove(i);
+                            cart.add(i, tempcart);
+
+
+                        } else {
+                            cart.add(cartItemItem);
+                        }
+                        orderAdapter.notifyDataSetChanged();
+                        addProductDialog.dismiss();
+                    }
+                });
+                addProductDialog.show(getActivity().getFragmentManager(), "simple dialog");
+                break;
+            case R.id.save_prod:
+
                 break;
         }
     }
 
+    ArrayList<CartItem> cart = new ArrayList<>();
+
+    @Override
+    public void delete(int pos) {
+        cart.remove(pos);
+        orderAdapter.notifyDataSetChanged();
+    }
 }

@@ -71,12 +71,12 @@ public class Login implements Parcelable {
         User = user;
     }
 
-    static String AuthToken;
-    static Boolean Success;
-    static  Boolean IsWarning;
-    static  String Message;
-    static String StackTrace;
-    static Users User;
+    String AuthToken;
+    Boolean Success;
+      Boolean IsWarning;
+      String Message;
+     String StackTrace;
+     Users User;
 
 
     protected Login(Parcel in) {
@@ -120,13 +120,17 @@ public class Login implements Parcelable {
     @Override
     public String toString() {
         return "AuthToken = " + AuthToken + " " +
+                "Success = " + Success + " " +
+                "IsWarning = " + IsWarning + " " +
+                "Message = " + Message + " " +
+                "StackTrace = " + StackTrace + " " +
                 "User = " + User ;
     }
 
 
     public static Login getInstance(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(SESSION_FILE, context.MODE_PRIVATE);
-        String string = sharedPreferences.getString(Keys.LOGIN, null);
+        String string = sharedPreferences.getString(Keys.LOGIN, "null");
         Login login = new Gson().fromJson(string, Login.class);
         Log.d("string", string);
         Log.d("login", String.valueOf(login));
@@ -147,6 +151,7 @@ public class Login implements Parcelable {
     }
 
     public void saveLoginInstance(Context context, Login login){
+        Log.d("saving",login.toString());
         SharedPreferences sharedPreferences = context.getSharedPreferences(SESSION_FILE, context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(Keys.LOGIN, new Gson().toJson(login));

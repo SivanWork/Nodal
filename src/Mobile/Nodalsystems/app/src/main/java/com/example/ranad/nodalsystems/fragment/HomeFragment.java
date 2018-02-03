@@ -69,8 +69,10 @@ public class HomeFragment extends Fragment{
         placeholder = (LinearLayout) view.findViewById(R.id.placeholder);
 
         homeGridElements.clear();
-       /* Log.d("userrole", Users.getInstance(getContext()).getUserTypeCode());
-        if (Users.getInstance(getContext()).getUserTypeCode().equals("Admin")){*/
+        Users users = new Users();
+        users = Users.getInstance(getContext());
+        /*Log.d("user type", users.getInstance(getContext()).getUserTypeCode());
+        if (users.getInstance(getContext()).getUserTypeCode().equals("Admin")){*/
             homeGridElements.add(new HomeGridElement("CUSTOMERS", R.drawable.customer, android.R.color.white, FRAGMENT_CUSTOMER));
             homeGridElements.add(new HomeGridElement("SCHEME",R.drawable.scheme, android.R.color.white, FRAGMENT_SCHEME));
             homeGridElements.add(new HomeGridElement("REPORT", R.drawable.report, android.R.color.white, FRAGMENT_REPORT));
@@ -79,7 +81,7 @@ public class HomeFragment extends Fragment{
             homeGridElements.add(new HomeGridElement("BILLING", R.drawable.biiling_2, android.R.color.white, FRAGMENT_BILLING));
             homeGridElements.add(new HomeGridElement("RETURN", R.drawable.return_2, android.R.color.white, FRAGMENT_RETURN));
 
-        /*}else if (Users.getInstance(getContext()).getUserTypeCode().equals("Agent")) {
+        /*}else if (users.getInstance(getContext()).getUserTypeCode().equals("Agent")) {
             homeGridElements.add(new HomeGridElement("ORDER", R.drawable.order_2, android.R.color.white, FRAGMENT_ORDER));
             homeGridElements.add(new HomeGridElement("BILLING", R.drawable.biiling_2, android.R.color.white, FRAGMENT_BILLING));
             homeGridElements.add(new HomeGridElement("RETURN", R.drawable.return_2, android.R.color.white, FRAGMENT_RETURN));

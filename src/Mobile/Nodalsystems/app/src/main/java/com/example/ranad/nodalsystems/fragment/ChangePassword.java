@@ -37,7 +37,6 @@ public class ChangePassword extends DialogFragment implements View.OnClickListen
 
     public static ChangePassword newInstance() {
         ChangePassword fragment = new ChangePassword();
-
         return fragment;
     }
 
