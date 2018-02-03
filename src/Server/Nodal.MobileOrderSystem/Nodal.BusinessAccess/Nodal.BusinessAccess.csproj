@@ -43,6 +43,7 @@
     <Compile Include="Model\BaseRequest.cs" />
     <Compile Include="Model\BaseResponse.cs" />
     <Compile Include="Model\OrderRequest.cs" />
+    <Compile Include="Model\OrderResponse.cs" />
     <Compile Include="Model\UserProfileResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\OrderService.cs" />

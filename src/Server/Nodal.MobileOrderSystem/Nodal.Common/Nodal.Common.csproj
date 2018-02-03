@@ -46,6 +46,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schema\Order.cs" />
     <Compile Include="Schema\OrderDetails.cs" />
+    <Compile Include="Schema\OrderReturnDetails.cs" />
+    <Compile Include="Schema\SchemeProduct.cs" />
+    <Compile Include="Schema\Schemes.cs" />
     <Compile Include="Schema\Token.cs" />
     <Compile Include="Schema\User.cs" />
     <Compile Include="Schema\UserProfile.cs" />

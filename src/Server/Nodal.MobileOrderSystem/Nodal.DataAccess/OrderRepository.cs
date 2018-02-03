@@ -33,5 +33,61 @@ namespace Nodal.DataAccess
             string processQuery = "INSERT INTO OrderDetails ([OrderId],[ProductId],[Quantity],[CGST],[SGST],[IGST],[Discount],[NetPrice]) VALUES (@OrderId,@ProductId,@Quantity,@CGST,@SGST,@IGST,@Discount,@NetPrice)";
             return db.Connection.Execute(processQuery, orderDetails) > 0;
         }
+
+        public int UpdateOrder(Order order)
+        {
+            string sql = @"UPDATE [Orders] SET [TotalOrderAmount] = @TotalOrderAmount, 
+                            [OrderStatusGroup] = @OrderStatusGroup, [OrderStatusElementCode] = @OrderStatusElementCode
+                            WHERE OrderId = @OrderId";
+
+            var id = db.Connection.Query<int>(sql, order).Single();
+            return id;
+        }
+
+        public bool UpdateOrderDetails(List<OrderDetails> orderDetails)
+        {
+            string processQuery = @"UPDATE [OrderDetails] SET [Quantity] = @Quantity,
+                                    [CGST] = @CGST, [SGST] = @SGST, [IGST] = @IGST, [Discount] = @Discount,
+                                    [NetPrice] = @NetPrice WHERE [OrderId] = @OrderId";
+            return db.Connection.Execute(processQuery, orderDetails) > 0;
+        }
+
+        public int DeleteOrder(int orderId)
+        {
+            var result = db.Connection.Execute("DELETE FROM [Orders] WHERE [OrderId] = @OrderId", new { orderId });
+            return result;
+        }
+
+        public bool DeleteOrderDetails(int orderId)
+        {
+            var result = db.Connection.Execute("DELETE FROM [OrderDetails] WHERE [OrderId] = @OrderId", new { orderId });
+            return result > 0;
+        }
+
+        public Order GetOrder(int orderId)
+        {
+            string query = "SELECT * FROM [dbo].[Orders] WHERE [OrderId] = @OrderId";
+            var result = db.Connection.Query(query, new { orderId }).FirstOrDefault();
+            return result;
+        }
+
+        public OrderDetails GetOrderDetail(int orderId)
+        {
+            string query = "SELECT * FROM [dbo].[OrderDetails] WHERE [OrderId] = @OrderId";
+            var result = db.Connection.Query(query, new { orderId }).FirstOrDefault();
+            return result;
+        }
+
+        public IEnumerable<Order> GetAllOrder()
+        {
+            var result = db.Connection.Query<Order>("SELECT * FROM [dbo].[Orders]");
+            return result;
+        }
+
+        public IEnumerable<OrderDetails> GetAllOrderDetails()
+        {
+            var result = db.Connection.Query<OrderDetails>("SELECT * FROM [dbo].[OrderDetails]");
+            return result;
+        }
     }
 }
