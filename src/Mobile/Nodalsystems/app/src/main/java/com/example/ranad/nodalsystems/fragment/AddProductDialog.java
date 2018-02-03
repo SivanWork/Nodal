@@ -5,34 +5,42 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.ranad.nodalsystems.CartItem;
 import com.example.ranad.nodalsystems.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class AddProductDialog extends DialogFragment {
+public class AddProductDialog extends DialogFragment  {
     View view;
-    Context context;
    Spinner prod_spinner;
    List<String> arrayList = new ArrayList<>();
+    EditText quantity;
+    Button add;
+    OnProductAddListener onProductAddListener;
+   public AddProductDialog(){
 
+   }
 
-    public static AddProductDialog newInstance() {
+   public void setOnProductAddListener(OnProductAddListener onProductAddListener){
+       this.onProductAddListener = onProductAddListener;
+
+   }
+
+    public  AddProductDialog newInstance() {
         AddProductDialog fragment = new AddProductDialog();
-
         return fragment;
     }
 
@@ -48,7 +56,7 @@ public class AddProductDialog extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_add_product_dialog, container, false);
-
+        quantity = (EditText) view.findViewById(R.id.quantity);
         prod_spinner = (Spinner) view.findViewById(R.id.prod_spinner);
         arrayList.clear();
         arrayList.add("Product 1");
@@ -56,15 +64,21 @@ public class AddProductDialog extends DialogFragment {
         arrayList.add("Product 3");
         arrayList.add("Product 4");
         arrayList.add("Product 5");
-        ArrayAdapter<String> product = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item, arrayList);
+        ArrayAdapter<String> product = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, arrayList);
         product.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         prod_spinner.setAdapter(product);
-        prod_spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        add = (Button) view.findViewById(R.id.add);
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                dismiss();
+            public void onClick(View view) {
+                CartItem cartItemItem = new CartItem();
+                cartItemItem.setProductId(prod_spinner.getSelectedItem().toString());
+                cartItemItem.setQuantity(Integer.parseInt(quantity.getText().toString()));
+                onProductAddListener.onProductAdd(cartItemItem);
             }
         });
+
+
 
         return view;
     }
@@ -109,5 +123,8 @@ public class AddProductDialog extends DialogFragment {
     }
 
 
+    public interface OnProductAddListener{
+        public void  onProductAdd(CartItem cartItemItem);
+   }
 
 }

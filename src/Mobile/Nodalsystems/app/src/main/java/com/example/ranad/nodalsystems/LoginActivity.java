@@ -22,7 +22,9 @@ import com.example.ranad.nodalsystems.model.Login;
 import com.example.ranad.nodalsystems.model.Users;
 import com.example.ranad.nodalsystems.restapi.ApiClient;
 import com.example.ranad.nodalsystems.restapi.ApiInterface;
+import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import retrofit2.Call;
@@ -35,9 +37,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     Button login;
     TextView forgot_pwd;
     LinearLayout main_contenier;
-    public static String user="";
+    public static String user = "";
     ProgressDialog progressDialog;
-    String auth_token, userid, email,mobile,city, country, adrs1, adrs2, fn, ln, mn, role;
+    String auth_token, userid, email, mobile, city, country, adrs1, adrs2, fn, ln, mn, role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +50,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login = (Button) findViewById(R.id.login);
         forgot_pwd = (TextView) findViewById(R.id.forgot_pwd);
         forgot_pwd.setOnClickListener(this);
-        main_contenier = (LinearLayout)findViewById(R.id.main_contenier);
+        main_contenier = (LinearLayout) findViewById(R.id.main_contenier);
         login.setOnClickListener(this);
     }
 
-    public static String getUserType(){
-        if (userName.getText().toString().equals("admin")  && pwd.getText().toString().equals("admin@123")){
+    public static String getUserType() {
+        if (userName.getText().toString().equals("admin") && pwd.getText().toString().equals("admin@123")) {
             user = "Admin";
-        }else if (userName.getText().toString().equals("testuser")  && pwd.getText().toString().equals("user@123")){
+        } else if (userName.getText().toString().equals("testuser") && pwd.getText().toString().equals("user@123")) {
             user = "customer";
         }
         return user;
@@ -63,7 +65,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.forgot_pwd:
                 ChangePassword changePassword = new ChangePassword();
                 changePassword.show(getSupportFragmentManager(), "Change Password");
@@ -88,10 +90,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onResponse(Call<Login> call, Response<Login> response) {
                         try {
 
-
                             if (response.isSuccessful()) {
                                 // user object available
-
+                                Log.d("response", response.body().toString());
+                                response.body().saveLogin(LoginActivity.this);
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -99,7 +101,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 // error response, no access to resource?
 
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

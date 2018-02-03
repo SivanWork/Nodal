@@ -11,8 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.example.ranad.nodalsystems.CartItem;
 import com.example.ranad.nodalsystems.R;
-import com.example.ranad.nodalsystems.data_holder.OrderData;
+import com.example.ranad.nodalsystems.interfaces.OrderAction;
 
 import java.util.ArrayList;
 
@@ -21,14 +22,15 @@ import java.util.ArrayList;
  */
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
-    ArrayList<OrderData> orderData;
+    ArrayList<CartItem> orderData;
     Context context;
     InputMethodManager inputMethodManager;
-
-    public  OrderAdapter( ArrayList<OrderData> orderData, Context context){
+OrderAction orderAction;
+    public  OrderAdapter(ArrayList<CartItem> orderData, Context context, OrderAction  orderAction){
         this.context = context;
         this.orderData = orderData;
         inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        this.orderAction = orderAction;
     }
 
 
@@ -41,7 +43,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     @Override
     public void onBindViewHolder(OrderViewHolder holder, int position) {
 
-        OrderData orderData = this.orderData.get(position);
+        CartItem orderData = this.orderData.get(position);
         holder.bindData(orderData, position);
 
     }
@@ -58,7 +60,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         EditText quantity;
         ImageView delete;
 
-        public OrderViewHolder(Context context, View itemView) {
+        public OrderViewHolder(final Context context, View itemView) {
             super(itemView);
             this.itemView = itemView;
             prod_name = (TextView) itemView.findViewById(R.id.prod_name);
@@ -68,11 +70,21 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
 
 
+
         }
 
-        public void bindData(final OrderData orderData, final int position){
-            prod_name.setText("Product 1");
-            prod_amount.setText("5000");
+        public void bindData(final CartItem orderData, final int position){
+            prod_name.setText(orderData.getProductId());
+            quantity.setText(orderData.getQuantity()+"");
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                   // Toast.makeText(context, "unable to delete", Toast.LENGTH_SHORT).show();
+                    orderAction.delete(position);
+
+                }
+            });
+
         }
 
 

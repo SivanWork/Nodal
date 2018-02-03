@@ -245,7 +245,7 @@ public class Users implements Parcelable {
 
     public static  Users getInstance(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(SESSION_FILE, Context.MODE_PRIVATE);
-        String s = sharedPreferences.getString(Keys.UserInstance, null);
+        String s = sharedPreferences.getString(Keys.UserInstance, "null");
         return new Gson().fromJson(s, Users.class);
     }
 
@@ -258,5 +258,28 @@ public class Users implements Parcelable {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(Keys.UserInstance, new Gson().toJson(users));
         editor.commit();
+    }
+
+    @Override
+    public String toString() {
+        return "UserId = " + UserId + " " +
+                "FirstName = " + FirstName + " " +
+                "MiddleName = " + MiddleName + " " +
+                "LastName = " + LastName + " " +
+                "Mobile = " + Mobile + " " +
+                "UserTypeCode = " + UserTypeCode + " " +
+                "UserTypeName = " + UserTypeName + " " +
+                "UserTypeActive = " + UserTypeActive + " " +
+                "Email = " + Email + " " +
+                "Address1 = " + Address1 + " " +
+                "Address2 = " + Address2 + " " +
+                "City = " + City + " " +
+                "State = " + State + " " +
+                "Country = " + Country + " " +
+                "Pin = " + Pin + " " +
+                "ActiveFrom = " + ActiveFrom + " " +
+                "ActiveTo = " + ActiveTo + " " +
+                "IsActive = " + IsActive ;
+
     }
 }

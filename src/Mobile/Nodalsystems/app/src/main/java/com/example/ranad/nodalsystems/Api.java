@@ -6,5 +6,6 @@ package com.example.ranad.nodalsystems;
 
 public class Api {
     public final static String
-    LOGIN_API = "http://nodalmos.azurewebsites.net/api/User/Login";
+    LOGIN_API = "http://nodalmos.azurewebsites.net/api/User/Login",
+    ORDER_CREATE = "http://nodalmos.azurewebsites.net/api/Order/Create";
 }

@@ -27,10 +27,10 @@ public class Splash extends AppCompatActivity {
                     public void run() {
                         try {
                             Intent intent;
-                        intent = new Intent(Splash.this, LoginActivity.class);
+                        /*intent = new Intent(Splash.this, LoginActivity.class);
                         startActivity(intent);
-                        finish();
-                            /*if (Login.getInstance(Splash.this) == null) {
+                        finish();*/
+                            if (Login.getInstance(Splash.this) == null) {
                                 intent = new Intent(Splash.this, LoginActivity.class);
                             } else {
                                 if (Login.getInstance(Splash.this).getAuthToken() == null) {
@@ -39,7 +39,7 @@ public class Splash extends AppCompatActivity {
                                     intent = new Intent(Splash.this, MainActivity.class);
                                 }
                             }
-                            startActivity(intent);*/
+                            startActivity(intent);
                         }catch (Exception e){
                             e.printStackTrace();
                         }
