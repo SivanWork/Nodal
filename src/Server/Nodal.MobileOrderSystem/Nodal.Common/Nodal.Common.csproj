@@ -44,9 +44,15 @@
     <Compile Include="Helper\DBHelper.cs" />
     <Compile Include="Helper\Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Schema\Bills.cs" />
+    <Compile Include="Schema\Customer.cs" />
+    <Compile Include="Schema\Discounts.cs" />
+    <Compile Include="Schema\GroupElementCode.cs" />
+    <Compile Include="Schema\GroupType.cs" />
     <Compile Include="Schema\Order.cs" />
     <Compile Include="Schema\OrderDetails.cs" />
     <Compile Include="Schema\OrderReturnDetails.cs" />
+    <Compile Include="Schema\Products.cs" />
     <Compile Include="Schema\SchemeProduct.cs" />
     <Compile Include="Schema\Schemes.cs" />
     <Compile Include="Schema\Token.cs" />

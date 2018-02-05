@@ -15,25 +15,25 @@ namespace Nodal.Web.Controllers.API
         }
 
         [HttpPost]
-        public BaseResponse Update(OrderRequest request)
+        public BaseResponse UpdateOrder(OrderRequest request)
         {
-            return service.InsertOrder(request);
+            return service.UpdateOrder(request);
         }
 
         [HttpDelete]
-        public BaseResponse Delete(int orderId)
+        public BaseResponse DeleteOrder(int orderId)
         {
             return service.DeleteOrder(orderId);
         }
 
         [HttpGet]
-        public OrderResponse Get(int orderId)
+        public OrderResponse GetOrder(int orderId)
         {
             return service.GetOrder(orderId);
         }
 
         [HttpGet]
-        public OrderResponse GetAll()
+        public OrderResponse GetAllOrders()
         {
             return service.GetAllOrders();
         }

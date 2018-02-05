@@ -1,11 +1,8 @@
 ﻿using Dapper;
 using Nodal.Common.Helper;
 using Nodal.Common.Schema;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Nodal.DataAccess
 {
@@ -80,7 +77,7 @@ namespace Nodal.DataAccess
 
         public IEnumerable<Order> GetAllOrder()
         {
-            var result = db.Connection.Query<Order>("SELECT * FROM [dbo].[Orders]");
+            var result = db.Connection.Query<Order>("SELECT * FROM [Orders]");
             return result;
         }
 

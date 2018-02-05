@@ -43,8 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BillsRepository.cs" />
+    <Compile Include="CustomerRepository.cs" />
+    <Compile Include="DiscountRepository.cs" />
+    <Compile Include="GroupElementCodeRepository.cs" />
+    <Compile Include="GroupTypeRepository.cs" />
+    <Compile Include="OrderDetailsRepository.cs" />
     <Compile Include="OrderRepository.cs" />
+    <Compile Include="OrderReturnDetailsRepository.cs" />
+    <Compile Include="ProductsRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SchemeProductRepository.cs" />
+    <Compile Include="SchemesRepository.cs" />
     <Compile Include="TokenRepository.cs" />
     <Compile Include="UserRepository.cs" />
   </ItemGroup>
