@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.ranad.nodalsystems.App;
 import com.example.ranad.nodalsystems.CartItem;
@@ -45,6 +46,8 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
     List<String> list = new ArrayList<String>();
     List<String> cust = new ArrayList<>();
     ScrollView lists;
+    TextView total;
+    CartItemDao cartItemDao = App.getDaoSession().getCartItemDao();
 
     public OrderFragment() {
         // Required empty public constructor
@@ -61,15 +64,16 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
 
     }
 
-    CartItemDao cartItemDao = App.getDaoSession().getCartItemDao();
 
     @Override
     public void onResume() {
         super.onResume();
         MainActivity.setAppTitle(R.string.order_title);
-        cart.clear();
-        List<CartItem> tempCart = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(cust.get(customers.getSelectedItemPosition()))).list();
+        //cart.clear();
+        currentItem = customers.getSelectedItemPosition();
+        List<CartItem> tempCart = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(cust.get(currentItem))).list();
         cart.addAll(tempCart);
+        refreshTotal();
         orderAdapter.notifyDataSetChanged();
     }
 
@@ -79,6 +83,7 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_order, container, false);
         cName = (AutoCompleteTextView) view.findViewById(R.id.cName);
+        total = (TextView) view.findViewById(R.id.total_price);
         lvAddOrder = (LinearLayout) view.findViewById(R.id.lvAddOrder);
         cNumber = (AutoCompleteTextView) view.findViewById(R.id.cNumber);
         quantity = (EditText) view.findViewById(R.id.quantity);
@@ -124,11 +129,21 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
         customers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("for cus "+currentItem,cart.toString());
                 Log.d("changing cust to", i + " ");
+
+                List<CartItem> deleteList = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(cust.get(currentItem))).list();
+                cartItemDao.deleteInTx(deleteList);
+                cartItemDao.insertOrReplaceInTx(cart);
                 cart.clear();
                 List<CartItem> tempCart = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(cust.get(i))).list();
                 cart.addAll(tempCart);
+                refreshTotal();
                 orderAdapter.notifyDataSetChanged();
+                currentItem = i;
+                List<CartItem> cartItems = cartItemDao.loadAll();
+                Log.d("all records",cartItems.toString());
+
             }
 
             @Override
@@ -144,7 +159,7 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
     @Override
     public void onPause() {
         super.onPause();
-        List<CartItem> deleteList = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(cust.get(customers.getSelectedItemPosition()))).list();
+        List<CartItem> deleteList = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(cust.get(currentItem))).list();
         cartItemDao.deleteInTx(deleteList);
         cartItemDao.insertOrReplaceInTx(cart);
     }
@@ -155,6 +170,7 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
 
     }
 
+    int currentItem=-1;
 
     @Override
     public void onClick(View view) {
@@ -204,10 +220,17 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
                             cart.remove(i);
                             cart.add(i, tempcart);
 
+                            Log.d("adding t item",tempcart.toString());
 
                         } else {
+                            Log.d("adding item",cartItemItem.toString());
                             cart.add(cartItemItem);
+
                         }
+                        int partTotal = calculateTotalForProduct( cart.indexOf(cartItemItem));
+                        int utotal = Integer.parseInt(total.getText().toString());
+                        utotal=utotal+partTotal;
+                        total.setText(utotal+"");
                         orderAdapter.notifyDataSetChanged();
                         addProductDialog.dismiss();
                     }
@@ -224,7 +247,24 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
 
     @Override
     public void delete(int pos) {
+        int partTotal = calculateTotalForProduct( pos);
+        int utotal = Integer.parseInt(total.getText().toString());
+        utotal=utotal-partTotal;
+        total.setText(utotal+"");
         cart.remove(pos);
         orderAdapter.notifyDataSetChanged();
+    }
+
+    public void refreshTotal(){
+        int sum=0;
+        for(int i= 0; i<cart.size(); i++){
+            sum = sum+ (12345 * cart.get(i).getQuantity());
+        }
+        total.setText(sum+"");
+    }
+
+    public int calculateTotalForProduct(int positionOfProduct){
+      int partTotal= 12345 * cart.get(positionOfProduct).getQuantity();
+      return partTotal;
     }
 }

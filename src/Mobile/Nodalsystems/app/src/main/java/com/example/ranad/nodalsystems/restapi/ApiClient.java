@@ -22,7 +22,7 @@ public class ApiClient {
 
 
 
-    public static final String API_BASE_URL = "http://nodalmos.azurewebsites.net";
+    public static final String API_BASE_URL = "http://nodalmobsys.azurewebsites.net";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 

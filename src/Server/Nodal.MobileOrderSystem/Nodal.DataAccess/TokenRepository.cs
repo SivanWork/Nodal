@@ -1,11 +1,8 @@
 ﻿using Dapper;
 using Nodal.Common.Helper;
 using Nodal.Common.Schema;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Nodal.DataAccess
 {

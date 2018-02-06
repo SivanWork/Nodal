@@ -15,11 +15,31 @@ import static com.example.ranad.nodalsystems.usage.Keys.SESSION_FILE;
  */
 
 public class Users implements Parcelable {
+
+     String UserId;
+     String FirstName;
+     String MiddleName;
+     String LastName;
+     String Mobile;
+     String UserTypeCode;
+    String UserTypeName;
+     String UserTypeActive;
+     String Email;
+      String Address1;
+     String Address2;
+     String City;
+     String State;
+     String Country;
+     String Pin;
+     String ActiveFrom;
+     String ActiveTo;
+     Boolean IsActive;
+
     public String getUserId() {
         return UserId;
     }
 
-    public static void setUserId(String userId) {
+    public  void setUserId(String userId) {
         UserId = userId;
     }
 
@@ -55,7 +75,7 @@ public class Users implements Parcelable {
         Mobile = mobile;
     }
 
-    public static String getUserTypeCode() {
+    public  String getUserTypeCode() {
         return  UserTypeCode;
     }
 
@@ -159,24 +179,7 @@ public class Users implements Parcelable {
         IsActive = active;
     }
 
-    static String UserId;
-    static String FirstName;
-    static String MiddleName;
-    static String LastName;
-    static String Mobile;
-    static String UserTypeCode;
-    static String UserTypeName;
-    static String UserTypeActive;
-    static String Email;
-    static  String Address1;
-    static String Address2;
-    static String City;
-    static String State;
-    static String Country;
-    static String Pin;
-    static String ActiveFrom;
-    static String ActiveTo;
-    static Boolean IsActive;
+
 
     public Users(){
 

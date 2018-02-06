@@ -7,15 +7,20 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Index;
 
 /**
  * Created by Rana D on 2/3/2018.
  */
-@Entity
+@Entity(
+        // Define indexes spanning multiple columns here.
+        indexes = {
+                @Index(value = "customerId , ProductId ", unique = true)
+        })
 public class CartItem implements Parcelable {
-    @Id
-    String customerId;
-    String ProductId;
+    @Id (autoincrement = true)
+    Long id;
+    String customerId , ProductId;
     int Quantity;
 
     public CartItem(){
@@ -34,12 +39,15 @@ public class CartItem implements Parcelable {
         Quantity = in.readInt();
     }
 
-    @Generated(hash = 1767541010)
-    public CartItem(String customerId, String ProductId, int Quantity) {
+    @Generated(hash = 1933224580)
+    public CartItem(Long id, String customerId, String ProductId, int Quantity) {
+        this.id = id;
         this.customerId = customerId;
         this.ProductId = ProductId;
         this.Quantity = Quantity;
     }
+
+
 
 
 
@@ -109,4 +117,19 @@ public class CartItem implements Parcelable {
         return super.equals(obj);
 
     }
+
+    @Override
+    public String toString() {
+        return "cust id = "+customerId+" proid = "+getProductId();
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+   
 }

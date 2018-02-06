@@ -25,7 +25,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     ArrayList<CartItem> orderData;
     Context context;
     InputMethodManager inputMethodManager;
-OrderAction orderAction;
+    OrderAction orderAction;
     public  OrderAdapter(ArrayList<CartItem> orderData, Context context, OrderAction  orderAction){
         this.context = context;
         this.orderData = orderData;
@@ -57,7 +57,7 @@ OrderAction orderAction;
     public class OrderViewHolder extends RecyclerView.ViewHolder implements ViewSwitcher.ViewFactory{
         View itemView;
         TextView prod_name, prod_amount;
-        EditText quantity;
+        EditText quantity,net_price, tax;
         ImageView delete;
 
         public OrderViewHolder(final Context context, View itemView) {
@@ -67,15 +67,15 @@ OrderAction orderAction;
             prod_amount = (TextView) itemView.findViewById(R.id.prod_amount);
             quantity = (EditText) itemView.findViewById(R.id.etquantity);
             delete = (ImageView) itemView.findViewById(R.id.delete);
-
-
-
-
+            net_price = (EditText) itemView.findViewById(R.id.net_price);
+            tax = (EditText) itemView.findViewById(R.id.tax);
         }
 
         public void bindData(final CartItem orderData, final int position){
             prod_name.setText(orderData.getProductId());
             quantity.setText(orderData.getQuantity()+"");
+            int total = 12345 * orderData.getQuantity();
+            net_price.setText(total+"");
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
