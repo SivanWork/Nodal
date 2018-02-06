@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,16 +11,16 @@
         android:id="@+id/main_contenier"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
         android:focusable="true"
         android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:orientation="vertical"
         android:padding="30dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/logo"/>
+            android:background="@drawable/logo" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -30,62 +30,63 @@
 
             <EditText
                 android:id="@+id/user_name"
+                style="@android:style/Widget.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:textSize="20sp"
-                android:textColor="@android:color/black"
                 android:backgroundTint="@android:color/black"
-                android:textCursorDrawable="@null"
-                style="@android:style/Widget.EditText"
-                android:theme="@android:style/Theme.Holo"
                 android:fontFamily="sans-serif-condensed"
-                android:hint="Username"/>
+                android:hint="Username"
+                android:singleLine="true"
+                android:textColor="@android:color/black"
+                android:textCursorDrawable="@null"
+                android:textSize="20sp"
+                android:theme="@android:style/Theme.Holo" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             app:hintTextAppearance="@style/floating_hint">
+
             <EditText
                 android:id="@+id/password"
-                android:textSize="20sp"
                 style="@android:style/Widget.EditText"
-                android:textColor="@android:color/black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/black"
                 android:fontFamily="sans-serif-condensed"
-                android:layout_width="match_parent"
-                android:textCursorDrawable="@null"
+                android:hint="Password"
                 android:inputType="textPassword"
-                android:theme="@android:style/Theme.Holo"
-                android:layout_height="wrap_content"
-                android:hint="Password" />
+                android:textColor="@android:color/black"
+                android:textCursorDrawable="@null"
+                android:textSize="20sp"
+                android:theme="@android:style/Theme.Holo" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/login"
+            style="@style/AppTheme.RoundedCornerMaterialButton"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="LOGIN"
-            android:textSize="18sp"
-            style="@style/AppTheme.RoundedCornerMaterialButton"
             android:layout_marginTop="30dp"
             android:fontFamily="sans-serif-condensed"
-            android:foreground="?attr/selectableItemBackground"/>
+            android:foreground="?attr/selectableItemBackground"
+            android:text="LOGIN"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/forgot_pwd"
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:layout_marginTop="15dp"
-            android:textColor="@android:color/black"
-            android:text="Forgot Password?"
+            android:fontFamily="sans-serif-condensed"
             android:gravity="center"
-            android:textSize="18sp"
-            android:fontFamily="sans-serif-condensed"/>
+            android:text="Forgot Password?"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
 
     </LinearLayout>
-</LinearLayout >
+</LinearLayout>

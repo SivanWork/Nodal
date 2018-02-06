@@ -21,7 +21,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class ApiClient {
 
 
-
     public static final String API_BASE_URL = "http://nodalmobsys.azurewebsites.net";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
@@ -72,7 +71,7 @@ public class ApiClient {
         return retrofit.create(serviceClass);
     }
 
-     public static OrderApi createorders(Context context){
+    public static OrderApi createorders(Context context) {
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder builder = new OkHttpClient.Builder();

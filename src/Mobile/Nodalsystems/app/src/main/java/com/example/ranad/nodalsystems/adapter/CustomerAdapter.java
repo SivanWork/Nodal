@@ -22,7 +22,7 @@ public class CustomerAdapter extends BaseAdapter {
     Context context;
 
 
-    public CustomerAdapter(Context context, ArrayList<CustomerData> customerData){
+    public CustomerAdapter(Context context, ArrayList<CustomerData> customerData) {
         this.context = context;
         this.customerData = customerData;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -43,7 +43,6 @@ public class CustomerAdapter extends BaseAdapter {
     public long getItemId(int i) {
         return 0;
     }
-
 
 
     @Override

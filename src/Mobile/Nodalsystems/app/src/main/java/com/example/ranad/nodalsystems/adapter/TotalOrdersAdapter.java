@@ -2,20 +2,21 @@ package com.example.ranad.nodalsystems.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.example.ranad.nodalsystems.App;
+
 import com.example.ranad.nodalsystems.R;
-import com.example.ranad.nodalsystems.database.CartItem;
-import com.example.ranad.nodalsystems.database.Products;
-import com.example.ranad.nodalsystems.database.ProductsDao;
+import com.example.ranad.nodalsystems.database.Customers;
+import com.example.ranad.nodalsystems.database.CustomersDao;
+import com.example.ranad.nodalsystems.database.Orders;
+import com.example.ranad.nodalsystems.fragment.OrderViewFragment;
 import com.example.ranad.nodalsystems.interfaces.OrderAction;
 
 import java.util.ArrayList;
@@ -25,30 +26,31 @@ import java.util.List;
  * Created by Rana D on 2/1/2018.
  */
 
-public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
-    ArrayList<CartItem> orderData;
+public class TotalOrdersAdapter extends RecyclerView.Adapter<TotalOrdersAdapter.OrderViewHolder> {
+    ArrayList<Orders> orderData;
     Context context;
     InputMethodManager inputMethodManager;
     OrderAction orderAction;
 
-    public OrderAdapter(ArrayList<CartItem> orderData, Context context, OrderAction orderAction) {
+    public TotalOrdersAdapter(ArrayList<Orders> orderData, Context context, OrderViewFragment orderAction) {
         this.context = context;
         this.orderData = orderData;
         inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         this.orderAction = orderAction;
+        Log.i("orderData", "LLLL" + orderData.size());
     }
 
 
     @Override
     public OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_listing, parent, false);
-        return new OrderAdapter.OrderViewHolder(this.context, view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.total_order_listing, parent, false);
+        return new TotalOrdersAdapter.OrderViewHolder(this.context, view);
     }
 
     @Override
     public void onBindViewHolder(OrderViewHolder holder, int position) {
 
-        CartItem orderData = this.orderData.get(position);
+        Orders orderData = this.orderData.get(position);
         holder.bindData(orderData, position);
 
     }
@@ -61,22 +63,44 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     public class OrderViewHolder extends RecyclerView.ViewHolder implements ViewSwitcher.ViewFactory {
         View itemView;
-        TextView prod_name, prod_amount;
-        EditText quantity, net_price, tax;
-        ImageView delete;
+        TextView customerName, amount, dateview, code, items;
+
 
         public OrderViewHolder(final Context context, View itemView) {
             super(itemView);
             this.itemView = itemView;
-            prod_name = (EditText) itemView.findViewById(R.id.prod_name);
-            // prod_amount = (TextView) itemView.findViewById(R.id.prod_amount);
-            quantity = (EditText) itemView.findViewById(R.id.etquantity);
-            delete = (ImageView) itemView.findViewById(R.id.delete);
-            net_price = (EditText) itemView.findViewById(R.id.net_price);
-            tax = (EditText) itemView.findViewById(R.id.tax);
+            customerName = (TextView) itemView.findViewById(R.id.customername);
+            amount = (TextView) itemView.findViewById(R.id.amount);
+            dateview = (TextView) itemView.findViewById(R.id.date);
+            code = (TextView) itemView.findViewById(R.id.customercode);
+            items = (TextView) itemView.findViewById(R.id.noofitems);
+
         }
 
-        public void bindData(final CartItem orderData, final int position) {
+        public void bindData(final Orders orderData, final int position) {
+           /* Log.d("CDATE", "LLL" + orderData.getCreatedDate());
+            String createdDate = null;
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss ");
+            try {
+                Date date = sdf.parse(String.valueOf(orderData.getCreatedDate()));
+
+                SimpleDateFormat sdf1 = new SimpleDateFormat("dd/M/yyyy");
+                createdDate = sdf1.format(date.getTime());
+                Log.d("AAAAAAAAAA","PAALA"+createdDate);
+            } catch (Exception e) {
+
+            }
+*/
+
+            CustomersDao customersDao = App.getDaoSession().getCustomersDao();
+            List<Customers> customersList = customersDao.queryBuilder().where(CustomersDao.Properties.Id.eq(orderData.getCustomerId())).list();
+            customerName.setText(customersList.get(0).getFirstName());
+            code.setText("CD00" + customersList.get(0).getId());
+            amount.setText(orderData.getTotalOrderAmount() + "");
+            dateview.setText(orderData.getCreatedDate() + "");
+            items.setText("22");
+
+            /*
 
             ProductsDao productsDao = App.getDaoSession().getProductsDao();
             List<Products> productsList = productsDao.queryBuilder().where(ProductsDao.Properties.Id.eq(orderData.getProductId())).list();
@@ -94,6 +118,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
                 }
             });
+*/
 
         }
 

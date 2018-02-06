@@ -14,6 +14,7 @@ import com.example.ranad.nodalsystems.R;
 
 public class ReportFragment extends Fragment {
     View view;
+
     public ReportFragment() {
         // Required empty public constructor
     }
