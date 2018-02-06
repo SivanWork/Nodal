@@ -42,6 +42,7 @@ import com.example.ranad.nodalsystems.interfaces.OrderAction;
 import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
 import com.example.ranad.nodalsystems.model.Login;
 import com.example.ranad.nodalsystems.model.Order;
+import com.example.ranad.nodalsystems.model.OrderDetail;
 import com.example.ranad.nodalsystems.model.OrderPojo;
 import com.example.ranad.nodalsystems.restapi.ApiClient;
 import com.example.ranad.nodalsystems.restapi.OrderApi;
@@ -278,19 +279,16 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
                 break;
             case R.id.save_prod:
 
-                progressDialog = new ProgressDialog(getContext());
-                progressDialog.setMessage("Loading..."); // Setting Message
-                progressDialog.setTitle("Saving to server"); // Setting Title
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
-                progressDialog.show(); // Display Progress Dialog
-                progressDialog.setCancelable(true);
-                progressDialog.show();
+                if (cart.size() == 0) showAlert("Alert", "Cart Empty", 1);
+                else {
+                    saveOrderOffline();
+                    showAlert("Order Status", "Success! Saved Locally..", 2);
+                }
 
-                saveOrderOffline();
 
-                progressDialog.dismiss();
                 break;
         }
+
     }
 
     ArrayList<CartItem> cart = new ArrayList<>();
@@ -323,13 +321,18 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
         OrdersDao ordersDao = App.getDaoSession().getOrdersDao();
         Orders orders = null;
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+
         Date currentDate = new Date();
+/*
+        Date date=null;
+        String dateTime = format.format(currentDate);
+        System.out.println("Current Date Time : " + dateTime);
+            date = new Date(dateTime);
+*/
         orders = new Orders();
-        try {
-            orders.setCreatedDate(format.parse(currentDate.toString()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        orders.setCreatedDate(currentDate);
+
         orders.setCustomerId(customerId);
         orders.setTotalOrderAmount(calculateTotalCartAmount());
         long genOrderId = ordersDao.insertOrReplace(orders);
@@ -360,102 +363,73 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
     @Override
     public void syncOrderToServer() {
 
-        Order order = new Order();
 
-        order.setOrderId(1);
+        OrdersDao ordersDao = App.getDaoSession().getOrdersDao();
+        OrderDetailDBDao orderDetailDBDao = App.getDaoSession().getOrderDetailDBDao();
 
-        OrderApi create = ApiClient.createorders(getContext());
-        OrderPojo orderPojo = new OrderPojo();
-          /*      List tempCart = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(cust.get(customers.getSelectedItemPosition()))).list();
-Log.i("CUSTOMER","PPP"+tempCart);
-          */
-        order.setOrderId(1);
-        //   order.setCustomerId(Integer.parseInt(tempCart.get(0).getCustomerId()));
-        order.setCustomerId(1);
-        order.setTotalOrderAmount(0);
-        order.setOrderStatusElementCode(0);
-        order.setOrderStatusGroup(0);
-/*
+        List<Orders> ordersList = ordersDao.queryBuilder().list();
+        int orderId;
+        Order order = null;
+        OrderDetail orderDetail = null;
+        ArrayList<OrderDetail> orderDetailList = null;
 
-        for (int i = 0; i < cart.size(); i++) {
-            orderDetailDB.setProductId(cart.get(i).getProductId());
-            // orderDetailDB.setProductId(1);
-            orderDetailModel.setId(i);
+        OrderApi orderApi = null;
+        OrderPojo orderPojo = null;
 
-            // orderDetailDB.setOrderId(cart.get(i).getId());
-            orderDetailDB.setOrderId(1);
-            orderDetailDB.setQuantity(cart.get(i).getQuantity());
-            //orderDetailDB.setQuantity(1);
 
-            orderDetailDB.setCGST(0);
-            orderDetailDB.setIGST(0);
-            orderDetailDB.setSGST(0);
-            orderDetailDB.setDiscount(0);
-            orderDetailDB.setNetPrice(Integer.parseInt(total.getText().toString()));
+        for (int i = 0; i < ordersList.size(); i++) {
 
-            Log.i("LOOP", "QUANTITY" + orderDetailDB.getQuantity());
-            Log.i("DETAIS", "ggg" + orderDetailDB);
-            orderDetailsListDB.add(orderDetailDB);
+            orderId = Integer.parseInt(String.valueOf(ordersList.get(i).getId()));
+            order.setOrderId(orderId);
+            order.setCustomerId(ordersList.get(i).getCustomerId());
+            order.setTotalOrderAmount(ordersList.get(i).getTotalOrderAmount());
+            order.setOrderStatusElementCode(0);
+            order.setOrderStatusGroup(0);
+            List<OrderDetailDB> orderDetailDBList = orderDetailDBDao.queryBuilder().where(OrderDetailDBDao.Properties.OrderId.eq(orderId)).list();
+            orderDetailList = new ArrayList<OrderDetail>();
+            for (int j = 0; j < orderDetailDBList.size(); j++) {
 
+                orderDetail.setProductId(orderDetailDBList.get(j).getProductId());
+                orderDetail.setQuantity(orderDetailDBList.get(j).getQuantity());
+                orderDetail.setNetPrice(orderDetailDBList.get(j).getNetPrice());
+                orderDetail.setCGST(0.0);
+                orderDetail.setSGST(0.0);
+                orderDetail.setIGST(0.0);
+                orderDetail.setOrderId(orderId);
+                orderDetail.setDiscount(0.0);
+                orderDetailList.add(orderDetail);
+
+            }
+            order.setOrderDetails(orderDetailList);
+            orderPojo = new OrderPojo();
+            orderPojo.setOrder(order);
+            Log.i("MSG", "data" + Login.getInstance(getContext()).getAuthToken());
+
+            orderApi =
+                    ApiClient.createService(OrderApi.class, Login.getInstance(getContext()).getAuthToken());
+
+            Call<OrderPojo> call = orderApi.createOrder(orderPojo);
+
+
+            call.enqueue(new Callback<OrderPojo>() {
+                @Override
+                public void onResponse(Call<OrderPojo> call, Response<OrderPojo> response) {
+                    Log.i("response", response.body().toString());
+
+
+                    progressDialog.dismiss();
+
+
+                    showAlert("Order Status", "Success! Saved in Server..", 2);
+                }
+
+
+                @Override
+                public void onFailure(Call<OrderPojo> call, Throwable t) {
+
+                }
+            });
         }
-        // Log.i("DETAIS","ggg"+orderDetailDB);
-        Log.i("LIST", "lll" + orderDetailsListDB);
-        order.setOrderDetails(orderDetailsListDB);
-*/
-
-        orderPojo.setOrder(order);
-        Log.i("MSG", "data" + Login.getInstance(getContext()).getAuthToken());
-
-
-              /*  OrderApi orderService =
-                        ApiClient.createService(OrderApi.class, "00000000-0000-0000-0000-000000000000");
-*/
-
-        OrderApi orderService =
-                ApiClient.createService(OrderApi.class, Login.getInstance(getContext()).getAuthToken());
-
-        /*Call<OrderPojo> call = orderService.createOrder(orderPojo);
-
-
-        call.enqueue(new Callback<OrderPojo>() {
-            @Override
-            public void onResponse(Call<OrderPojo> call, Response<OrderPojo> response) {
-                Log.i("response", response.body().toString());
-                progressDialog.dismiss();
-
-
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        getContext());
-
-                // set title
-                alertDialogBuilder.setTitle("Order Status");
-
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage("Success!")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // if this button is clicked, close
-                                // current activity
-                                dialog.cancel();
-                            }
-                        });
-
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
-            }
-
-
-            @Override
-            public void onFailure(Call<OrderPojo> call, Throwable t) {
-
-            }
-        });*/
     }
 
     public void refreshTotal() {
@@ -477,5 +451,39 @@ Log.i("CUSTOMER","PPP"+tempCart);
             cartTotal = cartTotal + cartItemList.get(i).getNetPrice();
         }
         return cartTotal;
+    }
+
+
+    public void showProgress(String title, String msg, int theme) {
+        progressDialog.setTitle(title);
+        progressDialog.setMessage(msg);
+
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
+    }
+
+    public void showAlert(String title, String msg, int theme) {
+
+
+        if (theme == 1) theme = R.style.Theme_AppCompat_DayNight_Dialog;
+        else theme = R.style.Theme_AppCompat_DayNight_Dialog_Alert;
+
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getContext(), R.style.Theme_AppCompat_DayNight_Dialog);
+        alertDialogBuilder.setTitle(title);
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage(msg)
+                .setCancelable(true)
+                .setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }
