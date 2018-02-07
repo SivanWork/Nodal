@@ -52,6 +52,8 @@ namespace Nodal.Web.Controllers.API
         }
 
         [HttpGet]
+        [AllowAnonymous]
+
         public UserResponse GetAllUsers()
         {
             return _userService.GetAllUsers();

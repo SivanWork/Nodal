@@ -16,7 +16,7 @@ namespace Nodal.DataAccess
 
         public int InsertScheme(Schemes scheme)
         {
-            string sql = @"INSERT INTO [Schemes] ([SchemeName],[SchemeCode],[IsActive]) VALUES (@SchemeName, @SchemeCode, @IsActive) ; SELECT CAST(SCOPE_IDENTITY() as int)";
+            string sql = @"INSERT INTO [Schemes] ([SchemeName],[SchemeCode],[IsActive], [CreatedById], [CreatedDate], [LastUpdatedById], [LastUpdatedDate]) VALUES (@SchemeName, @SchemeCode, @IsActive, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate) ; SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Connection.Query<int>(sql, scheme).Single();
             return id;
@@ -25,7 +25,7 @@ namespace Nodal.DataAccess
         public int UpdateScheme(Schemes scheme)
         {
             string sql = @"UPDATE [Schemes] SET [SchemeName] = @SchemeName, 
-[SchemeCode] = @SchemeCode, [IsActive] = @IsActive WHERE [SchemeId] = @SchemeId";
+[SchemeCode] = @SchemeCode, [IsActive] = @IsActive, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate WHERE [SchemeId] = @SchemeId";
 
             var id = db.Connection.Query<int>(sql, scheme).Single();
             return id;

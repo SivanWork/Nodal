@@ -1,4 +1,6 @@
-﻿namespace Nodal.Common.Schema
+﻿using System;
+
+namespace Nodal.Common.Schema
 {
     public class OrderDetails
     {
@@ -11,6 +13,9 @@
         public float IGST { get; set; }
         public float Discount { get; set; }
         public float NetPrice { get; set; }
-
+        public int CreatedById { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int LastUpdatedById { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
     }
 }

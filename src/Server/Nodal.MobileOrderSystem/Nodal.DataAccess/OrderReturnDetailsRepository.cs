@@ -18,10 +18,10 @@ namespace Nodal.DataAccess
         {
             string sql = @"INSERT INTO [OrderReturnDetails]
            ([OrderId],[ProductId],[Quantity],[CGST],[SGST],[IGST],[Discount],[NetPrice],
-		    [OrderReturnGroup],[OrderReturnElementCode],[Comments])
+		    [OrderReturnGroup],[OrderReturnElementCode],[Comments], [CreatedById], [CreatedDate], [LastUpdatedById], [LastUpdatedDate])
            VALUES 
            (@OrderId, @ProductId, @Quantity, @CGST, @SGST, @IGST, @Discount, @NetPrice, 
-		    @OrderReturnGroup, @OrderReturnElementCode, @Comments) ; SELECT CAST(SCOPE_IDENTITY() as int)";
+		    @OrderReturnGroup, @OrderReturnElementCode, @Comments, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate) ; SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Connection.Query<int>(sql, orderReturnDetail).Single();
             return id;
@@ -32,7 +32,7 @@ namespace Nodal.DataAccess
             string sql = @"UPDATE [OrderReturnDetails] SET [OrderId] = @OrderId, 
        [ProductId] = @ProductId, [Quantity] = @Quantity, [CGST] = @CGST, [SGST] = @SGST, 
        [IGST] = @IGST, [Discount] = @Discount, [NetPrice] = @NetPrice, [OrderReturnGroup] = @OrderReturnGroup, 
-       [OrderReturnElementCode] = @OrderReturnElementCode, [Comments] = @Comments WHERE [Id] = @Id";
+       [OrderReturnElementCode] = @OrderReturnElementCode, [Comments] = @Comments, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate WHERE [Id] = @Id";
 
             var id = db.Connection.Query<int>(sql, orderReturnDetail).Single();
             return id;

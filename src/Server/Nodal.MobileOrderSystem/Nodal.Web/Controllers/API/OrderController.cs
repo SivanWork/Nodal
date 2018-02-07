@@ -1,5 +1,6 @@
 ﻿using Nodal.BusinessAccess.Model;
 using Nodal.BusinessAccess.Service;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace Nodal.Web.Controllers.API
@@ -12,6 +13,22 @@ namespace Nodal.Web.Controllers.API
         public BaseResponse Create(OrderRequest request)
         {
             return service.InsertOrder(request);
+        }
+
+        [HttpPost]
+        public List<BulkOrderResponse> CreateBulkOrder(List<OrderRequest> request)
+        {
+            List<BulkOrderResponse> orderResponse = new List<BulkOrderResponse>();
+            foreach (OrderRequest item in request)
+            {
+                var res = service.InsertOrder(item);
+                orderResponse.Add(new BulkOrderResponse()
+                {
+                    orderId = item.order.OrderId,
+                    Success = res.Success
+                });
+            }
+            return orderResponse;
         }
 
         [HttpPost]

@@ -18,8 +18,8 @@ namespace Nodal.Common.Schema
         public string State { get; set; }
         public string Country { get; set; }
         public string Pin { get; set; }
-        public int UserGroupType { get; set; }
-        public int UserElementCode { get; set; }
+        public string UserGroupType { get; set; }
+        public string UserElementCode { get; set; }
         public DateTime ActiveFrom { get; set; }
         public DateTime ActiveTo { get; set; }
         public bool IsActive { get; set; }
