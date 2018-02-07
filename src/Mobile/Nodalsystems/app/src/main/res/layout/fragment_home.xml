@@ -6,23 +6,23 @@
     tools:context="com.example.ranad.nodalsystems.fragment.HomeFragment">
 
     <LinearLayout
-        android:id="@+id/placeholder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="16dp">
-
-        <GridView
-            android:id="@+id/home_grid"
+            android:id="@+id/placeholder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:drawSelectorOnTop="true"
-            android:horizontalSpacing="16dp"
-            android:numColumns="2"
-            android:verticalSpacing="16dp"></GridView>
+            android:padding="16dp"
+            android:gravity="center">
 
-    </LinearLayout>
+            <GridView
+                android:id="@+id/home_grid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:numColumns="2"
+                android:verticalSpacing="5dp"
+                android:horizontalSpacing="5dp"
+                android:drawSelectorOnTop="true"></GridView>
+
+        </LinearLayout>
+
+
 
 </FrameLayout>

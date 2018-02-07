@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
                 fragment = new CustomerFragment();
                 break;
             case FRAGMENT_USER:
-                fragment = new UserFragment();
+                fragment = UserFragment.newInstance(this);
                 break;
             case FRAGMENT_PRODUCT:
                 fragment = new ProductFragment();

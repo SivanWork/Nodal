@@ -30,15 +30,15 @@ public class Splash extends AppCompatActivity {
                         /*intent = new Intent(Splash.this, LoginActivity.class);
                         startActivity(intent);
                         finish();*/
-                            if (Login.getInstance(Splash.this) == null) {
+                           /* if (Login.getInstance(Splash.this) == null) {
                                 intent = new Intent(Splash.this, LoginActivity.class);
                             } else {
                                 if (Login.getInstance(Splash.this).getAuthToken() == null) {
                                     intent = new Intent(Splash.this, LoginActivity.class);
-                                } else {
+                                } else {*/
                                     intent = new Intent(Splash.this, MainActivity.class);
-                                }
-                            }
+                                //}
+                            //}
                             startActivity(intent);
                         } catch (Exception e) {
                             e.printStackTrace();

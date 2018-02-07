@@ -18,7 +18,9 @@ import android.widget.ListView;
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.adapter.CustomerAdapter;
+import com.example.ranad.nodalsystems.adapter.UserAdapter;
 import com.example.ranad.nodalsystems.data_holder.CustomerData;
+import com.example.ranad.nodalsystems.data_holder.UserData;
 import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
 
 import java.text.DateFormat;
@@ -36,8 +38,8 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     ImageView ivAdd;
     ListView listView;
     DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-    ArrayList<CustomerData> customerData = new ArrayList<>();
-    CustomerAdapter customerAdapter;
+    ArrayList<UserData> userData = new ArrayList<>();
+    UserAdapter userAdapter;
     SwitchFragment switchFragment;
 
     public UserFragment() {
@@ -68,16 +70,16 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view =  inflater.inflate(R.layout.fragment_product, container, false);
-        listView = (ListView) view.findViewById(R.id.customer_list);
-        customerData.add(new CustomerData("User 1"));
-        customerData.add(new CustomerData("User 2"));
-        customerData.add(new CustomerData("User 3"));
-        customerData.add(new CustomerData("User 4"));
-        customerData.add(new CustomerData("User 5"));
+        view =  inflater.inflate(R.layout.fragment_user, container, false);
+        listView = (ListView) view.findViewById(R.id.user_list);
+        userData.add(new UserData("User 1"));
+        userData.add(new UserData("User 2"));
+        userData.add(new UserData("User 3"));
+        userData.add(new UserData("User 4"));
+        userData.add(new UserData("User 5"));
 
-        customerAdapter = new CustomerAdapter(getContext(),customerData);
-        listView.setAdapter(customerAdapter);
+        userAdapter = new UserAdapter(getContext(),userData);
+        listView.setAdapter(userAdapter);
         ivAdd = (ImageView) view.findViewById(R.id.ivAdd);
         ivAdd.setOnClickListener(this);
         add_customer = (View) view.findViewById(R.id.add_customer);

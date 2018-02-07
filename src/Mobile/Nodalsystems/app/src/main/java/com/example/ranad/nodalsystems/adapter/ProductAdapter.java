@@ -59,12 +59,14 @@ public class ProductAdapter extends BaseAdapter implements View.OnClickListener 
     public View getView(int i, View view, ViewGroup viewGroup) {
         View v = view;
         v = layoutInflater.inflate(R.layout.product_list, null);
-        View home_background = (View) v.findViewById(R.id.icon_background);
 
         TextView name = (TextView) v.findViewById(R.id.product_name);
         TextView code = (TextView) v.findViewById(R.id.product_code);
         ImageView edit = (ImageView) v.findViewById(R.id.edit);
         ImageView delete = (ImageView) v.findViewById(R.id.delete);
+
+        name.setText("Product 1");
+        code.setText("ProductCode 1");
 
         edit.setOnClickListener(this);
         delete.setOnClickListener(this);

@@ -74,11 +74,11 @@ public class HomeFragment extends Fragment {
         placeholder = (LinearLayout) view.findViewById(R.id.placeholder);
 
         homeGridElements.clear();
-        users = Login.getInstance(getContext()).getUser();
+       // users = Login.getInstance(getContext()).getUser();
         //Log.d("user type", users.getInstance(getContext()).getUserTypeCode());
 
 
-        if (users.getUserTypeCode().equals("Admin")){
+       // if (users.getUserTypeCode().equals("Admin")){
             homeGridElements.add(new HomeGridElement("USERS", R.drawable.user, android.R.color.white, FRAGMENT_USER));
             homeGridElements.add(new HomeGridElement("CUSTOMERS", R.drawable.customer, android.R.color.white, FRAGMENT_CUSTOMER));
             homeGridElements.add(new HomeGridElement("PRODUCTS", R.drawable.product, android.R.color.white, FRAGMENT_PRODUCT));
@@ -90,12 +90,12 @@ public class HomeFragment extends Fragment {
             homeGridElements.add(new HomeGridElement("BILLING", R.drawable.biiling_2, android.R.color.white, FRAGMENT_BILLING));
             homeGridElements.add(new HomeGridElement("RETURN", R.drawable.return_2, android.R.color.white, FRAGMENT_RETURN));
 
-        } else if (users.getUserTypeCode().equals("Agent")) {
+       /* } else if (users.getUserTypeCode().equals("Agent")) {
             homeGridElements.add(new HomeGridElement("ORDER", R.drawable.order_2, android.R.color.white, FRAGMENT_ORDER));
             homeGridElements.add(new HomeGridElement("BILLING", R.drawable.biiling_2, android.R.color.white, FRAGMENT_BILLING));
             homeGridElements.add(new HomeGridElement("RETURN", R.drawable.return_2, android.R.color.white, FRAGMENT_RETURN));
 
-        }
+        }*/
         homeGridAdapter = new HomeGridAdapter(getContext(), homeGridElements);
         home_grid.setAdapter(homeGridAdapter);
         home_grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {

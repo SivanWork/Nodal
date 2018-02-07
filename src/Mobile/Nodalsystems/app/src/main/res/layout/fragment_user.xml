@@ -15,7 +15,7 @@
             android:padding="10dp"
             android:divider="@null"
             android:dividerHeight="5dp"
-            android:id="@+id/customer_list"
+            android:id="@+id/user_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
