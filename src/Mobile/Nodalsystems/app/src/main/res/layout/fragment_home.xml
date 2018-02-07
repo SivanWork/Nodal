@@ -9,9 +9,10 @@
         android:id="@+id/placeholder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="16dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:gravity="center">
 
     <GridView
@@ -19,8 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:numColumns="2"
-        android:verticalSpacing="16dp"
-        android:horizontalSpacing="16dp"
+        android:verticalSpacing="5dp"
+        android:horizontalSpacing="5dp"
         android:drawSelectorOnTop="true"></GridView>
 
     </LinearLayout>
