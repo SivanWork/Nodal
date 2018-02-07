@@ -164,19 +164,18 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
             case FRAGMENT_SCHEME:
                 fragment = new SchemeFragment();
                 break;
-<<<<<<< HEAD
+
             case FRAGMENT_PRODUCT_EDIT:
                 fragment = new SchemeFragment();
                 break;
                 default:
                     fragment=null;
                     break;
-=======
+
 
             default:
                 fragment = null;
                 break;
->>>>>>> 1bfce9596ca6237e1fd0b83b668c3fb4cf490cfb
         }
 
         if (fragment != null) {
