@@ -15,7 +15,11 @@ import android.widget.ListView;
 
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
+import com.example.ranad.nodalsystems.adapter.CustomerAdapter;
+import com.example.ranad.nodalsystems.data_holder.CustomerData;
 import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
+
+import java.util.ArrayList;
 
 
 public class CustomerFragment extends Fragment implements View.OnClickListener {
@@ -24,6 +28,8 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
     Button add, btncancel;
     ImageView ivAdd;
     ListView listView;
+    ArrayList<CustomerData> customerData = new ArrayList<>();
+    CustomerAdapter customerAdapter;
 
 
     public CustomerFragment() {
@@ -55,6 +61,8 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_customer, container, false);
         listView = (ListView) view.findViewById(R.id.customer_list);
+        customerAdapter = new CustomerAdapter(getContext(), customerData);
+        listView.setAdapter(customerAdapter);
         ivAdd = (ImageView) view.findViewById(R.id.ivAdd);
         ivAdd.setOnClickListener(this);
         add_customer = (View) view.findViewById(R.id.add_customer);

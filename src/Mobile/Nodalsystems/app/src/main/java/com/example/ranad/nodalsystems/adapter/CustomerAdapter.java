@@ -61,12 +61,11 @@ public class CustomerAdapter extends BaseAdapter implements View.OnClickListener
 
         View v = view;
         v = layoutInflater.inflate(R.layout.customer_list_item, null);
-        View home_background = (View) v.findViewById(R.id.icon_background);
-        //ImageView del = (ImageView) v.findViewById(R.id.);
         TextView name = (TextView) v.findViewById(R.id.customer_name);
         ImageView edit = (ImageView) v.findViewById(R.id.edit);
         ImageView delete = (ImageView) v.findViewById(R.id.delete);
 
+        name.setText("Customer 1");
         edit.setOnClickListener(this);
         delete.setOnClickListener(this);
 

@@ -136,7 +136,7 @@ public class UserFragment extends Fragment implements View.OnClickListener {
                 add_customer.setVisibility(View.VISIBLE);
                 ivAdd.setVisibility(View.GONE);
                 outer_layout.setVisibility(View.GONE);
-                MainActivity.setAppTitle(R.string.add_customer);
+                MainActivity.setAppTitle(R.string.add_user);
                 break;
             case R.id.add:
 
