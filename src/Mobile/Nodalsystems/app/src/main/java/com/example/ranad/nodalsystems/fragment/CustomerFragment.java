@@ -20,7 +20,7 @@ import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
 
 public class CustomerFragment extends Fragment implements View.OnClickListener {
     View view, add_customer;
-    EditText name, code, amount, email,addrs, alt_addrs, number;
+    EditText name, code, amount, email, addrs, alt_addrs, number;
     Button add, btncancel;
     ImageView ivAdd;
     ListView listView;
@@ -39,8 +39,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
     }
 
 
-
-    public void Construct(SwitchFragment switchFragment){
+    public void Construct(SwitchFragment switchFragment) {
 
     }
 
@@ -54,7 +53,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view =  inflater.inflate(R.layout.fragment_customer, container, false);
+        view = inflater.inflate(R.layout.fragment_customer, container, false);
         listView = (ListView) view.findViewById(R.id.customer_list);
         ivAdd = (ImageView) view.findViewById(R.id.ivAdd);
         ivAdd.setOnClickListener(this);
@@ -95,7 +94,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.ivAdd:
                 add_customer.setVisibility(View.VISIBLE);
                 ivAdd.setVisibility(View.GONE);

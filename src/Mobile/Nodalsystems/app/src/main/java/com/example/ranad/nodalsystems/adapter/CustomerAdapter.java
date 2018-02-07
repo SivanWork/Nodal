@@ -27,11 +27,15 @@ public class CustomerAdapter extends BaseAdapter implements View.OnClickListener
     Context context;
 
 
+<<<<<<< HEAD
     public CustomerAdapter(){
 
 
 }
     public CustomerAdapter(Context context, ArrayList<CustomerData> customerData){
+=======
+    public CustomerAdapter(Context context, ArrayList<CustomerData> customerData) {
+>>>>>>> 1bfce9596ca6237e1fd0b83b668c3fb4cf490cfb
         this.context = context;
         this.customerData = customerData;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -52,7 +56,6 @@ public class CustomerAdapter extends BaseAdapter implements View.OnClickListener
     public long getItemId(int i) {
         return 0;
     }
-
 
 
     @Override

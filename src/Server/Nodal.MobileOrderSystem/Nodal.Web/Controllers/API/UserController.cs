@@ -26,5 +26,35 @@ namespace Nodal.Web.Controllers.API
             }
             return new UserProfileResponse();
         }
+
+        [HttpPost]
+        public BaseResponse CreateUser(UserRequest request)
+        {
+            return _userService.InsertUser(request);
+        }
+
+        [HttpPost]
+        public BaseResponse UpdateUser(UserRequest request)
+        {
+            return _userService.UpdateUser(request);
+        }
+
+        [HttpDelete]
+        public BaseResponse DeleteUser(int discountId)
+        {
+            return _userService.DeleteUser(discountId);
+        }
+
+        [HttpGet]
+        public UserResponse GetUser(int discountId)
+        {
+            return _userService.GetUser(discountId);
+        }
+
+        [HttpGet]
+        public UserResponse GetAllUsers()
+        {
+            return _userService.GetAllUsers();
+        }
     }
 }

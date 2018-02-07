@@ -16,10 +16,10 @@ import com.example.ranad.nodalsystems.R;
 
 
 public class ReturnFragment extends Fragment {
-   View view;
-   AutoCompleteTextView id, cId, pId;
-   EditText quantity, discount, price, comments, tax;
-   Button submit;
+    View view;
+    AutoCompleteTextView id, cId, pId;
+    EditText quantity, discount, price, comments, tax;
+    Button submit;
 
     public ReturnFragment() {
         // Required empty public constructor
@@ -40,7 +40,7 @@ public class ReturnFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view =  inflater.inflate(R.layout.fragment_return, container, false);
+        view = inflater.inflate(R.layout.fragment_return, container, false);
         id = (AutoCompleteTextView) view.findViewById(R.id.id);
         cId = (AutoCompleteTextView) view.findViewById(R.id.customer_id);
         pId = (AutoCompleteTextView) view.findViewById(R.id.product_id);

@@ -18,7 +18,7 @@ import static com.example.ranad.nodalsystems.usage.Keys.SESSION_FILE;
 
 public class Login implements Parcelable {
 
-    public Login(){
+    public Login() {
 
     }
 
@@ -27,7 +27,7 @@ public class Login implements Parcelable {
         return AuthToken;
     }
 
-    public  void setAuthToken(String authToken) {
+    public void setAuthToken(String authToken) {
         AuthToken = authToken;
     }
 
@@ -73,10 +73,10 @@ public class Login implements Parcelable {
 
     String AuthToken;
     Boolean Success;
-      Boolean IsWarning;
-      String Message;
-     String StackTrace;
-     Users User;
+    Boolean IsWarning;
+    String Message;
+    String StackTrace;
+    Users User;
 
 
     protected Login(Parcel in) {
@@ -124,34 +124,35 @@ public class Login implements Parcelable {
                 "IsWarning = " + IsWarning + " " +
                 "Message = " + Message + " " +
                 "StackTrace = " + StackTrace + " " +
-                "User = " + User ;
+                "User = " + User;
     }
 
 
-    public static Login getInstance(Context context){
+    public static Login getInstance(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SESSION_FILE, context.MODE_PRIVATE);
         String string = sharedPreferences.getString(Keys.LOGIN, "null");
         Login login = new Gson().fromJson(string, Login.class);
         Log.d("string", string);
         Log.d("login", String.valueOf(login));
 
-        if (!string.equalsIgnoreCase("null")){
-            if (login.getAuthToken() != null){
-                if (login.getUser() == null){
+        if (!string.equalsIgnoreCase("null")) {
+            if (login.getAuthToken() != null) {
+                if (login.getUser() == null) {
 
                     Log.d("adding roles", login.getAuthToken());
 
                 }
             }
-        }return login;
+        }
+        return login;
     }
 
-    public void saveLogin(Context context){
+    public void saveLogin(Context context) {
         saveLoginInstance(context, this);
     }
 
-    public void saveLoginInstance(Context context, Login login){
-        Log.d("saving",login.toString());
+    public void saveLoginInstance(Context context, Login login) {
+        Log.d("saving", login.toString());
         SharedPreferences sharedPreferences = context.getSharedPreferences(SESSION_FILE, context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(Keys.LOGIN, new Gson().toJson(login));

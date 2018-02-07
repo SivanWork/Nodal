@@ -40,7 +40,7 @@ import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_SCHEME;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_USER;
 
 
-public class HomeFragment extends Fragment{
+public class HomeFragment extends Fragment {
 
     GridView home_grid;
     View view;
@@ -48,44 +48,52 @@ public class HomeFragment extends Fragment{
     HomeGridAdapter homeGridAdapter;
     SwitchFragment switchFragment;
     LinearLayout placeholder;
+
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    public void Construct(SwitchFragment switchFragment){
+    public void Construct(SwitchFragment switchFragment) {
 
     }
 
-    public static HomeFragment newInstance(SwitchFragment switchFragment){
+    public static HomeFragment newInstance(SwitchFragment switchFragment) {
         HomeFragment fragment = new HomeFragment();
         fragment.Construct(switchFragment);
         return fragment;
     }
 
     Users users;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view= inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
         home_grid = (GridView) view.findViewById(R.id.home_grid);
         placeholder = (LinearLayout) view.findViewById(R.id.placeholder);
 
         homeGridElements.clear();
         users = Login.getInstance(getContext()).getUser();
         //Log.d("user type", users.getInstance(getContext()).getUserTypeCode());
+<<<<<<< HEAD
         if (users.getUserTypeCode().equals("Admin")){
             homeGridElements.add(new HomeGridElement("USERS", R.drawable.customer, android.R.color.white, FRAGMENT_USER));
             homeGridElements.add(new HomeGridElement("CUSTOMERS", R.drawable.customer, android.R.color.white, FRAGMENT_CUSTOMER));
             homeGridElements.add(new HomeGridElement("PRODUCTS", R.drawable.product, android.R.color.white, FRAGMENT_PRODUCT));
             homeGridElements.add(new HomeGridElement("SCHEME",R.drawable.scheme, android.R.color.white, FRAGMENT_SCHEME));
+=======
+        if (users.getUserTypeCode().equals("Admin")) {
+            homeGridElements.add(new HomeGridElement("CUSTOMERS", R.drawable.customer, android.R.color.white, FRAGMENT_CUSTOMER));
+            homeGridElements.add(new HomeGridElement("SCHEME", R.drawable.scheme, android.R.color.white, FRAGMENT_SCHEME));
+>>>>>>> 1bfce9596ca6237e1fd0b83b668c3fb4cf490cfb
             homeGridElements.add(new HomeGridElement("REPORT", R.drawable.report, android.R.color.white, FRAGMENT_REPORT));
             homeGridElements.add(new HomeGridElement("DISCOUNT", R.drawable.discount, android.R.color.white, FRAGMENT_DISCOUNT));
-            homeGridElements.add(new HomeGridElement("ORDER",R.drawable.order_2, android.R.color.white, FRAGMENT_ORDER));
+            homeGridElements.add(new HomeGridElement("ORDER", R.drawable.order_2, android.R.color.white, FRAGMENT_ORDER));
             homeGridElements.add(new HomeGridElement("BILLING", R.drawable.biiling_2, android.R.color.white, FRAGMENT_BILLING));
             homeGridElements.add(new HomeGridElement("RETURN", R.drawable.return_2, android.R.color.white, FRAGMENT_RETURN));
 
-        }else if (users.getUserTypeCode().equals("Agent")) {
+        } else if (users.getUserTypeCode().equals("Agent")) {
             homeGridElements.add(new HomeGridElement("ORDER", R.drawable.order_2, android.R.color.white, FRAGMENT_ORDER));
             homeGridElements.add(new HomeGridElement("BILLING", R.drawable.biiling_2, android.R.color.white, FRAGMENT_BILLING));
             homeGridElements.add(new HomeGridElement("RETURN", R.drawable.return_2, android.R.color.white, FRAGMENT_RETURN));
@@ -94,12 +102,12 @@ public class HomeFragment extends Fragment{
         homeGridAdapter = new HomeGridAdapter(getContext(), homeGridElements);
         home_grid.setAdapter(homeGridAdapter);
         home_grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-           @Override
-           public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-             switchFragment.switchToFragment(homeGridElements.get(i).target);
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                switchFragment.switchToFragment(homeGridElements.get(i).target);
 
-           }
-       });
+            }
+        });
         return view;
 
     }

@@ -2,10 +2,7 @@
 using Nodal.Common.Schema;
 using Nodal.DataAccess;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Nodal.BusinessAccess.Service
 {
@@ -58,6 +55,95 @@ namespace Nodal.BusinessAccess.Service
             }
 
             return usersResponse;
+        }
+
+        public BaseResponse InsertUser(UserRequest request)
+        {
+            BaseResponse userResponse = new BaseResponse();
+            try
+            {
+                var orderID = repository.InsertUser(request.user);
+                userResponse.Success = true;
+            }
+            catch (Exception ex)
+            {
+                userResponse.Success = false;
+                userResponse.Message = ex.Message;
+                userResponse.StackTrace = ex.StackTrace;
+            }
+
+            return userResponse;
+        }
+
+        public BaseResponse UpdateUser(UserRequest request)
+        {
+            BaseResponse userResponse = new BaseResponse();
+            try
+            {
+                var orderID = repository.UpdateUser(request.user);
+                userResponse.Success = true;
+            }
+            catch (Exception ex)
+            {
+                userResponse.Success = false;
+                userResponse.Message = ex.Message;
+                userResponse.StackTrace = ex.StackTrace;
+            }
+
+            return userResponse;
+        }
+
+        public BaseResponse DeleteUser(int userId)
+        {
+            BaseResponse userResponse = new BaseResponse();
+            try
+            {
+                repository.DeleteUser(userId);
+                userResponse.Success = true;
+            }
+            catch (Exception ex)
+            {
+                userResponse.Success = false;
+                userResponse.Message = ex.Message;
+                userResponse.StackTrace = ex.StackTrace;
+            }
+
+            return userResponse;
+        }
+
+        public UserResponse GetUser(int userId)
+        {
+            UserResponse userResponse = new UserResponse();
+            try
+            {
+                userResponse.user = repository.GetUser(userId);
+                userResponse.Success = true;
+            }
+            catch (Exception ex)
+            {
+                userResponse.Success = false;
+                userResponse.Message = ex.Message;
+                userResponse.StackTrace = ex.StackTrace;
+            }
+            return userResponse;
+        }
+
+        public UserResponse GetAllUsers()
+        {
+            UserResponse userResponse = new UserResponse();
+            try
+            {
+                userResponse.userList = repository.GetUsers().ToList();
+                userResponse.Success = true;
+            }
+            catch (Exception ex)
+            {
+                userResponse.Success = false;
+                userResponse.Message = ex.Message;
+                userResponse.StackTrace = ex.StackTrace;
+            }
+
+            return userResponse;
         }
     }
 }

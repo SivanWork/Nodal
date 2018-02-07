@@ -9,6 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.ranad.nodalsystems.database.Customers;
+import com.example.ranad.nodalsystems.database.CustomersDao;
+import com.example.ranad.nodalsystems.database.Products;
+import com.example.ranad.nodalsystems.database.ProductsDao;
 import com.example.ranad.nodalsystems.fragment.BillingFragment;
 import com.example.ranad.nodalsystems.fragment.CustomerFragment;
 import com.example.ranad.nodalsystems.fragment.DiscountFragment;
@@ -34,12 +38,16 @@ import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_RETURN;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_SCHEME;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_USER;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements SwitchFragment {
 
 
-    public  static SwitchFragment switchFragment;
-   private static android.support.v7.widget.Toolbar toolbar;
+    public static SwitchFragment switchFragment;
+    private static android.support.v7.widget.Toolbar toolbar;
 
+    List<Customers> customersList = new ArrayList<>();
 
 
     public static void setSwitchFragment(SwitchFragment switchFragment) {
@@ -47,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
     }
 
 
-    public static SwitchFragment getSwitchFragment(){
+    public static SwitchFragment getSwitchFragment() {
         return switchFragment;
     }
 
@@ -64,9 +72,45 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
         int target = intent.getIntExtra("target", 0);
-        Log.d("target", target + " ");
-            switchToFragment(target);
 
+        //  String authToken = intent.getStringExtra("authToken");
+
+
+        // Log.d("authToken", authToken + " ");
+        switchToFragment(target);
+        //Log.i("LIST","ZZZZ"+customersList.size());
+
+        loadDefaultData();
+
+    }
+
+    public void loadDefaultData() {
+        CustomersDao customersDao = App.getDaoSession().getCustomersDao();
+        Customers customers = null;
+        String customerNames[] = {"pattabhi", "siva", "rajesh", "kavya", "lavanya"};
+        List<Customers> customersList = customersDao.queryBuilder().list();
+        if (customersList.size() == 0) {
+            for (int i = 0; i < 5; i++) {
+                customers = new Customers();
+                customers.setFirstName(customerNames[i]);
+                customersDao.insert(customers);
+            }
+        }
+
+        ProductsDao productsDao = App.getDaoSession().getProductsDao();
+        Products products = null;
+
+        String productNames[] = {"Satoor Soap", "Dabur Paste", "Parachute Oil", "Surf Excel", "Dishwasher"};
+        List<Products> productsList = productsDao.queryBuilder().list();
+        Double amounts[] = {100.00, 200.00, 300.00, 400.00, 500.00};
+        if (productsList.size() == 0) {
+            for (int i = 0; i < 5; i++) {
+                products = new Products();
+                products.setProductName(productNames[i]);
+                products.setDealerPrice(amounts[i]);
+                productsDao.insert(products);
+            }
+        }
     }
 
     @Override
@@ -75,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
         toolbar.setTitle(R.string.home_title);
     }
 
-    public static void setAppTitle(int resId){
+    public static void setAppTitle(int resId) {
         toolbar.setTitle(resId);
     }
 
@@ -85,10 +129,10 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
         Log.d("switching fragment", "target" + target);
         Fragment fragment;
 
-        switch (target){
+        switch (target) {
             case FRAGMENT_HOME:
                 FragmentManager fragmentManager = this.getSupportFragmentManager();
-                for (int i=0; i<fragmentManager.getBackStackEntryCount(); ++i){
+                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
                     fragmentManager.popBackStack();
                 }
                 fragment = HomeFragment.newInstance(this);
@@ -103,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
                 fragment = new ProductFragment();
                 break;
             case FRAGMENT_ORDER:
-                fragment = new  OrderFragment();
+                fragment = new OrderFragment();
                 break;
             case FRAGMENT_BILLING:
                 fragment = new BillingFragment();
@@ -120,21 +164,28 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
             case FRAGMENT_SCHEME:
                 fragment = new SchemeFragment();
                 break;
+<<<<<<< HEAD
             case FRAGMENT_PRODUCT_EDIT:
                 fragment = new SchemeFragment();
                 break;
                 default:
                     fragment=null;
                     break;
+=======
+
+            default:
+                fragment = null;
+                break;
+>>>>>>> 1bfce9596ca6237e1fd0b83b668c3fb4cf490cfb
         }
 
-        if (fragment != null){
+        if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             String s = fragment.getClass().getName();
             boolean frag = fragmentManager.popBackStackImmediate(s, 0);
-            Log.d("fragment", s +" " +frag);
+            Log.d("fragment", s + " " + frag);
 
-            if (!frag){
+            if (!frag) {
                 FragmentTransaction fragmenttransaction = fragmentManager.beginTransaction();
                 fragmenttransaction.replace(R.id.content, fragment);
                 fragmenttransaction.addToBackStack(s);
@@ -144,16 +195,15 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
     }
 
 
-
     @Override
     public void onBackPressed() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
-                Log.d("count", count + "");
-            if (count  == 1){
-                finish();
-            }else {
-                super.onBackPressed();
-            }
+        Log.d("count", count + "");
+        if (count == 1) {
+            finish();
+        } else {
+            super.onBackPressed();
+        }
 
 
     }

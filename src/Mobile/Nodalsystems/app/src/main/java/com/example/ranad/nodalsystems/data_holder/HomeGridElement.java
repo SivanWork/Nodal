@@ -28,7 +28,7 @@ public class HomeGridElement {
         this.title = title;
     }
 
-     public String title;
+    public String title;
 
     public int getIcon() {
         return icon;
@@ -47,9 +47,9 @@ public class HomeGridElement {
     }
 
     public int icon;
-    public  int background;
+    public int background;
 
-    public  HomeGridElement(String title, int icon, int background, int target) {
+    public HomeGridElement(String title, int icon, int background, int target) {
         this.title = title;
         this.icon = icon;
         this.background = background;

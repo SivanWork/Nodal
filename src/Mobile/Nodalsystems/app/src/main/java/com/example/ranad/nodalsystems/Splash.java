@@ -17,8 +17,8 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         openScreen();
     }
-    
-    protected void openScreen(){
+
+    protected void openScreen() {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
@@ -40,7 +40,7 @@ public class Splash extends AppCompatActivity {
                                 }
                             }
                             startActivity(intent);
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

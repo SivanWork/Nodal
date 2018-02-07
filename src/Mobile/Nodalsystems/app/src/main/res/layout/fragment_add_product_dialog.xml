@@ -13,42 +13,41 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:gravity="center"
-            android:textSize="18sp"
-            android:text="Add Product"
             android:fontFamily="sans-serif-condensed"
-            android:textColor="@android:color/black"/>
+            android:gravity="center"
+            android:text="Add Product"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
-       <Spinner
-           android:layout_marginTop="20dp"
-           android:id="@+id/prod_spinner"
-           android:layout_width="match_parent"
-           android:layout_height="48dp"
-           ></Spinner>
+        <Spinner
+            android:id="@+id/prod_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"></Spinner>
 
         <EditText
+            android:id="@+id/quantity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="1"
             android:inputType="number"
-            android:id="@+id/quantity"
-            />
+            android:text="1" />
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/add"
+            style="@style/AppTheme.RoundedCornerMaterialButton"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="18sp"
-            android:id="@+id/add"
-            android:text="Add Product"
-            style="@style/AppTheme.RoundedCornerMaterialButton"
             android:layout_marginTop="30dp"
             android:fontFamily="sans-serif-condensed"
-            android:foreground="?attr/selectableItemBackground"/>
+            android:foreground="?attr/selectableItemBackground"
+            android:text="Add Product"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
