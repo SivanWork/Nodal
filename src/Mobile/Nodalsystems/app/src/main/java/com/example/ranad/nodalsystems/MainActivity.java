@@ -172,10 +172,6 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
                     fragment=null;
                     break;
 
-
-            default:
-                fragment = null;
-                break;
         }
 
         if (fragment != null) {

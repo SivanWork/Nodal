@@ -99,6 +99,7 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
         order_list.setLayoutManager(linearLayoutManager);
         totalOrderAdapter = new TotalOrdersAdapter((ArrayList<Orders>) ordersList, getContext(), this);
         order_list.setAdapter(totalOrderAdapter);
+        totalOrderAdapter.notifyDataSetChanged();
 
         ImageButton backButton = (ImageButton) view.findViewById(R.id.backbutton);
         backButton.setOnClickListener(new View.OnClickListener() {

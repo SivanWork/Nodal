@@ -9,16 +9,15 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
-
 import com.example.ranad.nodalsystems.App;
-
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.database.Customers;
 import com.example.ranad.nodalsystems.database.CustomersDao;
+import com.example.ranad.nodalsystems.database.OrderDetailDB;
+import com.example.ranad.nodalsystems.database.OrderDetailDBDao;
 import com.example.ranad.nodalsystems.database.Orders;
 import com.example.ranad.nodalsystems.fragment.OrderViewFragment;
 import com.example.ranad.nodalsystems.interfaces.OrderAction;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,48 +77,15 @@ public class TotalOrdersAdapter extends RecyclerView.Adapter<TotalOrdersAdapter.
         }
 
         public void bindData(final Orders orderData, final int position) {
-           /* Log.d("CDATE", "LLL" + orderData.getCreatedDate());
-            String createdDate = null;
-            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss ");
-            try {
-                Date date = sdf.parse(String.valueOf(orderData.getCreatedDate()));
-
-                SimpleDateFormat sdf1 = new SimpleDateFormat("dd/M/yyyy");
-                createdDate = sdf1.format(date.getTime());
-                Log.d("AAAAAAAAAA","PAALA"+createdDate);
-            } catch (Exception e) {
-
-            }
-*/
-
             CustomersDao customersDao = App.getDaoSession().getCustomersDao();
             List<Customers> customersList = customersDao.queryBuilder().where(CustomersDao.Properties.Id.eq(orderData.getCustomerId())).list();
+            OrderDetailDBDao orderDetailDBDao = App.getDaoSession().getOrderDetailDBDao();
+            List<OrderDetailDB> orderDetailDBList = orderDetailDBDao.queryBuilder().where(OrderDetailDBDao.Properties.OrderId.eq(orderData.getId())).list();
             customerName.setText(customersList.get(0).getFirstName());
             code.setText("CD00" + customersList.get(0).getId());
             amount.setText(orderData.getTotalOrderAmount() + "");
             dateview.setText(orderData.getCreatedDate() + "");
-            items.setText("22");
-
-            /*
-
-            ProductsDao productsDao = App.getDaoSession().getProductsDao();
-            List<Products> productsList = productsDao.queryBuilder().where(ProductsDao.Properties.Id.eq(orderData.getProductId())).list();
-            String productName = productsList.get(0).getProductName();
-
-            prod_name.setText(productName);
-            quantity.setText(orderData.getQuantity() + "");
-            float total = orderData.getNetPrice();
-            net_price.setText(total + "");
-            delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Toast.makeText(context, "unable to delete", Toast.LENGTH_SHORT).show();
-                    orderAction.delete(position);
-
-                }
-            });
-*/
-
+            items.setText(orderDetailDBList.size()+"");
         }
 
 
