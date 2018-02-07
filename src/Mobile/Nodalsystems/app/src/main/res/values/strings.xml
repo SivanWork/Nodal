@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Nodal system</string>
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="appbar_scrolling_view_behaviour" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
@@ -10,7 +9,8 @@
     <string name="return_title">RETURN</string>
     <string name="customer_title">CUSTOMERS</string>
     <string name="user_title">USERS</string>
-    <string name="report_title">REPORT</string>
+    <string name="report_title">REPOR
+T</string>
     <string name="scheme_title">SCHEME</string>
     <string name="add_customer">ADD CUSTOMER</string>
     <string name="add_user">ADD USER</string>
