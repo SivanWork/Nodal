@@ -130,7 +130,8 @@
             android:fontFamily="sans-serif-condensed"
             android:foreground="?attr/selectableItemBackground"
             android:text="GENERATE"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="normal|bold" />
 
     </LinearLayout>
 </LinearLayout>
