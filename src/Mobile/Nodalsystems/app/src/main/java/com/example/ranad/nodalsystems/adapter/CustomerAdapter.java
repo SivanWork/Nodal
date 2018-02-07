@@ -5,24 +5,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.data_holder.CustomerData;
+import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
 
 import java.util.ArrayList;
+
+import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_EDIT;
 
 /**
  * Created by Rana D on 1/29/2018.
  */
 
-public class CustomerAdapter extends BaseAdapter {
+public class CustomerAdapter extends BaseAdapter implements View.OnClickListener {
     ArrayList<CustomerData> customerData;
     LayoutInflater layoutInflater;
     Context context;
 
 
+
+    public CustomerAdapter(){
+
+
+}
     public CustomerAdapter(Context context, ArrayList<CustomerData> customerData){
+
         this.context = context;
         this.customerData = customerData;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -45,7 +56,6 @@ public class CustomerAdapter extends BaseAdapter {
     }
 
 
-
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
@@ -54,9 +64,25 @@ public class CustomerAdapter extends BaseAdapter {
         View home_background = (View) v.findViewById(R.id.icon_background);
         //ImageView del = (ImageView) v.findViewById(R.id.);
         TextView name = (TextView) v.findViewById(R.id.customer_name);
+        ImageView edit = (ImageView) v.findViewById(R.id.edit);
+        ImageView delete = (ImageView) v.findViewById(R.id.delete);
 
+        edit.setOnClickListener(this);
+        delete.setOnClickListener(this);
 
         return v;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.edit:
+                Toast.makeText(context, "unable to edit", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.delete:
+                Toast.makeText(context, "unable to delete", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 }
 

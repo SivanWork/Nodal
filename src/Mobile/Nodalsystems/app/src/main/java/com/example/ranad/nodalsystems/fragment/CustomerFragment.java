@@ -19,8 +19,8 @@ import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
 
 
 public class CustomerFragment extends Fragment implements View.OnClickListener {
-    View view, add_customer;
-    EditText name, code, amount, email,addrs, alt_addrs, number;
+    View view, add_customer,outer;
+    EditText name, code, amount, email, addrs, alt_addrs, number;
     Button add, btncancel;
     ImageView ivAdd;
     ListView listView;
@@ -39,8 +39,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
     }
 
 
-
-    public void Construct(SwitchFragment switchFragment){
+    public void Construct(SwitchFragment switchFragment) {
 
     }
 
@@ -54,7 +53,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view =  inflater.inflate(R.layout.fragment_customer, container, false);
+        view = inflater.inflate(R.layout.fragment_customer, container, false);
         listView = (ListView) view.findViewById(R.id.customer_list);
         ivAdd = (ImageView) view.findViewById(R.id.ivAdd);
         ivAdd.setOnClickListener(this);
@@ -70,6 +69,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
         add.setOnClickListener(this);
         btncancel = (Button) view.findViewById(R.id.btnCancel);
         btncancel.setOnClickListener(this);
+        outer = (View) view.findViewById(R.id.outer);
 
         return view;
     }
@@ -95,10 +95,11 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.ivAdd:
                 add_customer.setVisibility(View.VISIBLE);
                 ivAdd.setVisibility(View.GONE);
+                outer.setVisibility(View.GONE);
                 MainActivity.setAppTitle(R.string.add_customer);
                 break;
             case R.id.add:
@@ -107,6 +108,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
             case R.id.btnCancel:
                 add_customer.setVisibility(View.GONE);
                 ivAdd.setVisibility(View.VISIBLE);
+                outer.setVisibility(View.VISIBLE);
                 MainActivity.setAppTitle(R.string.customer_title);
                 break;
         }

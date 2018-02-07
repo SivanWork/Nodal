@@ -1,44 +1,73 @@
+
 package com.example.ranad.nodalsystems.model;
 
+import java.io.Serializable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.Parcelable.Creator;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
+public class OrderPojo implements Serializable, Parcelable
+{
 
-/**
- * Created by Rana D on 2/2/2018.
- */
+    @SerializedName("order")
+    @Expose
+    private Order order;
+    public final static Creator<OrderPojo> CREATOR = new Creator<OrderPojo>() {
 
-public class OrderPojo implements Parcelable {
-    ArrayList<Order> order;
 
-    public OrderPojo(Parcel in) {
-        order = in.createTypedArrayList(Order.CREATOR);
-    }
-
-    public OrderPojo() {
-
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(order);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<OrderPojo> CREATOR = new Creator<OrderPojo>() {
-        @Override
+        @SuppressWarnings({
+            "unchecked"
+        })
         public OrderPojo createFromParcel(Parcel in) {
             return new OrderPojo(in);
         }
 
-        @Override
         public OrderPojo[] newArray(int size) {
-            return new OrderPojo[size];
+            return (new OrderPojo[size]);
         }
-    };
+
+    }
+    ;
+    private final static long serialVersionUID = 5226242992404228261L;
+
+    protected OrderPojo(Parcel in) {
+        this.order = ((Order) in.readValue((Order.class.getClassLoader())));
+    }
+
+    /**
+     * No args constructor for use in serialization
+     * 
+     */
+    public OrderPojo() {
+    }
+
+    /**
+     * 
+     * @param order
+     */
+    public OrderPojo(Order order) {
+        super();
+        this.order = order;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(order);
+    }
+
+    public int describeContents() {
+        return  0;
+    }
+
 }

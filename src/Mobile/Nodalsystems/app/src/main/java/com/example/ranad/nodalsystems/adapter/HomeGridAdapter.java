@@ -23,10 +23,10 @@ public class HomeGridAdapter extends BaseAdapter {
     Context context;
     LayoutInflater layoutInflater;
 
-   public HomeGridAdapter(Context context, ArrayList<HomeGridElement> homeGridElements){
+    public HomeGridAdapter(Context context, ArrayList<HomeGridElement> homeGridElements) {
         this.context = context;
         this.homeGridElements = homeGridElements;
-       layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override

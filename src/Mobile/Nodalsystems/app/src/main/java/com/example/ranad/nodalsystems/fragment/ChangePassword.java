@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.example.ranad.nodalsystems.R;
 
-public class ChangePassword extends DialogFragment implements View.OnClickListener{
+public class ChangePassword extends DialogFragment implements View.OnClickListener {
     View view;
     Context context;
     EditText new_pwd, renter_pwd;
@@ -31,7 +31,7 @@ public class ChangePassword extends DialogFragment implements View.OnClickListen
         // Required empty public constructor
     }
 
-    public void construct(){
+    public void construct() {
 
     }
 
@@ -50,7 +50,7 @@ public class ChangePassword extends DialogFragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view =  inflater.inflate(R.layout.fragment_change_password, container, false);
+        view = inflater.inflate(R.layout.fragment_change_password, container, false);
 
        /* WindowManager.LayoutParams w = new WindowManager.LayoutParams();
         w.copyFrom(getDialog().getWindow().getAttributes());
@@ -98,9 +98,9 @@ public class ChangePassword extends DialogFragment implements View.OnClickListen
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        if (Build.VERSION.SDK_INT <Build.VERSION_CODES.LOLLIPOP){
-            setStyle(STYLE_NO_TITLE , android.R.style.Theme_DeviceDefault_Dialog);
-        }else{
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            setStyle(STYLE_NO_TITLE, android.R.style.Theme_DeviceDefault_Dialog);
+        } else {
             setStyle(STYLE_NO_TITLE, android.R.style.Theme_Material_Dialog);
         }
         return super.onCreateDialog(savedInstanceState);
@@ -108,15 +108,15 @@ public class ChangePassword extends DialogFragment implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.cancel:
                 dismiss();
                 break;
             case R.id.change:
-                if (new_pwd.getText().toString().equals(renter_pwd.getText().toString())){
+                if (new_pwd.getText().toString().equals(renter_pwd.getText().toString())) {
                     Toast.makeText(getContext(), "Changed Password", Toast.LENGTH_SHORT).show();
                     dismiss();
-                }else{
+                } else {
                     Toast.makeText(getContext(), "Please try again", Toast.LENGTH_SHORT).show();
                 }
                 break;

@@ -1,120 +1,149 @@
+
 package com.example.ranad.nodalsystems.model;
 
+import java.io.Serializable;
+import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.util.List;
-
-/**
- * Created by Rana D on 2/1/2018.
- */
-
-public class Order implements Parcelable {
+import android.os.Parcelable.Creator;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 
-    protected Order(Parcel in) {
-        OrderId = in.readInt();
-        CustomerId = in.readInt();
-        TotalOrderAmount = in.readInt();
-        OrderStatusGroup = in.readInt();
-        OrderStatusElementCode = in.readInt();
-        OrderDetails = in.createTypedArrayList(com.example.ranad.nodalsystems.model.OrderDetails.CREATOR);
-    }
+public class Order implements Serializable, Parcelable
+{
 
-    public static final Creator<Order> CREATOR = new Creator<Order>() {
-        @Override
+    @SerializedName("OrderId")
+    @Expose
+    private int orderId;
+    @SerializedName("CustomerId")
+    @Expose
+    private int customerId;
+    @SerializedName("TotalOrderAmount")
+    @Expose
+    private double totalOrderAmount;
+    @SerializedName("OrderStatusGroup")
+    @Expose
+    private int orderStatusGroup;
+    @SerializedName("OrderStatusElementCode")
+    @Expose
+    private int orderStatusElementCode;
+    @SerializedName("OrderDetails")
+    @Expose
+    private List<OrderDetail> orderDetails = null;
+    public final static Creator<Order> CREATOR = new Creator<Order>() {
+
+
+        @SuppressWarnings({
+            "unchecked"
+        })
         public Order createFromParcel(Parcel in) {
             return new Order(in);
         }
 
-        @Override
         public Order[] newArray(int size) {
-            return new Order[size];
+            return (new Order[size]);
         }
-    };
+
+    }
+    ;
+    private final static long serialVersionUID = -1198251640207082120L;
+
+    protected Order(Parcel in) {
+        this.orderId = ((int) in.readValue((int.class.getClassLoader())));
+        this.customerId = ((int) in.readValue((int.class.getClassLoader())));
+        this.totalOrderAmount = ((double) in.readValue((double.class.getClassLoader())));
+        this.orderStatusGroup = ((int) in.readValue((int.class.getClassLoader())));
+        this.orderStatusElementCode = ((int) in.readValue((int.class.getClassLoader())));
+        in.readList(this.orderDetails, (com.example.ranad.nodalsystems.model.OrderDetail.class.getClassLoader()));
+    }
+
+    /**
+     * No args constructor for use in serialization
+     * 
+     */
+    public Order() {
+    }
+
+    /**
+     * 
+     * @param orderDetails
+     * @param totalOrderAmount
+     * @param customerId
+     * @param orderStatusGroup
+     * @param orderStatusElementCode
+     * @param orderId
+     */
+    public Order(int orderId, int customerId, double totalOrderAmount, int orderStatusGroup, int orderStatusElementCode, List<OrderDetail> orderDetails) {
+        super();
+        this.orderId = orderId;
+        this.customerId = customerId;
+        this.totalOrderAmount = totalOrderAmount;
+        this.orderStatusGroup = orderStatusGroup;
+        this.orderStatusElementCode = orderStatusElementCode;
+        this.orderDetails = orderDetails;
+    }
 
     public int getOrderId() {
-        return OrderId;
+        return orderId;
     }
 
     public void setOrderId(int orderId) {
-        OrderId = orderId;
+        this.orderId = orderId;
     }
 
     public int getCustomerId() {
-        return CustomerId;
+        return customerId;
     }
 
     public void setCustomerId(int customerId) {
-        CustomerId = customerId;
+        this.customerId = customerId;
     }
 
-    public int getTotalOrderAmount() {
-        return TotalOrderAmount;
+    public double getTotalOrderAmount() {
+        return totalOrderAmount;
     }
 
-    public void setTotalOrderAmount(int totalOrderAmount) {
-        TotalOrderAmount = totalOrderAmount;
+    public void setTotalOrderAmount(double totalOrderAmount) {
+        this.totalOrderAmount = totalOrderAmount;
     }
 
     public int getOrderStatusGroup() {
-        return OrderStatusGroup;
+        return orderStatusGroup;
     }
 
     public void setOrderStatusGroup(int orderStatusGroup) {
-        OrderStatusGroup = orderStatusGroup;
+        this.orderStatusGroup = orderStatusGroup;
     }
 
     public int getOrderStatusElementCode() {
-        return OrderStatusElementCode;
+        return orderStatusElementCode;
     }
 
     public void setOrderStatusElementCode(int orderStatusElementCode) {
-        OrderStatusElementCode = orderStatusElementCode;
+        this.orderStatusElementCode = orderStatusElementCode;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
 
-
-    int OrderId;
-        int CustomerId;
-        int TotalOrderAmount;
-        int OrderStatusGroup;
-        int OrderStatusElementCode;
-
-    public List<com.example.ranad.nodalsystems.model.OrderDetails> getOrderDetails() {
-        return OrderDetails;
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(orderId);
+        dest.writeValue(customerId);
+        dest.writeValue(totalOrderAmount);
+        dest.writeValue(orderStatusGroup);
+        dest.writeValue(orderStatusElementCode);
+        dest.writeList(orderDetails);
     }
 
-    public void setOrderDetails(List<com.example.ranad.nodalsystems.model.OrderDetails> orderDetails) {
-        OrderDetails = orderDetails;
-    }
-
-    List<OrderDetails> OrderDetails;
-
-    @Override
     public int describeContents() {
-        return 0;
+        return  0;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(OrderId);
-        parcel.writeInt(CustomerId);
-        parcel.writeInt(TotalOrderAmount);
-        parcel.writeInt(OrderStatusGroup);
-        parcel.writeInt(OrderStatusElementCode);
-        parcel.writeTypedList(OrderDetails);
-    }
-
-    @Override
-    public String toString() {
-        return "order{" +
-                "OrderId='" + OrderId + '\'' +
-                ", CustomerId='" + CustomerId + '\'' +
-                ", TotalOrderAmount=" + TotalOrderAmount +
-                ", OrderStatusGroup=" + OrderStatusGroup +
-                ", OrderStatusElementCode=" + OrderStatusElementCode +
-                ", OrderDetails=" + OrderDetails +
-                '}';
-    }
 }

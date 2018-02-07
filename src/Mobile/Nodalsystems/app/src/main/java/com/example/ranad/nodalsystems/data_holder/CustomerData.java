@@ -8,6 +8,11 @@ import android.os.Parcelable;
  */
 
 public class CustomerData implements Parcelable {
+
+    public CustomerData(String name){
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
