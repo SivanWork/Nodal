@@ -46,12 +46,8 @@
     </style>
 
     <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.AppCompat.Button.Colored">
-<<<<<<< HEAD
         <item name="android:background">@drawable/gradient_button</item>
         <item name="android:textStyle">bold</item>/>
-=======
-        <item name="android:background">@drawable/button_ripple</item>
->>>>>>> a5fdd59e6fa9a7c9333b4f99ac3d4ef8f66ff694
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
