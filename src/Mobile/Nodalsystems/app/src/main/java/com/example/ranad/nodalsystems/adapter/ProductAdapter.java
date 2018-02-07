@@ -10,7 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ranad.nodalsystems.R;
-import com.example.ranad.nodalsystems.data_holder.CustomerData;
+import com.example.ranad.nodalsystems.data_holder.ProductData;
 import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
 
 import java.util.ArrayList;
@@ -18,34 +18,36 @@ import java.util.ArrayList;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_EDIT;
 
 /**
- * Created by Rana D on 1/29/2018.
+ * Created by Kavya V on 06-02-2018.
  */
 
-public class CustomerAdapter extends BaseAdapter implements View.OnClickListener {
-    ArrayList<CustomerData> customerData;
+public class ProductAdapter extends BaseAdapter implements View.OnClickListener {
+
+    ArrayList<ProductData> productData;
     LayoutInflater layoutInflater;
     Context context;
+    SwitchFragment switchFragment;
 
 
-    public CustomerAdapter(){
-
-
-}
-    public CustomerAdapter(Context context, ArrayList<CustomerData> customerData){
+    public ProductAdapter(SwitchFragment switchFragment){
+        this.switchFragment = switchFragment;
+    }
+    public ProductAdapter(Context context, ArrayList<ProductData> productData){
         this.context = context;
-        this.customerData = customerData;
+        this.productData = productData;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
 
+
     @Override
     public int getCount() {
-        return customerData.size();
+        return productData.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return customerData.get(i);
+        return productData.get(i);
     }
 
     @Override
@@ -53,16 +55,14 @@ public class CustomerAdapter extends BaseAdapter implements View.OnClickListener
         return 0;
     }
 
-
-
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-
         View v = view;
-        v = layoutInflater.inflate(R.layout.customer_list_item, null);
+        v = layoutInflater.inflate(R.layout.product_list, null);
         View home_background = (View) v.findViewById(R.id.icon_background);
-        //ImageView del = (ImageView) v.findViewById(R.id.);
-        TextView name = (TextView) v.findViewById(R.id.customer_name);
+
+        TextView name = (TextView) v.findViewById(R.id.product_name);
+        TextView code = (TextView) v.findViewById(R.id.product_code);
         ImageView edit = (ImageView) v.findViewById(R.id.edit);
         ImageView delete = (ImageView) v.findViewById(R.id.delete);
 
@@ -84,4 +84,3 @@ public class CustomerAdapter extends BaseAdapter implements View.OnClickListener
         }
     }
 }
-

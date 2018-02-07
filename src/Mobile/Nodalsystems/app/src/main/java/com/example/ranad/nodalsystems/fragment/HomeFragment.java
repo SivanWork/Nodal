@@ -33,9 +33,11 @@ import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_BILLING;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_CUSTOMER;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_DISCOUNT;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_ORDER;
+import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_PRODUCT;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_REPORT;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_RETURN;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_SCHEME;
+import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_USER;
 
 
 public class HomeFragment extends Fragment{
@@ -73,7 +75,9 @@ public class HomeFragment extends Fragment{
         users = Login.getInstance(getContext()).getUser();
         //Log.d("user type", users.getInstance(getContext()).getUserTypeCode());
         if (users.getUserTypeCode().equals("Admin")){
+            homeGridElements.add(new HomeGridElement("USERS", R.drawable.customer, android.R.color.white, FRAGMENT_USER));
             homeGridElements.add(new HomeGridElement("CUSTOMERS", R.drawable.customer, android.R.color.white, FRAGMENT_CUSTOMER));
+            homeGridElements.add(new HomeGridElement("PRODUCTS", R.drawable.product, android.R.color.white, FRAGMENT_PRODUCT));
             homeGridElements.add(new HomeGridElement("SCHEME",R.drawable.scheme, android.R.color.white, FRAGMENT_SCHEME));
             homeGridElements.add(new HomeGridElement("REPORT", R.drawable.report, android.R.color.white, FRAGMENT_REPORT));
             homeGridElements.add(new HomeGridElement("DISCOUNT", R.drawable.discount, android.R.color.white, FRAGMENT_DISCOUNT));

@@ -14,21 +14,25 @@ import com.example.ranad.nodalsystems.fragment.CustomerFragment;
 import com.example.ranad.nodalsystems.fragment.DiscountFragment;
 import com.example.ranad.nodalsystems.fragment.HomeFragment;
 import com.example.ranad.nodalsystems.fragment.OrderFragment;
+import com.example.ranad.nodalsystems.fragment.ProductFragment;
 import com.example.ranad.nodalsystems.fragment.ReportFragment;
 import com.example.ranad.nodalsystems.fragment.ReturnFragment;
 import com.example.ranad.nodalsystems.fragment.SchemeFragment;
+import com.example.ranad.nodalsystems.fragment.UserFragment;
 import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
 
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_BILLING;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_CUSTOMER;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_DISCOUNT;
+import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_EDIT;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_HOME;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_ORDER;
+import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_PRODUCT;
+import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_PRODUCT_EDIT;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_REPORT;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_RETURN;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_SCHEME;
-
-import android.widget.Toast;
+import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_USER;
 
 public class MainActivity extends AppCompatActivity implements SwitchFragment {
 
@@ -92,6 +96,12 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
             case FRAGMENT_CUSTOMER:
                 fragment = new CustomerFragment();
                 break;
+            case FRAGMENT_USER:
+                fragment = new UserFragment();
+                break;
+            case FRAGMENT_PRODUCT:
+                fragment = new ProductFragment();
+                break;
             case FRAGMENT_ORDER:
                 fragment = new  OrderFragment();
                 break;
@@ -110,7 +120,9 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
             case FRAGMENT_SCHEME:
                 fragment = new SchemeFragment();
                 break;
-
+            case FRAGMENT_PRODUCT_EDIT:
+                fragment = new SchemeFragment();
+                break;
                 default:
                     fragment=null;
                     break;

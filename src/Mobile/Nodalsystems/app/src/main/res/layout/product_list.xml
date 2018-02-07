@@ -14,12 +14,19 @@
             android:layout_height="38dp">
 
             <TextView
-                android:id="@+id/customer_name"
-                android:layout_width="230dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:id="@+id/product_name"
+                android:layout_width="100dp"
                 android:layout_marginLeft="8dp"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/product_code"
+                android:layout_width="100dp"
+                android:textColor="@android:color/black"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
 
             <ImageView
                 android:id="@+id/edit"
@@ -33,8 +40,8 @@
                 android:id="@+id/delete"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginLeft="30dp"
                 android:layout_gravity="center"
+                android:layout_marginLeft="30dp"
                 android:background="@drawable/delete" />
         </LinearLayout>
 

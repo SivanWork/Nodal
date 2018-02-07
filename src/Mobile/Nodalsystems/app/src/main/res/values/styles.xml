@@ -30,6 +30,8 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog"></style>
+
     <style name="floating_hint" parent="TextAppearance.Design.Hint">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@android:color/black</item>
