@@ -3,11 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-<<<<<<< HEAD
     <color name="background">#e5e6e8</color>
-=======
-    <color name="background">#5fa6dd</color>
->>>>>>> 7cbad64a741c5cab514706311c848fbd4c48d1c2
     <color name="back">#E0790B</color>
     <color name="order_background">#1d9364</color>
     <color name="billing_background">#2208ce</color>
