@@ -70,11 +70,11 @@ public class UserFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_product, container, false);
         listView = (ListView) view.findViewById(R.id.customer_list);
-        customerData.add(new CustomerData("Customer 1"));
-        customerData.add(new CustomerData("Customer 2"));
-        customerData.add(new CustomerData("Customer 3"));
-        customerData.add(new CustomerData("Customer 4"));
-        customerData.add(new CustomerData("Customer 5"));
+        customerData.add(new CustomerData("User 1"));
+        customerData.add(new CustomerData("User 2"));
+        customerData.add(new CustomerData("User 3"));
+        customerData.add(new CustomerData("User 4"));
+        customerData.add(new CustomerData("User 5"));
 
         customerAdapter = new CustomerAdapter(getContext(),customerData);
         listView.setAdapter(customerAdapter);
