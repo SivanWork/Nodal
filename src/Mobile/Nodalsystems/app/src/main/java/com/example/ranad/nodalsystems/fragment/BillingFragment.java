@@ -20,12 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BillingFragment extends Fragment {
-   View view;
-   AutoCompleteTextView customer_id, order_id;
-   EditText amount_paid, total;
-   Spinner paid_through;
-   List<String> list = new ArrayList<>();
-   Button generate;
+    View view;
+    AutoCompleteTextView customer_id, order_id;
+    EditText amount_paid, total;
+    Spinner paid_through;
+    List<String> list = new ArrayList<>();
+    Button generate;
 
     public BillingFragment() {
         // Required empty public constructor
@@ -40,14 +40,14 @@ public class BillingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        MainActivity.setAppTitle( R.string.billing_title);
+        MainActivity.setAppTitle(R.string.billing_title);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        view =  inflater.inflate(R.layout.fragment_billing, container, false);
+        view = inflater.inflate(R.layout.fragment_billing, container, false);
         customer_id = (AutoCompleteTextView) view.findViewById(R.id.customer_id);
         order_id = (AutoCompleteTextView) view.findViewById(R.id.order_id);
         amount_paid = (EditText) view.findViewById(R.id.amount);
@@ -59,7 +59,7 @@ public class BillingFragment extends Fragment {
         list.add("Debit card");
         list.add("Paytm");
         list.add("Others");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item, list);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         paid_through.setAdapter(dataAdapter);
 

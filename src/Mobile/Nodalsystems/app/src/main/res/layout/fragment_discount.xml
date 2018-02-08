@@ -1,27 +1,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.ranad.nodalsystems.fragment.DiscountFragment">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            app:hintTextAppearance="@style/floating_hint"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@style/floating_hint">
 
             <EditText
                 android:id="@+id/cust_id"
-                android:layout_marginLeft="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:background="@android:color/transparent"
                 android:fontFamily="sans-serif-condensed"
                 android:hint="Customer id"
@@ -33,18 +33,18 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="5dp"
-            android:background="@android:color/black"/>
+            android:background="@android:color/black" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            app:hintTextAppearance="@style/floating_hint"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@style/floating_hint">
 
             <EditText
                 android:id="@+id/prod_id"
-                android:layout_marginLeft="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:background="@android:color/transparent"
                 android:fontFamily="sans-serif-condensed"
                 android:hint="Product id"
@@ -56,17 +56,18 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="5dp"
-            android:background="@android:color/black"/>
+            android:background="@android:color/black" />
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            app:hintTextAppearance="@style/floating_hint"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@style/floating_hint">
 
             <EditText
                 android:id="@+id/disc_name"
-                android:layout_marginLeft="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:background="@android:color/transparent"
                 android:fontFamily="sans-serif-condensed"
                 android:hint="Discount Name"
@@ -78,17 +79,18 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="5dp"
-            android:background="@android:color/black"/>
+            android:background="@android:color/black" />
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            app:hintTextAppearance="@style/floating_hint"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@style/floating_hint">
 
             <EditText
                 android:id="@+id/disc_type"
-                android:layout_marginLeft="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:background="@android:color/transparent"
                 android:fontFamily="sans-serif-condensed"
                 android:hint="Discount Type"
@@ -100,17 +102,18 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="5dp"
-            android:background="@android:color/black"/>
+            android:background="@android:color/black" />
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            app:hintTextAppearance="@style/floating_hint"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@style/floating_hint">
 
             <EditText
                 android:id="@+id/disc"
-                android:layout_marginLeft="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:background="@android:color/transparent"
                 android:fontFamily="sans-serif-condensed"
                 android:hint="Discount"
@@ -123,7 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="5dp"
-            android:background="@android:color/black"/>
+            android:background="@android:color/black" />
     </LinearLayout>
 
-    </LinearLayout>
+</LinearLayout>

@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
+import com.example.ranad.nodalsystems.database.DaoMaster;
+import com.example.ranad.nodalsystems.database.DaoSession;
+
 import org.greenrobot.greendao.database.Database;
 
 /**
@@ -25,10 +28,10 @@ public class App extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         _INSTANCE = this;
-      //  upgradeSecurityProvider();
+        //  upgradeSecurityProvider();
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "dataholders-db");
         db = helper.getWritableDb();
-        Log.d("DB", "onCreate: "+db);
+        Log.d("DB", "onCreate: " + db);
     }
 
     public static DaoMaster getMaster() {
@@ -36,17 +39,17 @@ public class App extends MultiDexApplication {
     }
 
     public static DaoSession getNewDaoSession() {
-        getMaster().createAllTables(getMaster().getDatabase(),true);
+        getMaster().createAllTables(getMaster().getDatabase(), true);
         return getSession(true);
     }
 
     public static DaoSession getDaoSession() {
-        getMaster().createAllTables(getMaster().getDatabase(),true);
+        getMaster().createAllTables(getMaster().getDatabase(), true);
         return getSession(false);
     }
 
     private static DaoSession getSession(boolean newSession) {
-        getMaster().createAllTables(getMaster().getDatabase(),true);
+        getMaster().createAllTables(getMaster().getDatabase(), true);
         if (newSession) {
             return getMaster().newSession();
         }

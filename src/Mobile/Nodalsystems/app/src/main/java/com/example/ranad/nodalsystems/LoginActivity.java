@@ -95,6 +95,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 Log.d("response", response.body().toString());
                                 response.body().saveLogin(LoginActivity.this);
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                //  intent.putExtra(auth_token,response.body().getAuthToken());
                                 startActivity(intent);
                                 finish();
                             } else {

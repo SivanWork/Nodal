@@ -20,7 +20,11 @@ public class Constants {
     FRAGMENT_CUSTOMER = 4,
             FRAGMENT_SCHEME = 5,
             FRAGMENT_DISCOUNT = 6,
-            FRAGMENT_REPORT = 7;
+            FRAGMENT_REPORT = 7,
+                    FRAGMENT_EDIT = 8,
+    FRAGMENT_PRODUCT_EDIT = 9,
+            FRAGMENT_PRODUCT = 10,
+    FRAGMENT_USER = 11;
 
 
 

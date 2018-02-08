@@ -11,11 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import com.example.ranad.nodalsystems.CartItem;
+import com.example.ranad.nodalsystems.App;
 import com.example.ranad.nodalsystems.R;
+import com.example.ranad.nodalsystems.database.CartItem;
+import com.example.ranad.nodalsystems.database.Products;
+import com.example.ranad.nodalsystems.database.ProductsDao;
 import com.example.ranad.nodalsystems.interfaces.OrderAction;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Rana D on 2/1/2018.
@@ -26,7 +30,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     Context context;
     InputMethodManager inputMethodManager;
     OrderAction orderAction;
-    public  OrderAdapter(ArrayList<CartItem> orderData, Context context, OrderAction  orderAction){
+
+    public OrderAdapter(ArrayList<CartItem> orderData, Context context, OrderAction orderAction) {
         this.context = context;
         this.orderData = orderData;
         inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -54,32 +59,37 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     }
 
 
-    public class OrderViewHolder extends RecyclerView.ViewHolder implements ViewSwitcher.ViewFactory{
+    public class OrderViewHolder extends RecyclerView.ViewHolder implements ViewSwitcher.ViewFactory {
         View itemView;
         TextView prod_name, prod_amount;
-        EditText quantity,net_price, tax;
+        EditText quantity, net_price, tax;
         ImageView delete;
 
         public OrderViewHolder(final Context context, View itemView) {
             super(itemView);
             this.itemView = itemView;
-            prod_name = (TextView) itemView.findViewById(R.id.prod_name);
-            prod_amount = (TextView) itemView.findViewById(R.id.prod_amount);
+            prod_name = (EditText) itemView.findViewById(R.id.prod_name);
+            // prod_amount = (TextView) itemView.findViewById(R.id.prod_amount);
             quantity = (EditText) itemView.findViewById(R.id.etquantity);
             delete = (ImageView) itemView.findViewById(R.id.delete);
             net_price = (EditText) itemView.findViewById(R.id.net_price);
             tax = (EditText) itemView.findViewById(R.id.tax);
         }
 
-        public void bindData(final CartItem orderData, final int position){
-            prod_name.setText(orderData.getProductId());
-            quantity.setText(orderData.getQuantity()+"");
-            int total = 12345 * orderData.getQuantity();
-            net_price.setText(total+"");
+        public void bindData(final CartItem orderData, final int position) {
+
+            ProductsDao productsDao = App.getDaoSession().getProductsDao();
+            List<Products> productsList = productsDao.queryBuilder().where(ProductsDao.Properties.Id.eq(orderData.getProductId())).list();
+            String productName = productsList.get(0).getProductName();
+
+            prod_name.setText(productName);
+            quantity.setText(orderData.getQuantity() + "");
+            float total = orderData.getNetPrice();
+            net_price.setText(total + "");
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   // Toast.makeText(context, "unable to delete", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(context, "unable to delete", Toast.LENGTH_SHORT).show();
                     orderAction.delete(position);
 
                 }

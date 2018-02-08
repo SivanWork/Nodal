@@ -16,30 +16,30 @@ import static com.example.ranad.nodalsystems.usage.Keys.SESSION_FILE;
 
 public class Users implements Parcelable {
 
-     String UserId;
-     String FirstName;
-     String MiddleName;
-     String LastName;
-     String Mobile;
-     String UserTypeCode;
+    String UserId;
+    String FirstName;
+    String MiddleName;
+    String LastName;
+    String Mobile;
+    String UserTypeCode;
     String UserTypeName;
-     String UserTypeActive;
-     String Email;
-      String Address1;
-     String Address2;
-     String City;
-     String State;
-     String Country;
-     String Pin;
-     String ActiveFrom;
-     String ActiveTo;
-     Boolean IsActive;
+    String UserTypeActive;
+    String Email;
+    String Address1;
+    String Address2;
+    String City;
+    String State;
+    String Country;
+    String Pin;
+    String ActiveFrom;
+    String ActiveTo;
+    Boolean IsActive;
 
     public String getUserId() {
         return UserId;
     }
 
-    public  void setUserId(String userId) {
+    public void setUserId(String userId) {
         UserId = userId;
     }
 
@@ -75,8 +75,8 @@ public class Users implements Parcelable {
         Mobile = mobile;
     }
 
-    public  String getUserTypeCode() {
-        return  UserTypeCode;
+    public String getUserTypeCode() {
+        return UserTypeCode;
     }
 
     public void setUserTypeCode(String userTypeCode) {
@@ -180,8 +180,7 @@ public class Users implements Parcelable {
     }
 
 
-
-    public Users(){
+    public Users() {
 
     }
 
@@ -246,17 +245,17 @@ public class Users implements Parcelable {
         parcel.writeByte((byte) (IsActive == null ? 0 : IsActive ? 1 : 2));
     }
 
-    public static  Users getInstance(Context context){
+    public static Users getInstance(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SESSION_FILE, Context.MODE_PRIVATE);
         String s = sharedPreferences.getString(Keys.UserInstance, "null");
         return new Gson().fromJson(s, Users.class);
     }
 
-    public void save(Context context){
+    public void save(Context context) {
         saveUsers(context, this);
     }
 
-    public void saveUsers(Context context, Users users){
+    public void saveUsers(Context context, Users users) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SESSION_FILE, context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(Keys.UserInstance, new Gson().toJson(users));
@@ -282,7 +281,7 @@ public class Users implements Parcelable {
                 "Pin = " + Pin + " " +
                 "ActiveFrom = " + ActiveFrom + " " +
                 "ActiveTo = " + ActiveTo + " " +
-                "IsActive = " + IsActive ;
+                "IsActive = " + IsActive;
 
     }
 }

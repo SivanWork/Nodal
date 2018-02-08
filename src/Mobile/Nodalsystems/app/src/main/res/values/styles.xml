@@ -18,7 +18,7 @@
     <style name="Toolbar" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:fontFamily" tools:targetApi = "jelly_bean">sans-serif-condensed</item>
-        <item name="android:textStyle">normal</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textSize">18sp</item>
     </style>
 
@@ -29,6 +29,8 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">18sp</item>
     </style>
+
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog"></style>
 
     <style name="floating_hint" parent="TextAppearance.Design.Hint">
         <item name="android:textSize">16sp</item>
@@ -44,7 +46,15 @@
     </style>
 
     <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:background">@drawable/button_ripple</item>
+        <item name="android:background">@drawable/gradient_button</item>
+        <item name="android:textStyle">bold</item>/>
+    </style>
+    <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem">
+
+    </style>
+
+    <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>

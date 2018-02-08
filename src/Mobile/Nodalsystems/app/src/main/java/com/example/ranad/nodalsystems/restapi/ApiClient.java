@@ -21,14 +21,14 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class ApiClient {
 
 
-
-    public static final String API_BASE_URL = "http://nodalmobsys.azurewebsites.net";
+    public static final String API_BASE_URL = "http://cellordering.com";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
     private static Retrofit.Builder builder =
             new Retrofit.Builder()
                     .baseUrl(API_BASE_URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create());
 
     private static Retrofit retrofit = builder.build();
@@ -63,7 +63,8 @@ public class ApiClient {
 
             if (!httpClient.interceptors().contains(interceptor)) {
                 httpClient.addInterceptor(interceptor);
-
+                httpClient.readTimeout(120, TimeUnit.SECONDS);
+                httpClient.connectTimeout(60, TimeUnit.SECONDS);
                 builder.client(httpClient.build());
                 retrofit = builder.build();
             }
@@ -72,21 +73,5 @@ public class ApiClient {
         return retrofit.create(serviceClass);
     }
 
-     public static OrderApi createorders(Context context){
-        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.readTimeout(120, TimeUnit.SECONDS);
-        builder.connectTimeout(60, TimeUnit.SECONDS);
-        builder.addInterceptor(httpLoggingInterceptor);
-
-        Retrofit.Builder retrofit = new Retrofit.Builder()
-                .baseUrl(API_BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit r = retrofit.client(builder.build()).build();
-
-        return r.create(OrderApi.class);
-    }
+  
 }
