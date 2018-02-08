@@ -13,4 +13,9 @@ namespace Nodal.BusinessAccess.Model
 
         public List<OrderDetails> OrderDetailList { get; set; }
     }
+
+    public class BulkOrderResponse : BaseResponse
+    {
+        public int orderId { get; set; }
+    }
 }

@@ -16,8 +16,8 @@ namespace Nodal.DataAccess
 
         public int InsertProduct(Products product)
         {
-            string sql = @"INSERT INTO [Products] ([ProductName],[MRP],[DealerPrice],[WholesalePrice],[CGST],[SGST],[IGST],[IsActive])
-     VALUES (@ProductName, @MRP, @DealerPrice, @WholesalePrice, @CGST, @SGST, @IGST, @IsActive); SELECT CAST(SCOPE_IDENTITY() as int)";
+            string sql = @"INSERT INTO [Products] ([ProductName],[MRP],[DealerPrice],[WholesalePrice],[CGST],[SGST],[IGST],[IsActive], [CreatedById], [CreatedDate], [LastUpdatedById], [LastUpdatedDate])
+     VALUES (@ProductName, @MRP, @DealerPrice, @WholesalePrice, @CGST, @SGST, @IGST, @IsActive, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate); SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Connection.Query<int>(sql, product).Single();
             return id;
@@ -27,7 +27,7 @@ namespace Nodal.DataAccess
         {
             string sql = @"UPDATE [dbo].[Products]
    SET [ProductName] = @ProductName,[MRP] = @MRP,[DealerPrice] = @DealerPrice,
-   [WholesalePrice] = @WholesalePrice,[CGST] = @CGST,[SGST] = @SGST,[IGST] = @IGST,[IsActive] = @IsActive 
+   [WholesalePrice] = @WholesalePrice,[CGST] = @CGST,[SGST] = @SGST,[IGST] = @IGST,[IsActive] = @IsActive, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate  
    WHERE [ProductId] = @ProductId";
 
             var id = db.Connection.Query<int>(sql, product).Single();

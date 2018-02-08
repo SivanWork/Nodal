@@ -1,4 +1,6 @@
-﻿namespace Nodal.Common.Schema
+﻿using System;
+
+namespace Nodal.Common.Schema
 {
     public class Schemes
     {
@@ -6,5 +8,9 @@
         public string SchemeName { get; set; }
         public string SchemeCode { get; set; }
         public bool IsActive { get; set; }
+        public int CreatedById { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int LastUpdatedById { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
     }
 }

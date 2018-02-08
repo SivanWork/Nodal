@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Nodal.Common.Schema
 {
@@ -10,6 +11,9 @@ namespace Nodal.Common.Schema
         public int OrderStatusGroup { get; set; }
         public int OrderStatusElementCode { get; set; }
         public List<OrderDetails> OrderDetails { get; set; }
-
+        public int CreatedById { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int LastUpdatedById { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
     }
 }

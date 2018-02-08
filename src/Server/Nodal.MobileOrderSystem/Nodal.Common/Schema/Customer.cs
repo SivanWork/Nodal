@@ -1,4 +1,6 @@
-﻿namespace Nodal.Common.Schema
+﻿using System;
+
+namespace Nodal.Common.Schema
 {
     public class Customer
     {
@@ -17,5 +19,9 @@
         public string Country { get; set; }
         public string Pin { get; set; }
         public bool IsActive { get; set; }
+        public int CreatedById { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int LastUpdatedById { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
     }
 }

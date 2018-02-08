@@ -17,8 +17,8 @@ namespace Nodal.DataAccess
 
         public int InsertBill(Bills bill)
         {
-            string sql = @"INSERT INTO [Bills] ([OrderId],[BillTotal],[PaidAmount],[PaymentStatusGroup],[PaymentStatusElementCode],[Paythru])
-VALUES (@OrderId, @BillTotal, @PaidAmount, @PaymentStatusGroup, @PaymentStatusElementCode, @Paythru) ; SELECT CAST(SCOPE_IDENTITY() as int)";
+            string sql = @"INSERT INTO [Bills] ([OrderId],[BillTotal],[PaidAmount],[PaymentStatusGroup],[PaymentStatusElementCode],[Paythru],[CreatedById],[CreatedDate],[LastUpdatedById],[LastUpdatedDate])
+VALUES (@OrderId, @BillTotal, @PaidAmount, @PaymentStatusGroup, @PaymentStatusElementCode, @Paythru, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate) ; SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Connection.Query<int>(sql, bill).Single();
             return id;
@@ -27,8 +27,8 @@ VALUES (@OrderId, @BillTotal, @PaidAmount, @PaymentStatusGroup, @PaymentStatusEl
         public int UpdateBill(Bills bill)
         {
             string sql = @"UPDATE [Bills] SET [OrderId] = @OrderId, [BillTotal] = @BillTotal, [PaidAmount] = @PaidAmount, 
-[PaymentStatusGroup] = @PaymentStatusGroup, [PaymentStatusElementCode] = @PaymentStatusElementCode, [Paythru] = @Paythru 
-WHERE [BillId] = @BillId";
+[PaymentStatusGroup] = @PaymentStatusGroup, [PaymentStatusElementCode] = @PaymentStatusElementCode, [Paythru] = @Paythru, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate  
+ WHERE [BillId] = @BillId";
 
             var id = db.Connection.Query<int>(sql, bill).Single();
             return id;

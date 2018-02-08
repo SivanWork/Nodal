@@ -18,7 +18,7 @@ namespace Nodal.DataAccess
         public int InsertOrder(Order order)
         {
             string sql = @"
-                            INSERT INTO [Orders] ([CustomerId],[TotalOrderAmount],[OrderStatusGroup],[OrderStatusElementCode]) VALUES (@CustomerId,@TotalOrderAmount,@OrderStatusGroup,@OrderStatusElementCode);
+                            INSERT INTO [Orders] ([CustomerId],[TotalOrderAmount],[OrderStatusGroup],[OrderStatusElementCode], [CreatedById], [CreatedDate], [LastUpdatedById], [LastUpdatedDate]) VALUES (@CustomerId,@TotalOrderAmount,@OrderStatusGroup,@OrderStatusElementCode, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate);
                             SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Connection.Query<int>(sql, order).Single();
@@ -27,15 +27,15 @@ namespace Nodal.DataAccess
 
         public bool InsertOrderDetails(List<OrderDetails> orderDetails)
         {
-            string processQuery = "INSERT INTO OrderDetails ([OrderId],[ProductId],[Quantity],[CGST],[SGST],[IGST],[Discount],[NetPrice]) VALUES (@OrderId,@ProductId,@Quantity,@CGST,@SGST,@IGST,@Discount,@NetPrice)";
+            string processQuery = "INSERT INTO OrderDetails ([OrderId],[ProductId],[Quantity],[CGST],[SGST],[IGST],[Discount],[NetPrice], [CreatedById], [CreatedDate], [LastUpdatedById], [LastUpdatedDate]) VALUES (@OrderId,@ProductId,@Quantity,@CGST,@SGST,@IGST,@Discount,@NetPrice, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate)";
             return db.Connection.Execute(processQuery, orderDetails) > 0;
         }
 
         public int UpdateOrder(Order order)
         {
             string sql = @"UPDATE [Orders] SET [TotalOrderAmount] = @TotalOrderAmount, 
-                            [OrderStatusGroup] = @OrderStatusGroup, [OrderStatusElementCode] = @OrderStatusElementCode
-                            WHERE OrderId = @OrderId";
+                            [OrderStatusGroup] = @OrderStatusGroup, [OrderStatusElementCode] = @OrderStatusElementCode, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate 
+                             WHERE OrderId = @OrderId";
 
             var id = db.Connection.Query<int>(sql, order).Single();
             return id;
@@ -45,7 +45,7 @@ namespace Nodal.DataAccess
         {
             string processQuery = @"UPDATE [OrderDetails] SET [Quantity] = @Quantity,
                                     [CGST] = @CGST, [SGST] = @SGST, [IGST] = @IGST, [Discount] = @Discount,
-                                    [NetPrice] = @NetPrice WHERE [OrderId] = @OrderId";
+                                    [NetPrice] = @NetPrice, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate WHERE [OrderId] = @OrderId";
             return db.Connection.Execute(processQuery, orderDetails) > 0;
         }
 

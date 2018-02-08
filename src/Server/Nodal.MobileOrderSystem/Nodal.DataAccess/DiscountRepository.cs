@@ -16,8 +16,8 @@ namespace Nodal.DataAccess
 
         public int InsertDiscount(Discounts discount)
         {
-            string sql = @"INSERT INTO [Discount] ([ProductId], [DiscountName], [DiscountType], [Discount], [IsActive])
-VALUES (@ProductId, @DiscountName, @DiscountType, @Discount, @IsActive) ; SELECT CAST(SCOPE_IDENTITY() as int)";
+            string sql = @"INSERT INTO [Discount] ([ProductId], [DiscountName], [DiscountType], [Discount], [IsActive], [CreatedById], [CreatedDate], [LastUpdatedById], [LastUpdatedDate])
+VALUES (@ProductId, @DiscountName, @DiscountType, @Discount, @IsActive, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate) ; SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Connection.Query<int>(sql, discount).Single();
             return id;
@@ -26,7 +26,7 @@ VALUES (@ProductId, @DiscountName, @DiscountType, @Discount, @IsActive) ; SELECT
         public int UpdateDiscount(Discounts discount)
         {
             string sql = @"UPDATE [Discount] SET [ProductId] = @ProductId, [DiscountName] = @DiscountName,[DiscountType] = @DiscountType,
-       [Discount] = @Discount, [IsActive] = @IsActive WHERE [Id] = @Id";
+       [Discount] = @Discount, [IsActive] = @IsActive, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate WHERE [Id] = @Id";
 
             var id = db.Connection.Query<int>(sql, discount).Single();
             return id;
