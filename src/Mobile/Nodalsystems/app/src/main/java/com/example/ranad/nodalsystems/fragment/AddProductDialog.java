@@ -76,8 +76,8 @@ public class AddProductDialog extends DialogFragment {
         arrayList.add("3");
         arrayList.add("4");
         arrayList.add("5");*/
-        final ArrayAdapter<String> product = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, arrayList);
-        product.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        final ArrayAdapter<String> product = new ArrayAdapter<String>(getActivity(), R.layout.spinner_checcked, arrayList);
+        product.setDropDownViewResource(R.layout.spinner_item);
         prod_spinner.setAdapter(product);
 
         prod_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

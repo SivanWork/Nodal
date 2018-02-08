@@ -48,9 +48,7 @@
     <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@drawable/gradient_button</item>
         <item name="android:textStyle">bold</item>/>
-        <item name="android:textSize">16sp</item>
     </style>
-
     <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem">
 
     </style>
