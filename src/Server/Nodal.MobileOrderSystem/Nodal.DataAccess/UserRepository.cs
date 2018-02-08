@@ -70,5 +70,11 @@ namespace Nodal.DataAccess
             var result = db.Connection.Query<User>("SELECT * FROM [Users]");
             return result;
         }
+
+        public User GetUserByEmail(string email)
+        {
+            var result = db.Connection.Query("SELECT * FROM [Users] WHERE [Email] = @Email", new { email }).FirstOrDefault();
+            return result;
+        }
     }
 }

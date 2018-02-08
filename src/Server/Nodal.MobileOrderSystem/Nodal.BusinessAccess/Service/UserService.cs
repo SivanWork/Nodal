@@ -145,5 +145,22 @@ namespace Nodal.BusinessAccess.Service
 
             return userResponse;
         }
+
+        public UserResponse GetUserByEMail(string email)
+        {
+            UserResponse userResponse = new UserResponse();
+            try
+            {
+                userResponse.user = repository.GetUserByEmail(email);
+                userResponse.Success = true;
+            }
+            catch (Exception ex)
+            {
+                userResponse.Success = false;
+                userResponse.Message = ex.Message;
+                userResponse.StackTrace = ex.StackTrace;
+            }
+            return userResponse;
+        }
     }
 }
