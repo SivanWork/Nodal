@@ -4,6 +4,7 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity(
         // Define indexes spanning multiple columns here.
         indexes = {
-                //    @Index(value = "productId,productName,mRP,dealerPrice,wholesalePrice,cGST,sGST,iGST,isActive,createdById,createdDate,lastUpdatedById,lastUpdatedDate", unique = true)
+                @Index(value = "id", unique = true)
         })
 
 
@@ -23,19 +24,18 @@ public class Products {
     @Id(autoincrement = true)
     Long id;
 
-    private int productId;
     private String productName;
-    private double mRP;
-    private double dealerPrice;
-    private double wholesalePrice;
-    private double cGST;
-    private double sGST;
-    private double iGST;
+    private float mRP;
+    private float dealerPrice;
+    private float wholesalePrice;
+    private float cGST;
+    private float sGST;
+    private float iGST;
     private boolean isActive;
     private int createdById;
-    private String createdDate;
+    private Date createdDate;
     private int lastUpdatedById;
-    private String lastUpdatedDate;
+    private Date lastUpdatedDate;
 
     /**
      * No args constructor for use in serialization
@@ -56,11 +56,9 @@ public class Products {
      * @param productName
      * @param lastUpdatedById
      * @param sGST
-     * @param productId
      */
-    public Products(int productId, String productName, double mRP, double dealerPrice, double wholesalePrice, double cGST, double sGST, double iGST, boolean isActive, int createdById, String createdDate, int lastUpdatedById, String lastUpdatedDate) {
+    public Products(String productName, float mRP, float dealerPrice, float wholesalePrice, float cGST, float sGST, float iGST, boolean isActive, int createdById, Date createdDate, int lastUpdatedById, Date lastUpdatedDate) {
         super();
-        this.productId = productId;
         this.productName = productName;
         this.mRP = mRP;
         this.dealerPrice = dealerPrice;
@@ -75,11 +73,9 @@ public class Products {
         this.lastUpdatedDate = lastUpdatedDate;
     }
 
-    @Generated(hash = 2034053822)
-    public Products(Long id, int productId, String productName, double mRP, double dealerPrice, double wholesalePrice, double cGST, double sGST, double iGST, boolean isActive, int createdById, String createdDate, int lastUpdatedById,
-                    String lastUpdatedDate) {
+    @Generated(hash = 747382157)
+    public Products(Long id, String productName, float mRP, float dealerPrice, float wholesalePrice, float cGST, float sGST, float iGST, boolean isActive, int createdById, Date createdDate, int lastUpdatedById, Date lastUpdatedDate) {
         this.id = id;
-        this.productId = productId;
         this.productName = productName;
         this.mRP = mRP;
         this.dealerPrice = dealerPrice;
@@ -92,14 +88,6 @@ public class Products {
         this.createdDate = createdDate;
         this.lastUpdatedById = lastUpdatedById;
         this.lastUpdatedDate = lastUpdatedDate;
-    }
-
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
     }
 
     public String getProductName() {
@@ -110,51 +98,51 @@ public class Products {
         this.productName = productName;
     }
 
-    public double getMRP() {
+    public float getMRP() {
         return mRP;
     }
 
-    public void setMRP(double mRP) {
+    public void setMRP(float mRP) {
         this.mRP = mRP;
     }
 
-    public double getDealerPrice() {
+    public float getDealerPrice() {
         return dealerPrice;
     }
 
-    public void setDealerPrice(double dealerPrice) {
+    public void setDealerPrice(float dealerPrice) {
         this.dealerPrice = dealerPrice;
     }
 
-    public double getWholesalePrice() {
+    public float getWholesalePrice() {
         return wholesalePrice;
     }
 
-    public void setWholesalePrice(double wholesalePrice) {
+    public void setWholesalePrice(float wholesalePrice) {
         this.wholesalePrice = wholesalePrice;
     }
 
-    public double getCGST() {
+    public float getCGST() {
         return cGST;
     }
 
-    public void setCGST(double cGST) {
+    public void setCGST(float cGST) {
         this.cGST = cGST;
     }
 
-    public double getSGST() {
+    public float getSGST() {
         return sGST;
     }
 
-    public void setSGST(double sGST) {
+    public void setSGST(float sGST) {
         this.sGST = sGST;
     }
 
-    public double getIGST() {
+    public float getIGST() {
         return iGST;
     }
 
-    public void setIGST(double iGST) {
+    public void setIGST(float iGST) {
         this.iGST = iGST;
     }
 
@@ -174,29 +162,31 @@ public class Products {
         this.createdById = createdById;
     }
 
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
 
     public int getLastUpdatedById() {
         return lastUpdatedById;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getLastUpdatedDate() {
+        return lastUpdatedDate;
+    }
+
+    public void setLastUpdatedDate(Date lastUpdatedDate) {
+        this.lastUpdatedDate = lastUpdatedDate;
     }
 
     public void setLastUpdatedById(int lastUpdatedById) {
         this.lastUpdatedById = lastUpdatedById;
     }
 
-    public String getLastUpdatedDate() {
-        return lastUpdatedDate;
-    }
-
-    public void setLastUpdatedDate(String lastUpdatedDate) {
-        this.lastUpdatedDate = lastUpdatedDate;
-    }
 
     public Long getId() {
         return this.id;

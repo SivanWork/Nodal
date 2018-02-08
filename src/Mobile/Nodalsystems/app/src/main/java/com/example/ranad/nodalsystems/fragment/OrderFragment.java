@@ -154,7 +154,7 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
         material.setAdapter(dataAdapter);
 
         List<Customers> customersList = customersDao.queryBuilder().list();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < customersList.size(); i++) {
             cust.add(customersList.get(i).getFirstName());
         }
         ArrayAdapter<String> customer = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, cust);
@@ -315,6 +315,11 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
     }
 
     @Override
+    public void removeOrdersAfterSync() {
+
+    }
+
+    @Override
     public void saveOrderOffline() {
 
         List<CartItem> cartList = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(customerId)).list();
@@ -364,80 +369,11 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
     public void syncOrderToServer() {
 
 
-        OrdersDao ordersDao = App.getDaoSession().getOrdersDao();
-        OrderDetailDBDao orderDetailDBDao = App.getDaoSession().getOrderDetailDBDao();
 
-        List<Orders> ordersList = ordersDao.queryBuilder().list();
-        int orderId;
-        Order order = null;
-        OrderDetail orderDetail = null;
-        ArrayList<OrderDetail> orderDetailList = null;
-
-        OrderApi orderApi = null;
-        OrderPojo orderPojo = null;
-
-
-        for (int i = 0; i < ordersList.size(); i++) {
-
-            orderId = Integer.parseInt(String.valueOf(ordersList.get(i).getId()));
-            order.setOrderId(orderId);
-            order.setCustomerId(ordersList.get(i).getCustomerId());
-            order.setTotalOrderAmount(ordersList.get(i).getTotalOrderAmount());
-            order.setOrderStatusElementCode(0);
-            order.setOrderStatusGroup(0);
-            List<OrderDetailDB> orderDetailDBList = orderDetailDBDao.queryBuilder().where(OrderDetailDBDao.Properties.OrderId.eq(orderId)).list();
-            orderDetailList = new ArrayList<OrderDetail>();
-            for (int j = 0; j < orderDetailDBList.size(); j++) {
-
-                orderDetail.setProductId(orderDetailDBList.get(j).getProductId());
-                orderDetail.setQuantity(orderDetailDBList.get(j).getQuantity());
-                orderDetail.setNetPrice(orderDetailDBList.get(j).getNetPrice());
-                orderDetail.setCGST(0.0);
-                orderDetail.setSGST(0.0);
-                orderDetail.setIGST(0.0);
-                orderDetail.setOrderId(orderId);
-                orderDetail.setDiscount(0.0);
-                orderDetailList.add(orderDetail);
-
-            }
-            order.setOrderDetails(orderDetailList);
-            orderPojo = new OrderPojo();
-            orderPojo.setOrder(order);
-            Log.i("MSG", "data" + Login.getInstance(getContext()).getAuthToken());
-
-            orderApi =
-                    ApiClient.createService(OrderApi.class, Login.getInstance(getContext()).getAuthToken());
-
-            Call<OrderPojo> call = orderApi.createOrder(orderPojo);
-
-
-            call.enqueue(new Callback<OrderPojo>() {
-                @Override
-                public void onResponse(Call<OrderPojo> call, Response<OrderPojo> response) {
-                    Log.i("response", response.body().toString());
-
-
-                    progressDialog.dismiss();
-
-
-                    showAlert("Order Status", "Success! Saved in Server..", 2);
-                }
-
-
-                @Override
-                public void onFailure(Call<OrderPojo> call, Throwable t) {
-
-                }
-            });
-        }
     }
 
     public void refreshTotal() {
-      /*  int sum = 0;
-        for (int i = 0; i < cart.size(); i++) {
-            sum = sum + (12345 * cart.get(i).getQuantity());
-        }*/
-        Log.i("refresh", "refresh");
+       Log.i("refresh", "refresh");
         //  displayCart();
         total.setText("");
         total.setText(calculateTotalCartAmount() + "");

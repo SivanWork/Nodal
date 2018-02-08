@@ -31,24 +31,12 @@
             android:layout_height="48dp"
             android:layout_marginTop="20dp"></Spinner>
 
-
-        <android.support.design.widget.TextInputLayout
+        <EditText
+            android:id="@+id/quantity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:hintTextAppearance="@style/floating_hint">
-
-            <EditText
-                android:id="@+id/quantity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:background="@android:color/transparent"
-                android:fontFamily="sans-serif-condensed"
-                android:hint="Quantity"
-                android:inputType="number"
-                android:textSize="16sp"
-                android:theme="@style/EdittextTheme" />
-        </android.support.design.widget.TextInputLayout>
+            android:inputType="number"
+            android:text="1" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/add"

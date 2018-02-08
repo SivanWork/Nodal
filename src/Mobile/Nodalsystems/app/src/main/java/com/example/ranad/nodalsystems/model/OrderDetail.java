@@ -38,6 +38,18 @@ public class OrderDetail implements Serializable, Parcelable
     @SerializedName("NetPrice")
     @Expose
     private double netPrice;
+    @SerializedName("CreatedById")
+    @Expose
+    private int createdById;
+    @SerializedName("CreatedDate")
+    @Expose
+    private String createdDate;
+    @SerializedName("LastUpdatedById")
+    @Expose
+    private int lastUpdatedById;
+    @SerializedName("LastUpdatedDate")
+    @Expose
+    private String lastUpdatedDate;
     public final static Creator<OrderDetail> CREATOR = new Creator<OrderDetail>() {
 
 
@@ -54,7 +66,7 @@ public class OrderDetail implements Serializable, Parcelable
 
     }
     ;
-    private final static long serialVersionUID = -5888140764578706092L;
+    private final static long serialVersionUID = 1504361261285731827L;
 
     protected OrderDetail(Parcel in) {
         this.id = ((int) in.readValue((int.class.getClassLoader())));
@@ -66,6 +78,10 @@ public class OrderDetail implements Serializable, Parcelable
         this.iGST = ((double) in.readValue((double.class.getClassLoader())));
         this.discount = ((double) in.readValue((double.class.getClassLoader())));
         this.netPrice = ((double) in.readValue((double.class.getClassLoader())));
+        this.createdById = ((int) in.readValue((int.class.getClassLoader())));
+        this.createdDate = ((String) in.readValue((String.class.getClassLoader())));
+        this.lastUpdatedById = ((int) in.readValue((int.class.getClassLoader())));
+        this.lastUpdatedDate = ((String) in.readValue((String.class.getClassLoader())));
     }
 
     /**
@@ -77,17 +93,21 @@ public class OrderDetail implements Serializable, Parcelable
 
     /**
      * 
-     * @param id
      * @param iGST
+     * @param createdById
      * @param netPrice
+     * @param productId
+     * @param discount
+     * @param id
+     * @param lastUpdatedDate
      * @param quantity
      * @param cGST
-     * @param sGST
+     * @param createdDate
      * @param orderId
-     * @param discount
-     * @param productId
+     * @param sGST
+     * @param lastUpdatedById
      */
-    public OrderDetail(int id, int orderId, int productId, int quantity, double cGST, double sGST, double iGST, double discount, double netPrice) {
+    public OrderDetail(int id, int orderId, int productId, int quantity, double cGST, double sGST, double iGST, double discount, double netPrice, int createdById, String createdDate, int lastUpdatedById, String lastUpdatedDate) {
         super();
         this.id = id;
         this.orderId = orderId;
@@ -98,6 +118,10 @@ public class OrderDetail implements Serializable, Parcelable
         this.iGST = iGST;
         this.discount = discount;
         this.netPrice = netPrice;
+        this.createdById = createdById;
+        this.createdDate = createdDate;
+        this.lastUpdatedById = lastUpdatedById;
+        this.lastUpdatedDate = lastUpdatedDate;
     }
 
     public int getId() {
@@ -172,6 +196,39 @@ public class OrderDetail implements Serializable, Parcelable
         this.netPrice = netPrice;
     }
 
+    public int getCreatedById() {
+        return createdById;
+    }
+
+    public void setCreatedById(int createdById) {
+        this.createdById = createdById;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public int getLastUpdatedById() {
+        return lastUpdatedById;
+    }
+
+    public void setLastUpdatedById(int lastUpdatedById) {
+        this.lastUpdatedById = lastUpdatedById;
+    }
+
+    public String getLastUpdatedDate() {
+        return lastUpdatedDate;
+    }
+
+    public void setLastUpdatedDate(String lastUpdatedDate) {
+        this.lastUpdatedDate = lastUpdatedDate;
+    }
+
+
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(id);
@@ -183,6 +240,10 @@ public class OrderDetail implements Serializable, Parcelable
         dest.writeValue(iGST);
         dest.writeValue(discount);
         dest.writeValue(netPrice);
+        dest.writeValue(createdById);
+        dest.writeValue(createdDate);
+        dest.writeValue(lastUpdatedById);
+        dest.writeValue(lastUpdatedDate);
     }
 
     public int describeContents() {

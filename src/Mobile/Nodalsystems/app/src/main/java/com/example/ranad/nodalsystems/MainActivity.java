@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
     }
 
     public void loadDefaultData() {
-        CustomersDao customersDao = App.getDaoSession().getCustomersDao();
+/*        CustomersDao customersDao = App.getDaoSession().getCustomersDao();
         Customers customers = null;
         String customerNames[] = {"pattabhi", "siva", "rajesh", "kavya", "lavanya"};
         List<Customers> customersList = customersDao.queryBuilder().list();
@@ -111,6 +111,29 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
                 productsDao.insert(products);
             }
         }
+
+        OrdersDao ordersDao = App.getDaoSession().getOrdersDao();
+        Orders orders = null;
+        int customerids[] ={1,2,3};
+        String dates[]={"12-02-2018","13-09-2018","14-02-2018"};
+        float toatalamounts[]={100.0f, 200.0f, 300.0f};
+        List<Orders> ordersList =ordersDao.queryBuilder().list();
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+
+        if (ordersList.size()==0){
+            try {
+                for (int i=0;i<3;i++){
+                    orders = new Orders();
+                    orders.setCreatedDate(format.parse(dates[i]));
+                    orders.setCustomerId(customerids[i]);
+                    orders.setTotalOrderAmount(toatalamounts[i]);
+                    ordersDao.insert(orders);
+                }
+            }catch (Exception e){
+
+            }
+
+        }*/
     }
 
     @Override

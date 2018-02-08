@@ -20,19 +20,17 @@ import java.util.Map;
 @Entity(
         // Define indexes spanning multiple columns here.
         indexes = {
-                //@Index(value = "customerCode,amountLimit,mobile,email,address1,address2,city,state,country,pin,isActive,createdById,createdDate,lastUpdatedById,lastUpdatedDate")
+                @Index(value = "id", unique = true)
         })
 
 public class Customers {
     @Id(autoincrement = true)
     Long id;
-
-    private int customerId;
     private String firstName;
     private String middleName;
     private String lastName;
     private String customerCode;
-    private double amountLimit;
+    private float amountLimit;
     private String mobile;
     private String email;
     private String address1;
@@ -43,9 +41,9 @@ public class Customers {
     private String pin;
     private boolean isActive;
     private int createdById;
-    private String createdDate;
+    private Date createdDate;
     private int lastUpdatedById;
-    private String lastUpdatedDate;
+    private Date lastUpdatedDate;
 
     /**
      * No args constructor for use in serialization
@@ -63,7 +61,7 @@ public class Customers {
      * @param country
      * @param city
      * @param isActive
-     * @param customerId
+     * @param
      * @param pin
      * @param email
      * @param customerCode
@@ -74,9 +72,8 @@ public class Customers {
      * @param lastUpdatedById
      * @param mobile
      */
-    public Customers(int customerId, String firstName, String middleName, String lastName, String customerCode, double amountLimit, String mobile, String email, String address1, String address2, String city, String state, String country, String pin, boolean isActive, int createdById, String createdDate, int lastUpdatedById, String lastUpdatedDate) {
+    public Customers(String firstName, String middleName, String lastName, String customerCode, float amountLimit, String mobile, String email, String address1, String address2, String city, String state, String country, String pin, boolean isActive, int createdById, Date createdDate, int lastUpdatedById, Date lastUpdatedDate) {
         super();
-        this.customerId = customerId;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
@@ -97,11 +94,9 @@ public class Customers {
         this.lastUpdatedDate = lastUpdatedDate;
     }
 
-    @Generated(hash = 550099825)
-    public Customers(Long id, int customerId, String firstName, String middleName, String lastName, String customerCode, double amountLimit, String mobile, String email, String address1, String address2, String city, String state, String country, String pin, boolean isActive, int createdById, String createdDate, int lastUpdatedById,
-                     String lastUpdatedDate) {
+    @Generated(hash = 2042596867)
+    public Customers(Long id, String firstName, String middleName, String lastName, String customerCode, float amountLimit, String mobile, String email, String address1, String address2, String city, String state, String country, String pin, boolean isActive, int createdById, Date createdDate, int lastUpdatedById, Date lastUpdatedDate) {
         this.id = id;
-        this.customerId = customerId;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
@@ -120,14 +115,6 @@ public class Customers {
         this.createdDate = createdDate;
         this.lastUpdatedById = lastUpdatedById;
         this.lastUpdatedDate = lastUpdatedDate;
-    }
-
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
     }
 
     public String getFirstName() {
@@ -162,16 +149,17 @@ public class Customers {
         this.customerCode = customerCode;
     }
 
-    public double getAmountLimit() {
-        return amountLimit;
-    }
-
-    public void setAmountLimit(double amountLimit) {
-        this.amountLimit = amountLimit;
-    }
 
     public String getMobile() {
         return mobile;
+    }
+
+    public float getAmountLimit() {
+        return amountLimit;
+    }
+
+    public void setAmountLimit(float amountLimit) {
+        this.amountLimit = amountLimit;
     }
 
     public void setMobile(String mobile) {
@@ -250,13 +238,6 @@ public class Customers {
         this.createdById = createdById;
     }
 
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
 
     public int getLastUpdatedById() {
         return lastUpdatedById;
@@ -266,13 +247,6 @@ public class Customers {
         this.lastUpdatedById = lastUpdatedById;
     }
 
-    public String getLastUpdatedDate() {
-        return lastUpdatedDate;
-    }
-
-    public void setLastUpdatedDate(String lastUpdatedDate) {
-        this.lastUpdatedDate = lastUpdatedDate;
-    }
 
     public Long getId() {
         return this.id;
@@ -286,5 +260,19 @@ public class Customers {
         return this.isActive;
     }
 
+    public Date getCreatedDate() {
+        return createdDate;
+    }
 
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getLastUpdatedDate() {
+        return lastUpdatedDate;
+    }
+
+    public void setLastUpdatedDate(Date lastUpdatedDate) {
+        this.lastUpdatedDate = lastUpdatedDate;
+    }
 }

@@ -68,7 +68,7 @@ public class AddProductDialog extends DialogFragment {
         arrayList.clear();
         final ProductsDao productsDao = App.getDaoSession().getProductsDao();
         List<Products> productsList = productsDao.queryBuilder().list();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < productsList.size(); i++) {
             arrayList.add(productsList.get(i).getProductName());
         }
        /* arrayList.add("1");
@@ -76,8 +76,8 @@ public class AddProductDialog extends DialogFragment {
         arrayList.add("3");
         arrayList.add("4");
         arrayList.add("5");*/
-        final ArrayAdapter<String> product = new ArrayAdapter<String>(getActivity(), R.layout.spinner_checcked, arrayList);
-        product.setDropDownViewResource(R.layout.spinner_item);
+        final ArrayAdapter<String> product = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, arrayList);
+        product.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         prod_spinner.setAdapter(product);
 
         prod_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

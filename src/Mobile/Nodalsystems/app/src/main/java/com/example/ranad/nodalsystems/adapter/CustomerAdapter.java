@@ -65,7 +65,6 @@ public class CustomerAdapter extends BaseAdapter implements View.OnClickListener
         ImageView edit = (ImageView) v.findViewById(R.id.edit);
         ImageView delete = (ImageView) v.findViewById(R.id.delete);
 
-        name.setText("Customer 1");
         edit.setOnClickListener(this);
         delete.setOnClickListener(this);
 

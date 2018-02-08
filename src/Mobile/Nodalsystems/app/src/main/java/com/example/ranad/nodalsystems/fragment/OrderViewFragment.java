@@ -45,6 +45,7 @@ import retrofit2.Response;
 
 public class OrderViewFragment extends Fragment implements View.OnClickListener, OrderAction {
     View view;
+    TextView noOfOrders;
     ProgressDialog progressDialog;
     RecyclerView order_list;
     TotalOrdersAdapter totalOrderAdapter;
@@ -92,7 +93,7 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
         List<Orders> orderCart = ordersDao.queryBuilder().list();
         ordersList.addAll(orderCart);
         Log.i("ordersList", "ordersList" + ordersList.size());
-        TextView noOfOrders = (TextView) view.findViewById(R.id.noOfOrders);
+        noOfOrders = (TextView) view.findViewById(R.id.noOfOrders);
         noOfOrders.setText("Orders:" + ordersList.size());
         order_list = (RecyclerView) view.findViewById(R.id.total_order_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -122,14 +123,14 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
 
             @Override
             public void onClick(View v) {
-/*
+
                 OrdersDao ordersDao = App.getDaoSession().getOrdersDao();
                 if (ordersDao.queryBuilder().list().size() > 0)
                     syncOrderToServer();
                 else
                     showAlert("Orders Status", "Already Uptodate..", 2);
 
-*/
+
             }
         });
 
@@ -152,6 +153,7 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
 
         OrderApi orderApi = null;
         OrderPojo orderPojo = null;
+        List<OrderPojo> bulkOrder = new ArrayList<OrderPojo>();
 
         int i;
         for (i = 0; i < ordersList.size(); i++) {
@@ -162,10 +164,17 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
             order.setTotalOrderAmount(ordersList.get(i).getTotalOrderAmount());
             order.setOrderStatusElementCode(0);
             order.setOrderStatusGroup(0);
+
+            order.setCreatedById(0);
+            order.setCreatedDate("2018-02-07T12:31:39.4566652-07:00");
+            order.setLastUpdatedById(0);
+            order.setLastUpdatedDate("2018-02-07T12:31:39.4566652-07:00");
+
             List<OrderDetailDB> orderDetailDBList = orderDetailDBDao.queryBuilder().where(OrderDetailDBDao.Properties.OrderId.eq(orderId)).list();
             orderDetailList = new ArrayList<OrderDetail>();
             for (int j = 0; j < orderDetailDBList.size(); j++) {
                 orderDetail = new OrderDetail();
+                orderDetail.setId(0);
                 orderDetail.setProductId(orderDetailDBList.get(j).getProductId());
                 orderDetail.setQuantity(orderDetailDBList.get(j).getQuantity());
                 orderDetail.setNetPrice(orderDetailDBList.get(j).getNetPrice());
@@ -174,6 +183,14 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
                 orderDetail.setIGST(0.0);
                 orderDetail.setOrderId(orderId);
                 orderDetail.setDiscount(0.0);
+
+                orderDetail.setCreatedById(0);
+                orderDetail.setCreatedDate("2018-02-07T12:31:39.4566652-07:00");
+                orderDetail.setLastUpdatedById(0);
+                orderDetail.setLastUpdatedDate("2018-02-07T12:31:39.4566652-07:00");
+
+
+
                 orderDetailList.add(orderDetail);
 
             }
@@ -181,32 +198,15 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
             orderPojo = new OrderPojo();
             orderPojo.setOrder(order);
             Log.i("MSG", "data" + Login.getInstance(getContext()).getAuthToken());
+            bulkOrder.add(orderPojo);
 
-            orderApi =
-                    ApiClient.createService(OrderApi.class, Login.getInstance(getContext()).getAuthToken());
-
-            Call<OrderPojo> call = orderApi.createOrder(orderPojo);
-
-
-            call.enqueue(new Callback<OrderPojo>() {
-                @Override
-                public void onResponse(Call<OrderPojo> call, Response<OrderPojo> response) {
-                    Log.i("response", response.body().toString());
-                }
-
-
-                @Override
-                public void onFailure(Call<OrderPojo> call, Throwable t) {
-
-                }
-            });
         }
-
-        if (i == ordersList.size()) {
-            // progressDialog.dismiss();
+        makeOrder(bulkOrder);
+   /*     if (i == ordersList.size()) {
+             //progressDialog.dismiss();
             showAlert("Order Status", "Success! Saved in Server", 2);
         }
-    }
+*/    }
 
     public void showAlert(String title, String msg, int theme) {
 
@@ -259,9 +259,53 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void saveOrderOffline() {
+    public void removeOrdersAfterSync() {
+
+        OrdersDao ordersDao = App.getDaoSession().getOrdersDao();
+
+        List<Orders> deleteList = ordersDao.queryBuilder().list();
+
+        ordersDao.deleteInTx(deleteList);
+
+        ordersList.clear();
+        noOfOrders.setText("");
+        totalOrderAdapter.notifyDataSetChanged();
+
+
 
     }
 
+    @Override
+    public void saveOrderOffline() {
+
+    }
+public  void makeOrder(List<OrderPojo> bulkOrder)
+{
+    OrderApi orderService =
+            ApiClient.createService(OrderApi.class, Login.getInstance(getContext()).getAuthToken());
+
+
+   // orderService.createBulkOrder(bulkOrder);
+
+    Call<OrderPojo> call = orderService.createBulkOrder(bulkOrder);
+
+
+    call.enqueue(new Callback<OrderPojo>() {
+        @Override
+        public void onResponse(Call<OrderPojo> call, Response<OrderPojo> response) {
+            Log.i("response", response.body().toString());
+        }
+
+
+        @Override
+        public void onFailure(Call<OrderPojo> call, Throwable t) {
+
+        }
+    });
+
+    showAlert("Order Status", "Success! Saved in Server", 2);
+    removeOrdersAfterSync();
+
+}
 
 }

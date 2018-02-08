@@ -9,7 +9,6 @@ import android.os.Parcelable.Creator;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-
 public class Order implements Serializable, Parcelable
 {
 
@@ -31,6 +30,18 @@ public class Order implements Serializable, Parcelable
     @SerializedName("OrderDetails")
     @Expose
     private List<OrderDetail> orderDetails = null;
+    @SerializedName("CreatedById")
+    @Expose
+    private int createdById;
+    @SerializedName("CreatedDate")
+    @Expose
+    private String createdDate;
+    @SerializedName("LastUpdatedById")
+    @Expose
+    private int lastUpdatedById;
+    @SerializedName("LastUpdatedDate")
+    @Expose
+    private String lastUpdatedDate;
     public final static Creator<Order> CREATOR = new Creator<Order>() {
 
 
@@ -47,7 +58,7 @@ public class Order implements Serializable, Parcelable
 
     }
     ;
-    private final static long serialVersionUID = -1198251640207082120L;
+    private final static long serialVersionUID = -2144291877282598453L;
 
     protected Order(Parcel in) {
         this.orderId = ((int) in.readValue((int.class.getClassLoader())));
@@ -56,6 +67,10 @@ public class Order implements Serializable, Parcelable
         this.orderStatusGroup = ((int) in.readValue((int.class.getClassLoader())));
         this.orderStatusElementCode = ((int) in.readValue((int.class.getClassLoader())));
         in.readList(this.orderDetails, (com.example.ranad.nodalsystems.model.OrderDetail.class.getClassLoader()));
+        this.createdById = ((int) in.readValue((int.class.getClassLoader())));
+        this.createdDate = ((String) in.readValue((String.class.getClassLoader())));
+        this.lastUpdatedById = ((int) in.readValue((int.class.getClassLoader())));
+        this.lastUpdatedDate = ((String) in.readValue((String.class.getClassLoader())));
     }
 
     /**
@@ -70,11 +85,15 @@ public class Order implements Serializable, Parcelable
      * @param orderDetails
      * @param totalOrderAmount
      * @param customerId
+     * @param createdById
      * @param orderStatusGroup
+     * @param lastUpdatedDate
      * @param orderStatusElementCode
+     * @param createdDate
+     * @param lastUpdatedById
      * @param orderId
      */
-    public Order(int orderId, int customerId, double totalOrderAmount, int orderStatusGroup, int orderStatusElementCode, List<OrderDetail> orderDetails) {
+    public Order(int orderId, int customerId, double totalOrderAmount, int orderStatusGroup, int orderStatusElementCode, List<OrderDetail> orderDetails, int createdById, String createdDate, int lastUpdatedById, String lastUpdatedDate) {
         super();
         this.orderId = orderId;
         this.customerId = customerId;
@@ -82,6 +101,10 @@ public class Order implements Serializable, Parcelable
         this.orderStatusGroup = orderStatusGroup;
         this.orderStatusElementCode = orderStatusElementCode;
         this.orderDetails = orderDetails;
+        this.createdById = createdById;
+        this.createdDate = createdDate;
+        this.lastUpdatedById = lastUpdatedById;
+        this.lastUpdatedDate = lastUpdatedDate;
     }
 
     public int getOrderId() {
@@ -132,6 +155,39 @@ public class Order implements Serializable, Parcelable
         this.orderDetails = orderDetails;
     }
 
+    public int getCreatedById() {
+        return createdById;
+    }
+
+    public void setCreatedById(int createdById) {
+        this.createdById = createdById;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public int getLastUpdatedById() {
+        return lastUpdatedById;
+    }
+
+    public void setLastUpdatedById(int lastUpdatedById) {
+        this.lastUpdatedById = lastUpdatedById;
+    }
+
+    public String getLastUpdatedDate() {
+        return lastUpdatedDate;
+    }
+
+    public void setLastUpdatedDate(String lastUpdatedDate) {
+        this.lastUpdatedDate = lastUpdatedDate;
+    }
+
+
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(orderId);
@@ -140,6 +196,10 @@ public class Order implements Serializable, Parcelable
         dest.writeValue(orderStatusGroup);
         dest.writeValue(orderStatusElementCode);
         dest.writeList(orderDetails);
+        dest.writeValue(createdById);
+        dest.writeValue(createdDate);
+        dest.writeValue(lastUpdatedById);
+        dest.writeValue(lastUpdatedDate);
     }
 
     public int describeContents() {
