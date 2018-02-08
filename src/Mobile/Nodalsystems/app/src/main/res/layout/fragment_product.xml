@@ -12,20 +12,23 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
-
         <ListView
+            android:paddingTop="10dp"
             android:id="@+id/product_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
         </ListView>
+
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone">
-        </android.support.v4.widget.SwipeRefreshLayout>
+            android:visibility="gone"></android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -76,7 +79,7 @@
                     android:layout_marginLeft="8dp"
                     android:background="@android:color/transparent"
                     android:fontFamily="sans-serif-condensed"
-                    android:hint="mrp"
+                    android:hint="MRP"
                     android:inputType="number"
                     android:textSize="16sp"
                     android:theme="@style/EdittextTheme" />
@@ -137,9 +140,6 @@
                 android:layout_height="0.5dp"
                 android:layout_marginTop="5dp"
                 android:background="@android:color/black" />
-
-
-
 
 
             <android.support.design.widget.TextInputLayout
@@ -221,11 +221,51 @@
                 android:layout_marginTop="5dp"
                 android:background="@android:color/black" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="Is Active?"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radio_btn1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="Yes" />
+
+                    <RadioButton
+                        android:id="@+id/radio_btn0"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="No" />
+
+                </RadioGroup>
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:padding="16dp">
 
@@ -240,7 +280,6 @@
                         android:layout_width="125dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:background="@drawable/button_ripple"
                         android:fontFamily="sans-serif-condensed"
                         android:foreground="?attr/selectableItemBackground"
                         android:text="CANCEL"
@@ -259,7 +298,6 @@
                         android:layout_width="125dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:background="@drawable/button_ripple"
                         android:fontFamily="sans-serif-condensed"
                         android:foreground="?attr/selectableItemBackground"
                         android:text="ADD"
@@ -267,7 +305,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-<<<<<<< HEAD
 
         </LinearLayout>
     </ScrollView>
@@ -279,17 +316,8 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="10dp"
         android:background="@drawable/float_btn" />
-=======
-        <ImageView
-            android:id="@+id/ivAdd"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="10dp"
-            android:background="@drawable/float_btn" />
 
-    </LinearLayout>
->>>>>>> parent of bd9e718... minor changes
+
 
 </FrameLayout>
 

@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.example.ranad.nodalsystems.App;
 import com.example.ranad.nodalsystems.MainActivity;
@@ -37,6 +40,8 @@ public class ProductFragment extends Fragment implements View.OnClickListener,Pr
    ProductAdapter productAdapter;
    Button cancel, submit;
     ImageView add;
+    RadioGroup radioGroup;
+    RadioButton radio_btn1, radio_btn0;
 
     public ProductFragment() {
         // Required empty public constructor
@@ -96,6 +101,25 @@ public class ProductFragment extends Fragment implements View.OnClickListener,Pr
                 list.setAdapter(productAdapter);
             }
         }
+
+        radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
+        radio_btn0 = (RadioButton) view.findViewById(R.id.radio_btn0);
+        radio_btn1 = (RadioButton) view.findViewById(R.id.radio_btn1);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if (radio_btn0.isChecked()){
+                    radio_btn0.setChecked(true);
+                    radio_btn1.setChecked(false);
+                }else if (radio_btn1.isChecked()){
+                    radio_btn0.setChecked(false);
+                    radio_btn1.setChecked(true);
+                }else{
+                    radio_btn0.setChecked(true);
+                    radio_btn1.setChecked(false);
+                }
+            }
+        });
         return view;
     }
 
@@ -120,7 +144,29 @@ public class ProductFragment extends Fragment implements View.OnClickListener,Pr
     boolean validateForm() {
 
         if (name.getText().toString().isEmpty()) {
-            showAlert("Alert", "Enter Product Name", 1);
+            Toast.makeText(getContext(), "Enter Product Name", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (mrp.getText().toString().isEmpty()) {
+            Toast.makeText(getContext(), "Enter MRP", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (dealerprice.getText().toString().isEmpty()) {
+            Toast.makeText(getContext(), "Enter Dealer Price", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (wholesaleprice.getText().toString().isEmpty()) {
+            Toast.makeText(getContext(), "Enter Wholesale Price", Toast.LENGTH_SHORT).show();
+            return false;
+        } if (cgst.getText().toString().isEmpty()) {
+            Toast.makeText(getContext(), "Enter CGST", Toast.LENGTH_SHORT).show();
+            return false;
+        } if (sgst.getText().toString().isEmpty()) {
+            Toast.makeText(getContext(), "Enter SGST", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (igst.getText().toString().isEmpty()) {
+            Toast.makeText(getContext(), "Enter IGST", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
