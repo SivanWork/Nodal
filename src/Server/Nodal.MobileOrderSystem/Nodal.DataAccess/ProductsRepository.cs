@@ -43,7 +43,7 @@ namespace Nodal.DataAccess
         public Products GetProduct(int productId)
         {
             string query = "SELECT * FROM [Products] WHERE ProductId = @ProductId";
-            var result = db.Connection.Query(query, new { productId }).FirstOrDefault();
+            var result = db.Connection.Query<Products>(query, new { productId }).FirstOrDefault();
             return result;
         }
 

@@ -41,7 +41,7 @@ VALUES (@ElementCode, @ElementName, @GroupType, @IsActive, @CreatedById, @Create
         public GroupElementCode GetGroupElementCode(int groupElementCodeId)
         {
             string query = "SELECT * FROM [dbo].[GroupElementCode] WHERE [Id] = @Id";
-            var result = db.Connection.Query(query, new { groupElementCodeId }).FirstOrDefault();
+            var result = db.Connection.Query<GroupElementCode>(query, new { groupElementCodeId }).FirstOrDefault();
             return result;
         }
 

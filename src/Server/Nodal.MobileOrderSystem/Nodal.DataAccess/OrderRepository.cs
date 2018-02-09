@@ -64,14 +64,14 @@ namespace Nodal.DataAccess
         public Order GetOrder(int orderId)
         {
             string query = "SELECT * FROM [dbo].[Orders] WHERE [OrderId] = @OrderId";
-            var result = db.Connection.Query(query, new { orderId }).FirstOrDefault();
+            var result = db.Connection.Query<Order>(query, new { orderId }).FirstOrDefault();
             return result;
         }
 
         public OrderDetails GetOrderDetail(int orderId)
         {
             string query = "SELECT * FROM [dbo].[OrderDetails] WHERE [OrderId] = @OrderId";
-            var result = db.Connection.Query(query, new { orderId }).FirstOrDefault();
+            var result = db.Connection.Query<OrderDetails>(query, new { orderId }).FirstOrDefault();
             return result;
         }
 

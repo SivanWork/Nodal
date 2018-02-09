@@ -41,7 +41,7 @@ VALUES (@ProductId, @DiscountName, @DiscountType, @Discount, @IsActive, @Created
         public Discounts GetDiscount(int discountId)
         {
             string query = "SELECT * FROM [Discount] WHERE [Id] = @Id";
-            var result = db.Connection.Query(query, new { discountId }).FirstOrDefault();
+            var result = db.Connection.Query<Discounts>(query, new { discountId }).FirstOrDefault();
             return result;
         }
 

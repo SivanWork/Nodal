@@ -41,15 +41,16 @@ namespace Nodal.Web.Controllers.API
         }
 
         [HttpDelete]
-        public BaseResponse DeleteUser(int discountId)
+        public BaseResponse DeleteUser(int userId)
         {
-            return _userService.DeleteUser(discountId);
+            return _userService.DeleteUser(userId);
         }
 
         [HttpGet]
-        public UserResponse GetUser(int discountId)
+        [AllowAnonymous]
+        public UserResponse GetUser(int userId)
         {
-            return _userService.GetUser(discountId);
+            return _userService.GetUser(userId);
         }
 
         [HttpGet]
@@ -59,6 +60,7 @@ namespace Nodal.Web.Controllers.API
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public BaseResponse ForgotPassword(string recipientEmail)
         {
             var res = _userService.GetUserByEMail(recipientEmail);

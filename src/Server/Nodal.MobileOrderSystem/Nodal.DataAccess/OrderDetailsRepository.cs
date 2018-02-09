@@ -43,7 +43,7 @@ VALUES (@OrderId, @ProductId, @Quantity, @CGST, @SGST, @IGST, @Discount, @NetPri
         public OrderDetails GetOrderDetail(int orderDetailId)
         {
             string query = "SELECT * FROM [OrderDetails] WHERE [Id] = @Id";
-            var result = db.Connection.Query(query, new { orderDetailId }).FirstOrDefault();
+            var result = db.Connection.Query<OrderDetails>(query, new { orderDetailId }).FirstOrDefault();
             return result;
         }
 

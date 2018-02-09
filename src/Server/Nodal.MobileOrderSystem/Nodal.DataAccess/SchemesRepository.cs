@@ -40,7 +40,7 @@ namespace Nodal.DataAccess
         public Schemes GetScheme(int schemeId)
         {
             string query = "SELECT * FROM [dbo].[Schemes] WHERE [SchemeId] = @SchemeId";
-            var result = db.Connection.Query(query, new { schemeId }).FirstOrDefault();
+            var result = db.Connection.Query<Schemes>(query, new { schemeId }).FirstOrDefault();
             return result;
         }
 

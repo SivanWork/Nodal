@@ -61,7 +61,7 @@ namespace Nodal.DataAccess
         public User GetUser(int userId)
         {
             string query = "SELECT * FROM [Users] WHERE [UserId] = @UserId";
-            var result = db.Connection.Query(query, new { userId }).FirstOrDefault();
+            var result = db.Connection.Query<User>(query, new { userId }).FirstOrDefault();
             return result;
         }
 
@@ -73,7 +73,7 @@ namespace Nodal.DataAccess
 
         public User GetUserByEmail(string email)
         {
-            var result = db.Connection.Query("SELECT * FROM [Users] WHERE [Email] = @Email", new { email }).FirstOrDefault();
+            var result = db.Connection.Query<User>("SELECT * FROM [Users] WHERE [Email] = @Email", new { email }).FirstOrDefault();
             return result;
         }
     }

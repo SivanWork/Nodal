@@ -47,7 +47,7 @@ namespace Nodal.DataAccess
         public OrderReturnDetails GetOrderReturnDetail(int orderReturnDetailId)
         {
             string query = "SELECT * FROM [OrderReturnDetails] WHERE [Id] = @Id";
-            var result = db.Connection.Query(query, new { orderReturnDetailId }).FirstOrDefault();
+            var result = db.Connection.Query<OrderReturnDetails>(query, new { orderReturnDetailId }).FirstOrDefault();
             return result;
         }
 

@@ -43,7 +43,7 @@ VALUES (@OrderId, @BillTotal, @PaidAmount, @PaymentStatusGroup, @PaymentStatusEl
         public Bills GetBill(int billId)
         {
             string query = "SELECT * FROM [Bills] WHERE [BillId] = @BillId";
-            var result = db.Connection.Query(query, new { billId }).FirstOrDefault();
+            var result = db.Connection.Query<Bills>(query, new { billId }).FirstOrDefault();
             return result;
         }
 

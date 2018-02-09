@@ -46,7 +46,7 @@ namespace Nodal.DataAccess
         public Customer GetCustomer(int customerId)
         {
             string query = "SELECT * FROM [Customer] WHERE [CustomerId] = @CustomerId";
-            var result = db.Connection.Query(query, new { customerId }).FirstOrDefault();
+            var result = db.Connection.Query<Customer>(query, new { customerId }).FirstOrDefault();
             return result;
         }
 

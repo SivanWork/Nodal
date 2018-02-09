@@ -41,7 +41,7 @@ namespace Nodal.DataAccess
         public GroupType GetGroupType(int groupTypeId)
         {
             string query = "SELECT * FROM [GroupType] WHERE [Id] = @Id";
-            var result = db.Connection.Query(query, new { groupTypeId }).FirstOrDefault();
+            var result = db.Connection.Query<GroupType>(query, new { groupTypeId }).FirstOrDefault();
             return result;
         }
 
