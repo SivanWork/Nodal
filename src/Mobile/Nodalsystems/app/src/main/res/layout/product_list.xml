@@ -27,7 +27,11 @@
                 android:layout_gravity="center" />
 
             <TextView
+<<<<<<< HEAD
                 android:id="@+id/product_price"
+=======
+                android:id="@+id/product_code"
+>>>>>>> parent of bd9e718... minor changes
                 android:layout_width="100dp"
                 android:textColor="@android:color/black"
                 android:layout_height="wrap_content"
