@@ -24,7 +24,6 @@ import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.adapter.CustomerListAdapter;
 import com.example.ranad.nodalsystems.data_holder.CustomerData;
-import com.example.ranad.nodalsystems.data_holder.UserData;
 import com.example.ranad.nodalsystems.database.Customers;
 import com.example.ranad.nodalsystems.database.CustomersDao;
 import com.example.ranad.nodalsystems.interfaces.CustomerAction;
@@ -32,40 +31,36 @@ import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
 import com.example.ranad.nodalsystems.model.Customer;
 import com.example.ranad.nodalsystems.model.CustomerGetAll;
 import com.example.ranad.nodalsystems.model.Login;
-import com.example.ranad.nodalsystems.model.USERGETALL;
-import com.example.ranad.nodalsystems.model.User;
 import com.example.ranad.nodalsystems.restapi.ApiClient;
 import com.example.ranad.nodalsystems.restapi.CustomerApi;
-import com.example.ranad.nodalsystems.restapi.UserApi;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class CustomerFragment extends Fragment implements View.OnClickListener, CustomerAction {
+public class CustomerEditFragment extends Fragment implements View.OnClickListener, CustomerAction {
     View view, add_customer, outer;
     EditText name, amount, email, addrs, alt_addrs, number, city, state, country, pincode;
-    Button add, btncancel;
-    ImageView ivAdd;
-    RecyclerView recyclerView;
-    CustomerListAdapter customerAdapter;
+    Button edit, btncancel;
+    //ImageView ivAdd;
+//    RecyclerView recyclerView;
+    //  CustomerListAdapter customerAdapter;
     ArrayList<CustomerData> customerData = new ArrayList<>();
 
 
-    public CustomerFragment() {
+    public CustomerEditFragment() {
         // Required empty public constructor
     }
 
 
     // TODO: Rename and change types and number of parameters
-    public static CustomerFragment newInstance(SwitchFragment switchFragment) {
-        CustomerFragment fragment = new CustomerFragment();
+    public static CustomerEditFragment newInstance(SwitchFragment switchFragment) {
+        CustomerEditFragment fragment = new CustomerEditFragment();
         fragment.Construct(switchFragment);
         return fragment;
     }
@@ -86,9 +81,9 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_customer, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.customer_list);
-        ivAdd = (ImageView) view.findViewById(R.id.ivAdd);
-        ivAdd.setOnClickListener(this);
+        //   recyclerView = (RecyclerView) view.findViewById(R.id.customer_list);
+        // ivAdd = (ImageView) view.findViewById(R.id.ivAdd);
+        //ivAdd.setOnClickListener(this);
         add_customer = (View) view.findViewById(R.id.add_customer);
         name = (EditText) view.findViewById(R.id.cust_name);
         amount = (EditText) view.findViewById(R.id.amt_limit);
@@ -100,33 +95,18 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
         state = (EditText) view.findViewById(R.id.state);
         country = (EditText) view.findViewById(R.id.country);
         pincode = (EditText) view.findViewById(R.id.pin_code);
-        add = (Button) view.findViewById(R.id.add);
-        add.setOnClickListener(this);
+        edit = (Button) view.findViewById(R.id.edit);
+        edit.setOnClickListener(this);
         btncancel = (Button) view.findViewById(R.id.btnCancel);
         btncancel.setOnClickListener(this);
         outer = (View) view.findViewById(R.id.outer);
-
-        List<CustomerData> customerDataList = readAllCustomers();
-
-        CustomersDao customersDao = App.getDaoSession().getCustomersDao();
-        List<Customers> customersList = customersDao.queryBuilder().list();
-        recyclerView = (RecyclerView) view.findViewById(R.id.customer_list);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        customerAdapter = new CustomerListAdapter((ArrayList<CustomerData>) customerDataList, getContext(), this);
-        recyclerView.setAdapter(customerAdapter);
-        customerAdapter.notifyDataSetChanged();
-
-
-        TextView noOfCustomers = (TextView) view.findViewById(R.id.noOfCustomers);
-        noOfCustomers.setText("Customers:" + customersList.size());
 
         ImageButton backButton = (ImageButton) view.findViewById(R.id.backbutton);
         backButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Fragment fragment = new CustomerFragment();
+                Fragment fragment = new CustomerEditFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.content, fragment);
@@ -143,79 +123,51 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
-        MainActivity.setAppTitle(R.string.customer_title);
+        MainActivity.setAppTitle(R.string.edit_customer);
     }
 
 
     @Override
     public void saveCustomerInfo() {
-        CustomersDao customersDao = App.getDaoSession().getCustomersDao();
-        Customers customers = new Customers();
-        customers.setFirstName(name.getText().toString());
-        customers.setAddress1(addrs.getText().toString());
-        customers.setAddress2(alt_addrs.getText().toString());
-        if (!amount.getText().toString().isEmpty())
-            customers.setAmountLimit(Float.parseFloat(amount.getText().toString()));
-        customers.setEmail(email.getText().toString());
-        customers.setMobile(number.getText().toString());
-        customers.setCreatedById(1);
-        customers.setCity(city.getText().toString());
-        customers.setState(state.getText().toString());
-        customers.setCountry(country.getText().toString());
-        customers.setPin(country.getText().toString());
-        customers.setIsActive(true);
-        customers.setLastUpdatedById(1);
-        //  customers.setLastUpdatedDate("11-11-2018");
-        //customers.setCreatedDate("12-12-2018");
-        long genId = customersDao.insertOrReplace(customers);
-
-        customers.setCustomerCode("CUST_00" + genId);
-        customersDao.update(customers);
     }
 
 
     @Override
     public Customer getCustomer() {
-
-        Customer customers = new Customer();
-        customers.setFirstName(name.getText().toString());
-        customers.setAddress1(addrs.getText().toString());
-        customers.setAddress2(alt_addrs.getText().toString());
-        if (!amount.getText().toString().isEmpty())
-            customers.setAmountLimit(Float.parseFloat(amount.getText().toString()));
-        customers.setEmail(email.getText().toString());
-        customers.setMobile(number.getText().toString());
-        customers.setCity(city.getText().toString());
-        customers.setState(state.getText().toString());
-        customers.setCountry(country.getText().toString());
-        customers.setPin(country.getText().toString());
-        customers.setIsActive(true);
-
-        customers.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
-        customers.setCreatedDate(getCurrentDate().toString());
-        customers.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
-        customers.setLastUpdatedDate(getCurrentDate().toString());
-
-        return customers;
+        return null;
     }
 
     @Override
     public void switchToEditCustomer(int pos) {
-        int customerId = customerData.get(pos).getId();
-        Fragment fragment = new CustomerEditFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("customerid", customerId);
-        fragment.setArguments(bundle);
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.content, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+
 
     }
 
     @Override
     public void readCustomer(int customerId) {
+
+        CustomerApi customerApi =
+                ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
+
+        Call<CustomerGetAll> call = customerApi.getCustomerAPI("http://cellordering.com/api/Customer/GetCustomer?discountId=" + customerId);;
+        call.enqueue(new Callback<CustomerGetAll>() {
+            @Override
+            public void onResponse(Call<CustomerGetAll> call, Response<CustomerGetAll> response) {
+                Log.i("responseDB", response.body() + "");
+                // User user = new User();
+                //user = response.body().getUser();
+                //   Log.i("USERDATA", "LL" + user);
+
+
+            }
+
+
+            @Override
+            public void onFailure(Call<CustomerGetAll> call, Throwable t) {
+
+            }
+        });
+
 
     }
 
@@ -223,25 +175,6 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void createCustomer(Customer customer) {
 
-
-        CustomerApi customerApi =
-                ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
-
-        Call<Customer> call = customerApi.createCustomerAPI(customer);
-        call.enqueue(new Callback<Customer>() {
-            @Override
-            public void onResponse(Call<Customer> call, Response<Customer> response) {
-
-                Log.i("CREATERES", "RESPONSE" + response.body().toString());
-                customerAdapter.notifyDataSetChanged();
-            }
-
-
-            @Override
-            public void onFailure(Call<Customer> call, Throwable t) {
-
-            }
-        });
 
     }
 
@@ -294,36 +227,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public ArrayList<CustomerData> readAllCustomers() {
-        customerData.clear();
-        CustomerApi customerApi =
-                ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
-
-        Call<CustomerGetAll> call = customerApi.getAllCustomersAPI();
-        call.enqueue(new Callback<CustomerGetAll>() {
-            @Override
-            public void onResponse(Call<CustomerGetAll> call, Response<CustomerGetAll> response) {
-                Log.i("responseDB", response.body().getCustomerList() + "");
-
-                for (int i = 0; i < response.body().getCustomerList().size(); i++) {
-
-                    Log.i("responseNames", response.body().getCustomerList().get(i).getFirstName() + "");
-                    Log.i("responseIDS", response.body().getCustomerList().get(i).getCustomerId() + "");
-                    customerData.add(new CustomerData(response.body().getCustomerList().get(i).getCustomerId(), response.body().getCustomerList().get(i).getFirstName()));
-
-                }
-                customerAdapter.notifyDataSetChanged();
-
-
-            }
-
-
-            @Override
-            public void onFailure(Call<CustomerGetAll> call, Throwable t) {
-
-            }
-        });
-        //    Log.i("responseNNN", userData + "");
-        return customerData;
+        return null;
 
     }
 
@@ -350,17 +254,17 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
         switch (view.getId()) {
             case R.id.ivAdd:
                 add_customer.setVisibility(View.VISIBLE);
-                ivAdd.setVisibility(View.GONE);
+                //ivAdd.setVisibility(View.GONE);
                 outer.setVisibility(View.GONE);
                 MainActivity.setAppTitle(R.string.add_customer);
                 break;
             case R.id.add:
                 boolean isValid = validateForm();
                 if (isValid) {
-                    Log.i("ADDCLICKED","CLICKED");
+                    Log.i("ADDCLICKED", "CLICKED");
                     createCustomer(getCustomer());
 
-                    Fragment fragment = new CustomerFragment();
+                    Fragment fragment = new CustomerEditFragment();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.content, fragment);
@@ -369,14 +273,18 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
                 }
                 break;
             case R.id.btnCancel:
-                add_customer.setVisibility(View.GONE);
-                ivAdd.setVisibility(View.VISIBLE);
-                outer.setVisibility(View.VISIBLE);
+                Fragment fragment = new CustomerFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.content, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
                 MainActivity.setAppTitle(R.string.customer_title);
                 break;
         }
 
     }
+
     public Date getCurrentDate() {
         Date d = new Date();
         return d;

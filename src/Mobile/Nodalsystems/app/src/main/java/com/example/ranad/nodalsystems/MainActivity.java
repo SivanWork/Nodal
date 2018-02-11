@@ -11,6 +11,8 @@ import android.util.Log;
 
 import com.example.ranad.nodalsystems.database.Customers;
 import com.example.ranad.nodalsystems.database.CustomersDao;
+import com.example.ranad.nodalsystems.database.Orders;
+import com.example.ranad.nodalsystems.database.OrdersDao;
 import com.example.ranad.nodalsystems.database.Products;
 import com.example.ranad.nodalsystems.database.ProductsDao;
 import com.example.ranad.nodalsystems.fragment.BillingFragment;
@@ -38,6 +40,7 @@ import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_RETURN;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_SCHEME;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_USER;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
     }
 
     public void loadDefaultData() {
-/*        CustomersDao customersDao = App.getDaoSession().getCustomersDao();
+        CustomersDao customersDao = App.getDaoSession().getCustomersDao();
         Customers customers = null;
         String customerNames[] = {"pattabhi", "siva", "rajesh", "kavya", "lavanya"};
         List<Customers> customersList = customersDao.queryBuilder().list();
@@ -107,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
             for (int i = 0; i < 5; i++) {
                 products = new Products();
                 products.setProductName(productNames[i]);
-                products.setDealerPrice(amounts[i]);
+                products.setDealerPrice(Float.parseFloat(amounts[i].toString()));
                 productsDao.insert(products);
             }
         }
@@ -133,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment {
 
             }
 
-        }*/
+        }
     }
 
     @Override

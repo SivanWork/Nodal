@@ -9,7 +9,8 @@ import android.os.Parcelable;
 
 public class CustomerData implements Parcelable {
 
-    public CustomerData(String name){
+    public CustomerData(int userId,String name){
+        this.id=userId;
         this.name = name;
     }
 

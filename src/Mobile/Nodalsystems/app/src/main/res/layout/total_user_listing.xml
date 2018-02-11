@@ -47,7 +47,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3"
+                android:layout_weight="0.32"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -58,7 +58,7 @@
                     <LinearLayout
                         android:layout_width="5dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.3"
+                        android:layout_weight="0.32"
                         android:orientation="horizontal">
 
                         <TextView
@@ -66,17 +66,18 @@
                             android:layout_height="wrap_content"
                             android:maxLines="1"
                             android:minLines="1"
-                            android:text="Customer:"
+                            android:text="Name:"
                             android:textColor="#000000"
                             android:textSize="15dp"
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/customername"
+                            android:id="@+id/name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:maxLines="1"
                             android:minLines="1"
+                            android:text="Lavanya"
                             android:textColor="#000000"
                             android:textStyle="bold"
                             android:textSize="15dp" />
@@ -95,16 +96,17 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:minLines="1"
-                        android:text="Code:"
+                        android:text="User:"
                         android:textColor="#000000"
                         android:textSize="15dp" />
 
                     <TextView
-                        android:id="@+id/customercode"
+                        android:id="@+id/username"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:minLines="1"
+                        android:text="Lavanya"
                         android:textColor="#000000"
                         android:textSize="15dp" />
 
@@ -122,16 +124,17 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:minLines="1"
-                        android:text="Date:"
+                        android:text="Mobile:"
                         android:textColor="#000000"
                         android:textSize="15dp" />
 
                     <TextView
-                        android:id="@+id/date"
+                        android:id="@+id/mobile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:minLines="1"
+                        android:text="9959777651"
                         android:textColor="#000000"
                         android:textSize="15dp" />
 
@@ -142,20 +145,18 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:background="@drawable/edit" />
-
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3"
+                android:layout_weight="0.28"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
+                    android:layout_weight="0.28"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -171,17 +172,18 @@
                             android:layout_marginTop="20dp"
                             android:maxLines="1"
                             android:minLines="1"
-                            android:text="Mobile:"
+                            android:text="UserType:"
                             android:textColor="#000000"
                             android:textSize="15dp" />
 
                         <TextView
-                            android:id="@+id/mobile"
+                            android:id="@+id/elementCode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
                             android:maxLines="1"
                             android:minLines="1"
+                            android:text=""
                             android:textColor="#000000"
                             android:textSize="15dp" />
 
@@ -202,31 +204,27 @@
                         android:layout_marginTop="10dp"
                         android:maxLines="1"
                         android:minLines="1"
-                        android:text="Email:"
+                        android:text="Status:"
                         android:textColor="#000000"
                         android:textSize="15dp" />
 
                     <TextView
-                        android:id="@+id/email"
+                        android:id="@+id/isActive"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:maxLines="1"
                         android:minLines="1"
-                        android:text="12"
+                        android:text=""
                         android:textColor="#000000"
                         android:textSize="15dp" />
-
 
                 </LinearLayout>
                 <ImageView
                     android:id="@+id/delete"
                     android:layout_width="20dp"
-                    android:layout_marginLeft="20dp"
                     android:layout_height="20dp"
                     android:background="@drawable/delete" />
-
-
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

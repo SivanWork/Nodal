@@ -9,15 +9,99 @@ import android.os.Parcelable;
 
 public class UserData implements Parcelable {
 
-    public UserData(String userName) {
+    public UserData(int userId,String userName) {
         this.userName = userName;
+        this.id = userId;
     }
 
-    public String getId() {
+   // private int userId;
+   // private String username;
+   // private String password;
+    private String firstName;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getUserElementCode() {
+        return userElementCode;
+    }
+
+    public void setUserElementCode(String userElementCode) {
+        this.userElementCode = userElementCode;
+    }
+
+    public String getActiveFrom() {
+        return activeFrom;
+    }
+
+    public void setActiveFrom(String activeFrom) {
+        this.activeFrom = activeFrom;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    private String middleName;
+    private String lastName;
+    private String mobile;
+    private String email;
+    private String address1;
+    private String address2;
+    private String city;
+    private String state;
+    private String country;
+    private String pin;
+    private String userGroupType;
+    private String userElementCode;
+    private String activeFrom;
+    private String activeTo;
+    private boolean isActive;
+    private int createdById;
+    private String createdDate;
+    private int lastUpdatedById;
+    private String lastUpdatedDate;
+
+
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -25,15 +109,21 @@ public class UserData implements Parcelable {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public void setUserName(String userName)
+    {
         this.userName = userName;
     }
 
-    String id;
+    int id;
     String userName;
 
+    public UserData()
+    {
+
+    }
+
     public UserData(Parcel in) {
-        id = in.readString();
+        id = in.readInt();
         userName = in.readString();
     }
 
@@ -56,7 +146,7 @@ public class UserData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(id);
+        parcel.writeInt(id);
         parcel.writeString(userName);
     }
 }

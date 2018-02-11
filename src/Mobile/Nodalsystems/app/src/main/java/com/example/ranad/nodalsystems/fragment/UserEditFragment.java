@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,16 +19,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
-import com.example.ranad.nodalsystems.adapter.UserAdapter;
-import com.example.ranad.nodalsystems.adapter.UsersAdapter;
 import com.example.ranad.nodalsystems.data_holder.UserData;
 import com.example.ranad.nodalsystems.interfaces.GroupElementTypeAction;
 import com.example.ranad.nodalsystems.interfaces.GroupTypeAction;
@@ -66,15 +60,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class UserFragment extends Fragment implements View.OnClickListener, UserAction, GroupTypeAction, GroupElementTypeAction, Validator.ValidationListener {
+public class UserEditFragment extends Fragment implements View.OnClickListener, UserAction, GroupTypeAction, GroupElementTypeAction, Validator.ValidationListener {
+   // View view, add_customer, outer_layout;
 
     protected Validator validator;
     protected boolean validated;
 
+    View view;
 
-    View view, add_user, outer_layout;
-
-
+    int userId;
     EditText midName;
     @Email
     EditText email;
@@ -82,34 +76,31 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
     EditText password;
     @NotEmpty(message = "Data Requried")
 
-    EditText name, pin, addrs1, addrs2, number, state, country, city, ftName, lastName, activeFrom, activeTo, mobile;
-    Button add, btncancel;
-    ImageView ivAdd;
-    ListView listView;
+    EditText name, pin, addrs1, addrs2,  state, country, city, ftName, lastName, activeFrom, activeTo, number;
+    Button edit, btncancel;
+//    ImageView ivAdd;
+    // ListView listView;
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     ArrayList<UserData> userData = new ArrayList<>();
     SwitchFragment switchFragment;
-    RecyclerView user_list;
-    UserAdapter userAdapter;
-    UsersAdapter usersAdapter;
-    List<UserList> userList = new ArrayList<UserList>();
+    //RecyclerView user_list;
+    //UserAdapter userAdapter;
+    ////UsersAdapter usersAdapter;
+
+    private RadioGroup radioStatusGroup;
     ProgressDialog progressDialog = null;
     Spinner userType_spinner, userElement_spinner;
-    private RadioGroup radioStatusGroup;
 
+    List<UserList> userList = new ArrayList<UserList>();
 
-    GetAllGroupTypes gtAll;
-
-    GetAllGroupTypes groupTypeLists;
-
-    public UserFragment() {
+    public UserEditFragment() {
         // Required empty public constructor
     }
 
 
     // TODO: Rename and change types and number of parameters
-    public static UserFragment newInstance(SwitchFragment switchFragment) {
-        UserFragment fragment = new UserFragment();
+    public static UserEditFragment newInstance(SwitchFragment switchFragment) {
+        UserEditFragment fragment = new UserEditFragment();
         fragment.Construct(switchFragment);
         return fragment;
     }
@@ -128,28 +119,40 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        progressDialog = new ProgressDialog(getContext());
-        view = inflater.inflate(R.layout.fragment_user, container, false);
-//Log.i("CURR",""+getCurrentDate());
-        //      Log.i("DataERR", "CCC"+getUTCDate("Feb 9, 2018 10:41:11 PM"));
-
-
-        // Log.i("STRRD",""+getUTCDate(new Date()));
+        view = inflater.inflate(R.layout.fragment_edit_user, container, false);
 
         validator = new Validator(this);
         validator.setValidationListener(this);
 
-        ivAdd = (ImageView) view.findViewById(R.id.ivAdd);
-        ivAdd.setOnClickListener(this);
+
+
+      /*  add_user.setVisibility(View.VISIBLE);
         add_user = (View) view.findViewById(R.id.add_user);
+        ivAdd = (ImageView) view.findViewById(R.id.ivAdd);
+*/
+
+     //   ivAdd.setVisibility(View.GONE);
+//        outer_layout.setVisibility(View.GONE);
+     //   MainActivity.setAppTitle(R.string.add_user);
+
+
+        // Inflate the layout for this fragment
+    //    progressDialog = new ProgressDialog(getContext());
+        progressDialog = new ProgressDialog(getContext());
+
+
+
+        userElement_spinner = (Spinner) view.findViewById(R.id.userElement);
+        userType_spinner = (Spinner) view.findViewById(R.id.userType);
+
+        //outer_layout = (View) view.findViewById(R.id.outer_layout);
+
+
         name = (EditText) view.findViewById(R.id.user_name);
         password = (EditText) view.findViewById(R.id.password);
         number = (EditText) view.findViewById(R.id.mobileNum);
         email = (EditText) view.findViewById(R.id.email);
-
-        userElement_spinner = (Spinner) view.findViewById(R.id.userElement);
-        userType_spinner = (Spinner) view.findViewById(R.id.userType);
+//        userType = (EditText) view.findViewById(R.id.userType);
         city = (EditText) view.findViewById(R.id.city);
         country = (EditText) view.findViewById(R.id.country);
         state = (EditText) view.findViewById(R.id.state);
@@ -157,95 +160,55 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         ftName = (EditText) view.findViewById(R.id.ftName);
         lastName = (EditText) view.findViewById(R.id.lastName);
         midName = (EditText) view.findViewById(R.id.midName);
-        mobile = (EditText) view.findViewById(R.id.mobileNum);
-        // userElementCode = (EditText) view.findViewById(R.id.userElementCode);
         addrs1 = (EditText) view.findViewById(R.id.addrs1);
         addrs2 = (EditText) view.findViewById(R.id.adrs2);
-        add = (Button) view.findViewById(R.id.add);
-        add.setOnClickListener(this);
+        edit = (Button) view.findViewById(R.id.edit);
+        edit.setOnClickListener(this);
+
         activeFrom = (EditText) view.findViewById(R.id.activeFrom);
         activeTo = (EditText) view.findViewById(R.id.activeTo);
         btncancel = (Button) view.findViewById(R.id.btnCancel);
-        outer_layout = (View) view.findViewById(R.id.outer_layout);
+
         btncancel.setOnClickListener(this);
         activeTo.setOnClickListener(this);
         activeFrom.setOnClickListener(this);
-        List<UserData> userDataList = readAllUsers();
 
-        user_list = (RecyclerView) view.findViewById(R.id.user_list);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        user_list.setLayoutManager(linearLayoutManager);
-        usersAdapter = new UsersAdapter(userDataList, getContext(), this);
-        user_list.setAdapter(usersAdapter);
-        usersAdapter.notifyDataSetChanged();
-
+        List<String> list = new ArrayList<String>();
+        list.add("USER");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        userType_spinner.setAdapter(dataAdapter);
 
         radioStatusGroup = (RadioGroup) view.findViewById(R.id.radioStatus);
 
+
+        List<String> list2 = new ArrayList<String>();
+
+
+        list2.add("Admin");
+        list2.add("Agent");
+        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list2);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        userElement_spinner.setAdapter(dataAdapter2);
+
+
+       if(getArguments()!=null) {
+           userId = getArguments().getInt("userid");
+           readUser(userId);
+       }
         return view;
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        MainActivity.setAppTitle(R.string.user_title);
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-    }
-
-
-    @Override
     public void onClick(final View view) {
         switch (view.getId()) {
-            case R.id.ivAdd:
-                add_user.setVisibility(View.VISIBLE);
-                ivAdd.setVisibility(View.GONE);
-                outer_layout.setVisibility(View.GONE);
-                MainActivity.setAppTitle(R.string.add_user);
-                // getAllGroupTypes();
+            case R.id.edit:
 
-
-                List<String> list = new ArrayList<String>();
-                list.add("USER");
-                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
-                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                userType_spinner.setAdapter(dataAdapter);
-
-
-                List<String> list2 = new ArrayList<String>();
-
-                list2.add(0,"Admin");
-                list2.add(1,"Agent");
-                ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list2);
-                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                userElement_spinner.setAdapter(dataAdapter2);
-
-                break;
-            case R.id.add:
 
                 validator.validate();
-                Log.i("ADDCLICKED", "CLICKED");
-
 
                 break;
             case R.id.btnCancel:
-/*
-                add_user.setVisibility(View.GONE);
-                ivAdd.setVisibility(View.VISIBLE);
-                outer_layout.setVisibility(View.VISIBLE);
-                MainActivity.setAppTitle(R.string.user_title);
-*/
 
                 Fragment fragment = new UserFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -255,8 +218,6 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
                 fragmentTransaction.commit();
 
                 MainActivity.setAppTitle(R.string.user_title);
-
-
                 break;
             case R.id.activeFrom:
                 final Calendar cal = Calendar.getInstance(TimeZone.getDefault());
@@ -292,9 +253,27 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
     }
 
-    public void readUser(int userId) {
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainActivity.setAppTitle(R.string.edit_user);
+    }
 
-        showProgress("User Inactivation.","In Progress... ",2);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+    }
+
+
+    @Override
+    public void readUser(int userId) {
         UserApi userApi =
                 ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
         Call<USERGETALL> call = userApi.getUserAPI("http://cellordering.com/api/User/GetUser?userId=" + userId);
@@ -305,18 +284,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
                 Log.i("responseDB", response.body() + "");
                 User user = new User();
                 user = response.body().getUser();
-                deleteUser(user);
-                dismissProgress();
-                showAlert("User Inactivation.","Inactivated successfully",2);
-                Fragment fragment = new UserFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.content, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
-                MainActivity.setAppTitle(R.string.user_title);
-
+                fetchUser(user);
 
             }
 
@@ -331,18 +299,49 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
     @Override
     public void fetchUser(User user) {
+//Log.i("HERE","HERE"+user.getUsername());
+
+        name.setText(user.getUsername());
+        password.setText(user.getPassword());
+
+        number.setText(user.getMobile());
+        email.setText(user.getEmail());
+
+        city.setText(user.getCity());
+        country.setText(user.getCountry());
+        state.setText(user.getState());
+        pin.setText(user.getPin());
+        ftName.setText(user.getFirstName());
+        lastName.setText(user.getLastName());
+        midName.setText(user.getMiddleName());
+        addrs1.setText(user.getAddress1());
+        addrs2.setText(user.getAddress2());
+
+        activeFrom.setText(user.getActiveFrom());
+        activeTo.setText(user.getActiveTo());
+
+
+        int elementpos;
+        if(user.getUserElementCode()=="Admin")
+            elementpos=0;
+        else
+            elementpos=1;
+
+        userElement_spinner.setSelection(elementpos);
+
+       if( user.isIsActive())
+radioStatusGroup.check(R.id.radioActive);
+else
+           radioStatusGroup.check(R.id.radioPassive);
 
     }
 
     @Override
-    public void switchToEditUser(int pos) {
-        int userId = userData.get(pos).getId();
-        Log.i("RPRP", "PPPP" + userId);
+    public void switchToEditUser(int user) {
+
+        Log.i("PATTABHI", "CCC" + user);
 
         Fragment fragment = new UserEditFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("userid", userId);
-        fragment.setArguments(bundle);
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.content, fragment);
@@ -351,64 +350,9 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
     }
 
-    public void delete(int pos) {
-
-      /*  List<CartItem> deleteList = cartItemDao.queryBuilder().where(CartItemDao.Properties.Id.eq(cart.get(pos).getId())).list();
-        cartItemDao.deleteInTx(deleteList);
-        cart.remove(pos);
-        refreshTotal();
-        orderAdapter.notifyDataSetChanged();*/
-    }
-
     @Override
     public ArrayList<UserData> readAllUsers() {
-        userData.clear();
-
-        showProgress("User Data Feteching.", "Loading...", 2);
-        UserApi userApi =
-                ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
-
-        Call<USERGETALL> call = userApi.getAllUsersAPI();
-        call.enqueue(new Callback<USERGETALL>() {
-            @Override
-            public void onResponse(Call<USERGETALL> call, Response<USERGETALL> response) {
-                //         Log.i("responseDB", response.body().getUserList() + "");
-                dismissProgress();
-             //   UserData userData=new UserData();
-                UserData userData1;
-
-                for (int i = 0; i < response.body().getUserList().size(); i++) {
-
-                    Log.i("responseNames", response.body().getUserList().get(i).getLastName() + "");
-                    Log.i("responseIDS", response.body().getUserList().get(i).getUserId() + "");
-                    userData1=new UserData();
-
-                    userData1.setId(response.body().getUserList().get(i).getUserId());
-                    userData1.setFirstName(response.body().getUserList().get(i).getFirstName());
-                    userData1.setLastName(response.body().getUserList().get(i).getLastName());
-
-                    userData1.setUserName(response.body().getUserList().get(i).getUsername());
-                    userData1.setMobile(response.body().getUserList().get(i).getMobile());
-                    userData1.setUserElementCode(response.body().getUserList().get(i).getUserElementCode());
-                    userData1.setActive(response.body().getUserList().get(i).isIsActive());
-
-
-                    userData.add(userData1);
-
-                }
-                usersAdapter.notifyDataSetChanged();
-
-
-            }
-
-
-            @Override
-            public void onFailure(Call<USERGETALL> call, Throwable t) {
-
-            }
-        });
-        Log.i("responseNNN", userData + "");
-        return userData;
+        return null;
     }
 
     @Override
@@ -422,7 +366,11 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         else userStatus = false;
 
 
+
         User user = new User();
+
+        user.setUserId(userId);
+
         user.setFirstName(ftName.getText().toString());
         user.setLastName(lastName.getText().toString());
         user.setMiddleName(midName.getText().toString());
@@ -435,7 +383,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         user.setCountry(country.getText().toString());
         user.setEmail(email.getText().toString());
         user.setPassword(password.getText().toString());
-        user.setMobile(mobile.getText().toString());
+        user.setMobile(number.getText().toString());
         user.setIsActive(userStatus);
         user.setPin(pin.getText().toString());
         user.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
@@ -454,25 +402,29 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
     }
 
+
     @Override
     public void createUser(User user) {
 
-        showProgress("User Creation!", "Processing...", 2);
+    }
+
+
+    @Override
+    public void updateUser(User user) {
+
         UserInfo userInfo = new UserInfo(user);
 
         UserApi userApi =
                 ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
 
-        Call<UserInfo> call = userApi.createUserAPI(userInfo);
+        Call<UserInfo> call = userApi.updateUserAPI(userInfo);
         call.enqueue(new Callback<UserInfo>() {
             @Override
             public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
 
                 Log.i("CREATERES", "RESPONSE" + response.body().toString());
                 dismissProgress();
-                showAlert("User Creation.", "Success!", 1);
 
-//                userAdapter.notifyDataSetChanged();
             }
 
 
@@ -482,10 +434,6 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
             }
         });
 
-    }
-
-    @Override
-    public void updateUser(User user) {
 
     }
 
@@ -502,7 +450,8 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
             @Override
             public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
 
-
+                Log.i("CREATERES", "RESPONSE" + response.body().toString());
+                //   UserInfoAdapter.notifyDataSetChanged();
             }
 
 
@@ -513,12 +462,16 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         });
     }
 
+    public String getCurrentDate() {
 
-/*
-    @Override
-    public void deleteUser(User user) {
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
 
-    }*/
+    }
+
+    public String getUTCDate(String strDate) {
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(strDate));
+    }
+
 
     public void showAlert(String title, String msg, int theme) {
 
@@ -544,7 +497,6 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         alertDialog.show();
     }
 
-
     public void showProgress(String title, String msg, int theme) {
         progressDialog.setTitle(title);
         progressDialog.setMessage(msg);
@@ -557,12 +509,6 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
     public void dismissProgress() {
         progressDialog.dismiss();
-    }
-
-    public String getCurrentDate() {
-
-        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
-
     }
 
 
@@ -610,7 +556,8 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
     @Override
     public GetAllElementTypes getAllElementTypes() {
-        /*GroupElementTypeApi groupElementTypeApi = ApiClient.createService(GroupElementTypeApi.class, Login.getInstance(getContext()).getAuthToken());
+/*
+        GroupElementTypeApi groupElementTypeApi = ApiClient.createService(GroupElementTypeApi.class, Login.getInstance(getContext()).getAuthToken());
         Call<GetAllElementTypes> call = groupElementTypeApi.getAllElementTypesAPI();
 
         call.enqueue(new Callback<GetAllElementTypes>() {
@@ -628,7 +575,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
                 } else {
 
-                    for (int i = 0; i < 2&&list.isEmpty(); i++) {
+                    for (int i = 0; i < 2 && list.isEmpty(); i++) {
 
                         list.add("Admin");
                         list.add("Agent");
@@ -649,18 +596,18 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         });
 
 */
+
         return null;
     }
 
     @Override
     public void onValidationSucceeded() {
         validated = true;
-        createUser(getUser());
-        /*add_user.setVisibility(View.GONE);
-        ivAdd.setVisibility(View.VISIBLE);
-        outer_layout.setVisibility(View.VISIBLE);
-        MainActivity.setAppTitle(R.string.user_title);*/
 
+        showProgress("User Update.", "Processing", 2);
+        updateUser(getUser());
+        showAlert("User Update Status","Success",2);
+//switchFragment()
         Fragment fragment = new UserFragment();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -671,7 +618,6 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         MainActivity.setAppTitle(R.string.user_title);
 
 
-        // readAllUsers();
     }
 
     @Override

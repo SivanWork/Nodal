@@ -267,7 +267,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-<<<<<<< HEAD
 
         </LinearLayout>
     </ScrollView>
@@ -279,17 +278,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="10dp"
         android:background="@drawable/float_btn" />
-=======
-        <ImageView
-            android:id="@+id/ivAdd"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="10dp"
-            android:background="@drawable/float_btn" />
-
-    </LinearLayout>
->>>>>>> parent of bd9e718... minor changes
 
 </FrameLayout>
 

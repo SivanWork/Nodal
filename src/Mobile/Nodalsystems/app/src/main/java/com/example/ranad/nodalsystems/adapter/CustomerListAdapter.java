@@ -7,11 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.example.ranad.nodalsystems.App;
 import com.example.ranad.nodalsystems.R;
+import com.example.ranad.nodalsystems.data_holder.CustomerData;
 import com.example.ranad.nodalsystems.database.Customers;
 import com.example.ranad.nodalsystems.database.CustomersDao;
 import com.example.ranad.nodalsystems.database.OrderDetailDB;
@@ -30,12 +32,12 @@ import java.util.List;
  */
 
 public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapter.CustomerViewHolder> {
-    ArrayList<Customers> customerData;
+    ArrayList<CustomerData> customerData;
     Context context;
     InputMethodManager inputMethodManager;
     CustomerAction customerAction;
 
-    public CustomerListAdapter(ArrayList<Customers> customerData, Context context, CustomerFragment customerAction) {
+    public CustomerListAdapter(ArrayList<CustomerData> customerData, Context context, CustomerFragment customerAction) {
         this.context = context;
         this.customerData = customerData;
         inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -52,7 +54,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
     @Override
     public void onBindViewHolder(CustomerViewHolder holder, int position) {
 
-        Customers customerData = this.customerData.get(position);
+        CustomerData customerData = this.customerData.get(position);
         holder.bindData(customerData, position);
 
     }
@@ -66,7 +68,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
     public class CustomerViewHolder extends RecyclerView.ViewHolder implements ViewSwitcher.ViewFactory {
         View itemView;
         TextView customerName, email, mobile, code,date;
-
+        ImageView edit,delete;
 
         public CustomerViewHolder(final Context context, View itemView) {
             super(itemView);
@@ -76,15 +78,33 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
             mobile = (TextView) itemView.findViewById(R.id.mobile);
             code = (TextView) itemView.findViewById(R.id.customercode);
             date = (TextView) itemView.findViewById(R.id.date);
+            edit= (ImageView) itemView.findViewById(R.id.edit);
+            delete= (ImageView) itemView.findViewById(R.id.delete);
+
 
         }
 
-        public void bindData(final Customers customerData, final int position) {
-            customerName.setText(customerData.getFirstName());
-            code.setText(customerData.getCustomerCode());
+        public void bindData(final CustomerData customerData, final int position) {
+            customerName.setText(customerData.getName());
+           /* code.setText(customerData.getCustomerCode());
             email.setText(customerData.getEmail());
             mobile.setText(customerData.getMobile());
-            date.setText(customerData.getCreatedDate()+"");
+            date.setText(customerData.getCreatedDate()+"");*/
+
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Toast.makeText(context, "unable to delete", Toast.LENGTH_SHORT).show();
+                    //   userAction.deleteUser(position);
+                }
+            });
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Toast.makeText(context, "unable to delete", Toast.LENGTH_SHORT).show();
+                    customerAction.switchToEditCustomer(position);
+                }
+            });
         }
 
 

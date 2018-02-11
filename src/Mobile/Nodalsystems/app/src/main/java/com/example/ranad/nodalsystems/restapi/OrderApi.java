@@ -17,10 +17,10 @@ public interface OrderApi {
 
     //@FormUrlEncoded
     @POST(Api.ORDER_CREATE)
-    Call<OrderPojo> createOrder(@Body OrderPojo o);
+    Call<OrderPojo> createOrderAPI(@Body OrderPojo o);
 
     @POST(Api.BULKORDER_CREATE)
-    Call<OrderPojo> createBulkOrder(@Body List<OrderPojo> o);
+    Call<OrderPojo> createBulkOrderAPI(@Body List<OrderPojo> o);
 
 
 }
