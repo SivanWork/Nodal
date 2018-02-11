@@ -3,8 +3,6 @@ package com.example.ranad.nodalsystems.restapi;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.example.ranad.nodalsystems.Api;
-
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Credentials;
@@ -73,5 +71,23 @@ public class ApiClient {
         return retrofit.create(serviceClass);
     }
 
-  
+
+    public static ApiInterface forgotPassword(Context context){
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.readTimeout(120, TimeUnit.SECONDS);
+        builder.connectTimeout(60, TimeUnit.SECONDS);
+        builder.addInterceptor(httpLoggingInterceptor);
+
+        Retrofit.Builder builder1 = new Retrofit.Builder()
+                .baseUrl(API_BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create());
+        Retrofit retrofit = builder1
+                .client(builder.build())
+                .build();
+
+        return  retrofit.create(ApiInterface.class);
+    }
 }
