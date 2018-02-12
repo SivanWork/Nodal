@@ -8,11 +8,16 @@ import android.os.Parcelable;
  */
 
 public class ProductData implements Parcelable {
+    String ProductName;
+    String ProductCode;
+    int MRP;
+    int DealerPrice;
+    int WholePrice;
+    int cgst;
+    int sgst;
+    int igst;
+    boolean IsActive;
 
-    public ProductData(String ProductName, String ProductCode ){
-        this.ProductName = ProductName;
-        this.ProductCode = ProductCode;
-    }
     public String getProductName() {
         return ProductName;
     }
@@ -37,14 +42,83 @@ public class ProductData implements Parcelable {
         this.MRP = MRP;
     }
 
-    String ProductName;
-    String ProductCode;
-    int MRP;
+    public int getDealerPrice() {
+        return DealerPrice;
+    }
+
+    public void setDealerPrice(int dealerPrice) {
+        DealerPrice = dealerPrice;
+    }
+
+    public int getWholePrice() {
+        return WholePrice;
+    }
+
+    public void setWholePrice(int wholePrice) {
+        WholePrice = wholePrice;
+    }
+
+    public int getCgst() {
+        return cgst;
+    }
+
+    public void setCgst(int cgst) {
+        this.cgst = cgst;
+    }
+
+    public int getSgst() {
+        return sgst;
+    }
+
+    public void setSgst(int sgst) {
+        this.sgst = sgst;
+    }
+
+    public int getIgst() {
+        return igst;
+    }
+
+    public void setIgst(int igst) {
+        this.igst = igst;
+    }
+
+    public boolean isActive() {
+        return IsActive;
+    }
+
+    public void setActive(boolean active) {
+        IsActive = active;
+    }
+
 
     protected ProductData(Parcel in) {
         ProductName = in.readString();
         ProductCode = in.readString();
         MRP = in.readInt();
+        DealerPrice = in.readInt();
+        WholePrice = in.readInt();
+        cgst = in.readInt();
+        sgst = in.readInt();
+        igst = in.readInt();
+        IsActive = in.readByte() != 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(ProductName);
+        dest.writeString(ProductCode);
+        dest.writeInt(MRP);
+        dest.writeInt(DealerPrice);
+        dest.writeInt(WholePrice);
+        dest.writeInt(cgst);
+        dest.writeInt(sgst);
+        dest.writeInt(igst);
+        dest.writeByte((byte) (IsActive ? 1 : 0));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<ProductData> CREATOR = new Creator<ProductData>() {
@@ -58,16 +132,4 @@ public class ProductData implements Parcelable {
             return new ProductData[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(ProductName);
-        parcel.writeString(ProductCode);
-        parcel.writeInt(MRP);
-    }
 }

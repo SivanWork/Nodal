@@ -8,6 +8,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by Rana D on 1/30/2018.
@@ -23,6 +24,6 @@ public interface ApiInterface {
     Call<Login> basicLogin();
 
     @POST(Api.FORGOT_PASSWORD+"={Email}")
-    Call<Login> forgotPassword(@Path("Email") String Email);
+    Call<Login> forgotPassword(@Query("Email") String Email);
 
 }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ranad.nodalsystems.fragment.ChangePassword;
+import com.example.ranad.nodalsystems.fragment.ForgotPasswordDialog;
 import com.example.ranad.nodalsystems.fragment.HomeFragment;
 import com.example.ranad.nodalsystems.fragment.OrderFragment;
 import com.example.ranad.nodalsystems.model.Login;
@@ -67,25 +68,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.forgot_pwd:
-//                ChangePassword changePassword = new ChangePassword();
-//                changePassword.show(getSupportFragmentManager(), "Change Password");
-                Login login = Login.getInstance(this);
-                ApiInterface apiInterface = ApiClient.forgotPassword(this);
-                Call<Login> c = apiInterface.forgotPassword(login.getUser().getEmail());
-                c.enqueue(new Callback<Login>() {
-                    @Override
-                    public void onResponse(Call<Login> call, Response<Login> response) {
-
-                        Log.d("response of forgotpwd", response.body().toString());
-                    }
-
-                    @Override
-                    public void onFailure(Call<Login> call, Throwable t) {
-
-                    }
-                });
-
-                break;
+               ForgotPasswordDialog forgotPasswordDialog = new ForgotPasswordDialog();
+                forgotPasswordDialog.show(getSupportFragmentManager(), "Forgot Password");
+                  break;
             case R.id.login:
                /* getUserType();
                 Log.d("user", user);

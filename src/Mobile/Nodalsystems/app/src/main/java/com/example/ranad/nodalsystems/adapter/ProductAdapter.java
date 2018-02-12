@@ -65,7 +65,6 @@ public class ProductAdapter extends BaseAdapter implements View.OnClickListener 
     public View getView(int i, View view, ViewGroup viewGroup) {
         View v = view;
         v = layoutInflater.inflate(R.layout.product_list, null);
-        View home_background = (View) v.findViewById(R.id.icon_background);
 
         TextView name = (TextView) v.findViewById(R.id.product_name);
         name.setText(productData.get(i).getProductName());
