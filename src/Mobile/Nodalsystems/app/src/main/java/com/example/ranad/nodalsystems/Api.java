@@ -22,4 +22,12 @@ public class Api {
 
     public final static String GETALL_ELEMENT_TYPES = HOST + "/api/GroupElementCode/GetAllGroupElementCodes";
 
+    public final static String ADD_PRODUCT = HOST + "/api/Product/CreateProduct";
+    public final static String GET_PRODUCT = HOST + "/api/Product/GetProduct";
+    public final static String UPDATE_PRODUCT = HOST + "/api/Product/UpdateProduct";
+    public final static String DELETE_PRODUCT = HOST + "/api/Product/DeleteProduct";
+    public final static String GET_ALL_PRODUCT = HOST + "/api/Product/GetAllProducts";
+
+
+
 }
