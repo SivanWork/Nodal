@@ -281,11 +281,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener, 
         call.enqueue(new Callback<USERGETALL>() {
             @Override
             public void onResponse(Call<USERGETALL> call, Response<USERGETALL> response) {
-                Log.i("responseDB", response.body() + "");
-                User user = new User();
-                user = response.body().getUser();
-                fetchUser(user);
-
+                fetchUser(response.body().getUser());
             }
 
 
@@ -386,8 +382,8 @@ else
         user.setMobile(number.getText().toString());
         user.setIsActive(userStatus);
         user.setPin(pin.getText().toString());
-        user.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
-        user.setCreatedDate(getCurrentDate().toString());
+//        user.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
+ //       user.setCreatedDate(getCurrentDate().toString());
         user.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
         user.setLastUpdatedDate(getCurrentDate().toString());
 
@@ -411,10 +407,6 @@ else
 
     @Override
     public void updateUser(User user) {
-
-        user.setLastUpdatedDate(getCurrentDate());
-        user.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
-
 
         UserInfo userInfo = new UserInfo(user);
 

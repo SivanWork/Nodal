@@ -19,5 +19,8 @@ public interface CustomerAction {
 
     public void createCustomer(Customer customer);
     public ArrayList<CustomerData> readAllCustomers();
+    public void updateCustomer(Customer customer);
+
+    public void fetchCustomer(Customer customer);
 
 }

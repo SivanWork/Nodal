@@ -18,9 +18,8 @@ public class Api {
     public final static String USER_GET = HOST + "/api/User/GetUser";
     public final static String CUSTOMER_GETALL = HOST + "/api/Customer/GetAllCustomers";
     public final static String CUSTOMER_CREATE = HOST + "/api/Customer/CreateCustomer";
-    public final static String GETALL_GROUPTYPES = HOST + "/api/GroupType/GetAllGroupTypes";
 
-    public final static String GETALL_ELEMENT_TYPES = HOST + "/api/GroupElementCode/GetAllGroupElementCodes";
+    public final static String CUSTOMER_UPDATE = HOST + "/api/Customer/UpdateCustomer";
 
     public final static String ADD_PRODUCT = HOST + "/api/Product/CreateProduct";
     public final static String GET_PRODUCT = HOST + "/api/Product/GetProduct";
@@ -29,5 +28,8 @@ public class Api {
     public final static String GET_ALL_PRODUCT = HOST + "/api/Product/GetAllProducts";
 
 
+    public final static String GETALL_GROUPTYPES = HOST + "/api/GroupType/GetAllGroupTypes";
+
+    public final static String GETALL_ELEMENT_TYPES = HOST + "/api/GroupElementCode/GetAllGroupElementCodes";
 
 }

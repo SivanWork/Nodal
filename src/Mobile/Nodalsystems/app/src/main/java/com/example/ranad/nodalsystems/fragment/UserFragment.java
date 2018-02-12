@@ -22,14 +22,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
-import com.example.ranad.nodalsystems.adapter.UserAdapter;
 import com.example.ranad.nodalsystems.adapter.UsersAdapter;
 import com.example.ranad.nodalsystems.data_holder.UserData;
 import com.example.ranad.nodalsystems.interfaces.GroupElementTypeAction;
@@ -44,7 +42,6 @@ import com.example.ranad.nodalsystems.model.User;
 import com.example.ranad.nodalsystems.model.UserInfo;
 import com.example.ranad.nodalsystems.model.UserList;
 import com.example.ranad.nodalsystems.restapi.ApiClient;
-import com.example.ranad.nodalsystems.restapi.GroupElementTypeApi;
 import com.example.ranad.nodalsystems.restapi.GroupTypeApi;
 import com.example.ranad.nodalsystems.restapi.UserApi;
 import com.example.ranad.nodalsystems.usage.NetworkChecker;
@@ -91,7 +88,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
     ArrayList<UserData> userData = new ArrayList<>();
     SwitchFragment switchFragment;
     RecyclerView user_list;
-    UserAdapter userAdapter;
+    //UserAdapter userAdapter;
     UsersAdapter usersAdapter;
     List<UserList> userList = new ArrayList<UserList>();
     ProgressDialog progressDialog = null;
@@ -367,7 +364,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 Log.i("NETCHKR",""+NetworkChecker.isConnected(getContext()));
         if(NetworkChecker.isConnected(getContext())==false)
         {
-         NetworkChecker.noNetworkDialog(getContext()).show();
+         NetworkChecker.noNetworkDialog(getContext(),getActivity(),2).show();
         }
         else {
 

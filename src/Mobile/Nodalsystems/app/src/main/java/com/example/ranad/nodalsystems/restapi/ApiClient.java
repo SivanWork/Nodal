@@ -1,9 +1,6 @@
 package com.example.ranad.nodalsystems.restapi;
 
-import android.content.Context;
 import android.text.TextUtils;
-
-import com.example.ranad.nodalsystems.Api;
 
 import java.util.concurrent.TimeUnit;
 

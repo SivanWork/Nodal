@@ -1,5 +1,6 @@
 package com.example.ranad.nodalsystems.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.ranad.nodalsystems.App;
@@ -31,13 +34,21 @@ import com.example.ranad.nodalsystems.interfaces.CustomerAction;
 import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
 import com.example.ranad.nodalsystems.model.Customer;
 import com.example.ranad.nodalsystems.model.CustomerGetAll;
+import com.example.ranad.nodalsystems.model.CustomerInfo;
 import com.example.ranad.nodalsystems.model.Login;
 import com.example.ranad.nodalsystems.model.USERGETALL;
 import com.example.ranad.nodalsystems.model.User;
 import com.example.ranad.nodalsystems.restapi.ApiClient;
 import com.example.ranad.nodalsystems.restapi.CustomerApi;
 import com.example.ranad.nodalsystems.restapi.UserApi;
+import com.example.ranad.nodalsystems.usage.DialogUtils;
+import com.example.ranad.nodalsystems.usage.FragmentSwitch;
+import com.example.ranad.nodalsystems.usage.NetworkChecker;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,9 +59,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class CustomerFragment extends Fragment implements View.OnClickListener, CustomerAction {
+public class CustomerFragment extends Fragment implements View.OnClickListener, CustomerAction, Validator.ValidationListener {
     View view, add_customer, outer;
-    EditText name, amount, email, addrs, alt_addrs, number, city, state, country, pincode;
+    protected Validator validator;
+    protected boolean validated;
+
+    TextView noOfCustomers;
+    EditText midName;
+    @NotEmpty
+    EditText firstName, lastName, amount, email, addrs, alt_addrs, number, city, state, country, pincode;
     Button add, btncancel;
     ImageView ivAdd;
     RecyclerView recyclerView;
@@ -86,11 +103,22 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_customer, container, false);
+
+        validator = new Validator(this);
+        validator.setValidationListener((Validator.ValidationListener) this);
+
+
         recyclerView = (RecyclerView) view.findViewById(R.id.customer_list);
         ivAdd = (ImageView) view.findViewById(R.id.ivAdd);
         ivAdd.setOnClickListener(this);
         add_customer = (View) view.findViewById(R.id.add_customer);
-        name = (EditText) view.findViewById(R.id.cust_name);
+
+
+        firstName = (EditText) view.findViewById(R.id.ftName);
+        midName = (EditText) view.findViewById(R.id.midName);
+        lastName = (EditText) view.findViewById(R.id.lastName);
+
+
         amount = (EditText) view.findViewById(R.id.amt_limit);
         email = (EditText) view.findViewById(R.id.cust_email);
         number = (EditText) view.findViewById(R.id.cust_num);
@@ -118,8 +146,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
         customerAdapter.notifyDataSetChanged();
 
 
-        TextView noOfCustomers = (TextView) view.findViewById(R.id.noOfCustomers);
-        noOfCustomers.setText("Customers:" + customersList.size());
+        noOfCustomers = (TextView) view.findViewById(R.id.noOfCustomers);
 
         ImageButton backButton = (ImageButton) view.findViewById(R.id.backbutton);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +178,11 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
     public void saveCustomerInfo() {
         CustomersDao customersDao = App.getDaoSession().getCustomersDao();
         Customers customers = new Customers();
-        customers.setFirstName(name.getText().toString());
+        customers.setFirstName(firstName.getText().toString());
+        customers.setMiddleName(midName.getText().toString());
+        customers.setLastName(lastName.getText().toString());
+
+
         customers.setAddress1(addrs.getText().toString());
         customers.setAddress2(alt_addrs.getText().toString());
         if (!amount.getText().toString().isEmpty())
@@ -177,26 +208,31 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
     @Override
     public Customer getCustomer() {
 
-        Customer customers = new Customer();
-        customers.setFirstName(name.getText().toString());
-        customers.setAddress1(addrs.getText().toString());
-        customers.setAddress2(alt_addrs.getText().toString());
+        Customer customer = new Customer();
+        customer.setFirstName(firstName.getText().toString());
+        customer.setLastName(lastName.getText().toString());
+        customer.setMiddleName(midName.getText().toString());
+        customer.setAddress1(addrs.getText().toString());
+        customer.setAddress2(alt_addrs.getText().toString());
         if (!amount.getText().toString().isEmpty())
-            customers.setAmountLimit(Float.parseFloat(amount.getText().toString()));
-        customers.setEmail(email.getText().toString());
-        customers.setMobile(number.getText().toString());
-        customers.setCity(city.getText().toString());
-        customers.setState(state.getText().toString());
-        customers.setCountry(country.getText().toString());
-        customers.setPin(country.getText().toString());
-        customers.setIsActive(true);
+            customer.setAmountLimit(Float.parseFloat(amount.getText().toString()));
+        customer.setEmail(email.getText().toString());
+        customer.setMobile(number.getText().toString());
+        customer.setCity(city.getText().toString());
+        customer.setState(state.getText().toString());
+        customer.setCountry(country.getText().toString());
+        customer.setPin(country.getText().toString());
+        customer.setIsActive(true);
 
-        customers.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
-        customers.setCreatedDate(getCurrentDate().toString());
-        customers.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
-        customers.setLastUpdatedDate(getCurrentDate().toString());
+        customer.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
+        customer.setCreatedDate(getCurrentDate().toString());
+        customer.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
+        customer.setLastUpdatedDate(getCurrentDate().toString());
+        customer.setCustomerId(0);
+        customer.setCustomerCode("");
 
-        return customers;
+
+        return customer;
     }
 
     @Override
@@ -223,37 +259,38 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void createCustomer(Customer customer) {
 
+        if (!NetworkChecker.isConnected(getContext()))
+            NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2);
+        else {
 
-        CustomerApi customerApi =
-                ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
+            final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Customer Creation.", "Processing..");
+            CustomerInfo customerInfo = new CustomerInfo(customer);
 
-        Call<Customer> call = customerApi.createCustomerAPI(customer);
-        call.enqueue(new Callback<Customer>() {
-            @Override
-            public void onResponse(Call<Customer> call, Response<Customer> response) {
+            CustomerApi customerApi =
+                    ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
 
-                Log.i("CREATERES", "RESPONSE" + response.body().toString());
-                customerAdapter.notifyDataSetChanged();
-            }
+            Call<CustomerInfo> call = customerApi.createCustomerAPI(customerInfo);
+            call.enqueue(new Callback<CustomerInfo>() {
 
+                @Override
+                public void onResponse(Call<CustomerInfo> call, Response<CustomerInfo> response) {
 
-            @Override
-            public void onFailure(Call<Customer> call, Throwable t) {
+                    Log.i("CREATERES", "RESPONSE" + response.body().toString());
+                    customerAdapter.notifyDataSetChanged();
 
-            }
-        });
-
-    }
+                    DialogUtils.dismissProgress(progressDialog);
+                    DialogUtils.alertDialog(getContext(), "Customer Creation.", "Success", 2);
+                }
 
 
-    boolean validateForm() {
+                @Override
+                public void onFailure(Call<CustomerInfo> call, Throwable t) {
 
-        if (name.getText().toString().isEmpty()) {
-            showAlert("Alert", "Enter Customer Name", 1);
-            return false;
+                }
+            });
         }
-        return true;
     }
+
 
     public void showAlert(String title, String msg, int theme) {
 
@@ -294,38 +331,73 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public ArrayList<CustomerData> readAllCustomers() {
+
         customerData.clear();
-        CustomerApi customerApi =
-                ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
+        //    Log.i("ZZZZ", ""+NetworkChecker.isConnected(getContext()));
 
-        Call<CustomerGetAll> call = customerApi.getAllCustomersAPI();
-        call.enqueue(new Callback<CustomerGetAll>() {
-            @Override
-            public void onResponse(Call<CustomerGetAll> call, Response<CustomerGetAll> response) {
-                Log.i("responseDB", response.body().getCustomerList() + "");
+        if (NetworkChecker.isConnected(getContext()) == false)
+            NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2).show();
+        else {
 
-                for (int i = 0; i < response.body().getCustomerList().size(); i++) {
 
-                    Log.i("responseNames", response.body().getCustomerList().get(i).getFirstName() + "");
-                    Log.i("responseIDS", response.body().getCustomerList().get(i).getCustomerId() + "");
-                    customerData.add(new CustomerData(response.body().getCustomerList().get(i).getCustomerId(), response.body().getCustomerList().get(i).getFirstName()));
+            final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Customer Data fetching.", "Loading...");
+            CustomerApi customerApi =
+                    ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
+
+            Call<CustomerGetAll> call = customerApi.getAllCustomersAPI();
+            call.enqueue(new Callback<CustomerGetAll>() {
+                @Override
+                public void onResponse(Call<CustomerGetAll> call, Response<CustomerGetAll> response) {
+                    Log.i("responseDB", response.body().getCustomerList() + "");
+
+                    DialogUtils.dismissProgress(progressDialog);
+                    CustomerData customerData1 = null;
+
+                    for (int i = 0; i < response.body().getCustomerList().size(); i++) {
+
+                        customerData1 = new CustomerData();
+                        Log.i("responseNames", response.body().getCustomerList().get(i).getFirstName() + "");
+                        Log.i("responseIDS", response.body().getCustomerList().get(i).getCustomerId() + "");
+                        customerData1.setCustomerCode(response.body().getCustomerList().get(i).getCustomerCode());
+                        customerData1.setEmail(response.body().getCustomerList().get(i).getEmail());
+                        customerData1.setId(response.body().getCustomerList().get(i).getCustomerId());
+                        if (response.body().getCustomerList().get(i).isIsActive())
+
+                            customerData1.setIsActive("Active");
+                        else customerData1.setIsActive("Passive");
+                        customerData1.setName(response.body().getCustomerList().get(i).getFirstName() + " " + response.body().getCustomerList().get(i).getLastName());
+                        customerData1.setMobile(response.body().getCustomerList().get(i).getMobile());
+                        //customerData.add(new CustomerData(response.body().getCustomerList().get(i).getCustomerId(), response.body().getCustomerList().get(i).getFirstName()));
+
+                        customerData.add(customerData1);
+
+                    }
+                    customerAdapter.notifyDataSetChanged();
+                    noOfCustomers.setText("Customers:" + response.body().getCustomerList().size());
+
 
                 }
-                customerAdapter.notifyDataSetChanged();
 
 
-            }
+                @Override
+                public void onFailure(Call<CustomerGetAll> call, Throwable t) {
 
-
-            @Override
-            public void onFailure(Call<CustomerGetAll> call, Throwable t) {
-
-            }
-        });
-        //    Log.i("responseNNN", userData + "");
+                }
+            });
+        }            //    Log.i("responseNNN", userData + "");
         return customerData;
+    }
+
+    @Override
+    public void updateCustomer(Customer customer) {
 
     }
+
+    @Override
+    public void fetchCustomer(Customer customer) {
+
+    }
+
 
     @Override
     public void delete(int pos) {
@@ -355,8 +427,10 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
                 MainActivity.setAppTitle(R.string.add_customer);
                 break;
             case R.id.add:
-                boolean isValid = validateForm();
-                if (isValid) {
+
+                validator.validate();
+
+/*
                     Log.i("ADDCLICKED","CLICKED");
                     createCustomer(getCustomer());
 
@@ -365,8 +439,8 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.content, fragment);
                     fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                }
+                    fragmentTransaction.commit();*/
+
                 break;
             case R.id.btnCancel:
                 add_customer.setVisibility(View.GONE);
@@ -377,8 +451,41 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
         }
 
     }
-    public Date getCurrentDate() {
-        Date d = new Date();
-        return d;
+
+    public String getCurrentDate() {
+
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
+
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+        validated = true;
+
+        createCustomer(getCustomer());
+        FragmentSwitch.switchTo(getActivity(), new CustomerFragment(), R.string.customer_title);
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        validated = false;
+
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(getContext());
+
+
+            // Display error messages
+            if (view instanceof Spinner) {
+                Spinner sp = (Spinner) view;
+                view = ((LinearLayout) sp.getSelectedView()).getChildAt(0);        // we are actually interested in the text view spinner has
+            }
+
+            if (view instanceof TextView) {
+                TextView et = (TextView) view;
+                et.setError(message);
+            }
+        }
+
     }
 }
