@@ -17,8 +17,8 @@ namespace Nodal.DataAccess
         public int InsertCustomer(Customer customer)
         {
             string sql = @"INSERT INTO [Customer]
-           ([FirstName],[MiddleName],[LastName],[CustomerCode],[AmountLimit],[Mobile],[Email],[Address1],[Address2],[City],[State],[Country],[Pin],[IsActive])
-			VALUES (@FirstName, @MiddleName, @LastName, @CustomerCode, @AmountLimit, @Mobile, @Email, @Address1, @Address2, @City, @State, @Country, @Pin, @IsActive); 
+           ([FirstName],[MiddleName],[LastName],[CustomerCode],[AmountLimit],[Mobile],[Email],[Address1],[Address2],[City],[State],[Country],[Pin],[IsActive],[CreatedById],[CreatedDate],[LastUpdatedById],[LastUpdatedDate])
+			VALUES (@FirstName, @MiddleName, @LastName, @CustomerCode, @AmountLimit, @Mobile, @Email, @Address1, @Address2, @City, @State, @Country, @Pin, @IsActive, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate); 
             SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Connection.Query<int>(sql, customer).Single();
@@ -30,7 +30,7 @@ namespace Nodal.DataAccess
             string sql = @"UPDATE [Customer] SET [FirstName] = @FirstName, [MiddleName] = @MiddleName, [LastName] = @LastName, 
       [CustomerCode] = @CustomerCode, [AmountLimit] = @AmountLimit, [Mobile] = @Mobile, 
       [Email] = @Email, [Address1] = @Address1, [Address2] = @Address2, [City] = @City, 
-      [State] = @State, [Country] = @Country, [Pin] = @Pin, [IsActive] = @IsActive 
+      [State] = @State, [Country] = @Country, [Pin] = @Pin, [IsActive] = @IsActive, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate 
 	  WHERE [CustomerId] = @CustomerId";
 
             var id = db.Connection.Query<int>(sql, customer).Single();
@@ -46,7 +46,7 @@ namespace Nodal.DataAccess
         public Customer GetCustomer(int customerId)
         {
             string query = "SELECT * FROM [Customer] WHERE [CustomerId] = @CustomerId";
-            var result = db.Connection.Query(query, new { customerId }).FirstOrDefault();
+            var result = db.Connection.Query<Customer>(query, new { customerId }).FirstOrDefault();
             return result;
         }
 

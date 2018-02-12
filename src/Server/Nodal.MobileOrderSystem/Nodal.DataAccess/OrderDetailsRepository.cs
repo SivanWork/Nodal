@@ -17,8 +17,8 @@ namespace Nodal.DataAccess
 
         public int InsertOrderDetail(OrderDetails orderDetail)
         {
-            string sql = @"INSERT INTO [OrderDetails] ([OrderId],[ProductId],[Quantity],[CGST],[SGST],[IGST],[Discount],[NetPrice])
-VALUES (@OrderId, @ProductId, @Quantity, @CGST, @SGST, @IGST, @Discount, @NetPrice) ; SELECT CAST(SCOPE_IDENTITY() as int)";
+            string sql = @"INSERT INTO [OrderDetails] ([OrderId],[ProductId],[Quantity],[CGST],[SGST],[IGST],[Discount],[NetPrice], [CreatedById], [CreatedDate], [LastUpdatedById], [LastUpdatedDate])
+VALUES (@OrderId, @ProductId, @Quantity, @CGST, @SGST, @IGST, @Discount, @NetPrice, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate) ; SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Connection.Query<int>(sql, orderDetail).Single();
             return id;
@@ -28,7 +28,7 @@ VALUES (@OrderId, @ProductId, @Quantity, @CGST, @SGST, @IGST, @Discount, @NetPri
         {
             string sql = @"UPDATE [dbo].[OrderDetails]
    SET [OrderId] = @OrderId, [ProductId] = @ProductId, [Quantity] = @Quantity, [CGST] = @CGST,  
-       [SGST] = @SGST, [IGST] = @IGST, [Discount] = @Discount, [NetPrice] = @NetPrice WHERE [Id] = @Id";
+       [SGST] = @SGST, [IGST] = @IGST, [Discount] = @Discount, [NetPrice] = @NetPrice, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate WHERE [Id] = @Id";
 
             var id = db.Connection.Query<int>(sql, orderDetail).Single();
             return id;
@@ -43,7 +43,7 @@ VALUES (@OrderId, @ProductId, @Quantity, @CGST, @SGST, @IGST, @Discount, @NetPri
         public OrderDetails GetOrderDetail(int orderDetailId)
         {
             string query = "SELECT * FROM [OrderDetails] WHERE [Id] = @Id";
-            var result = db.Connection.Query(query, new { orderDetailId }).FirstOrDefault();
+            var result = db.Connection.Query<OrderDetails>(query, new { orderDetailId }).FirstOrDefault();
             return result;
         }
 

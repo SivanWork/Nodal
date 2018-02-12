@@ -31,10 +31,10 @@ namespace Nodal.DataAccess
         {
             string sql = @"INSERT INTO [Users] ([Username],[Password],[FirstName],[MiddleName],[LastName],[Mobile]
 		   ,[Email],[Address1],[Address2],[City],[State],[Country],[Pin],[UserGroupType]
-		   ,[UserElementCode],[ActiveFrom],[ActiveTo],[IsActive])
+		   ,[UserElementCode],[ActiveFrom],[ActiveTo],[IsActive], [CreatedById], [CreatedDate], [LastUpdatedById], [LastUpdatedDate])
      VALUES(@Username, @Password, @FirstName, @MiddleName, @LastName, @Mobile, 
             @Email, @Address1, @Address2, @City, @State, @Country, 
-            @Pin, @UserGroupType, @UserElementCode, @ActiveFrom, @ActiveTo, @IsActive); SELECT CAST(SCOPE_IDENTITY() as int)";
+            @Pin, @UserGroupType, @UserElementCode, @ActiveFrom, @ActiveTo, @IsActive, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate); SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Connection.Query<int>(sql, user).Single();
             return id;
@@ -46,7 +46,7 @@ namespace Nodal.DataAccess
        [MiddleName] = @MiddleName, [LastName] = @LastName, [Mobile] = @Mobile, [Email] = @Email, 
        [Address1] = @Address1, [Address2] = @Address2, [City] = @City, [State] = @State, 
        [Country] = @Country, [Pin] = @Pin, [UserGroupType] = @UserGroupType, [UserElementCode] = @UserElementCode, 
-       [ActiveFrom] = @ActiveFrom, [ActiveTo] = @ActiveTo, [IsActive] = @IsActive WHERE [UserId] = @UserId";
+       [ActiveFrom] = @ActiveFrom, [ActiveTo] = @ActiveTo, [IsActive] = @IsActive, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate WHERE [UserId] = @UserId";
 
             var id = db.Connection.Query<int>(sql, user).Single();
             return id;
@@ -61,13 +61,19 @@ namespace Nodal.DataAccess
         public User GetUser(int userId)
         {
             string query = "SELECT * FROM [Users] WHERE [UserId] = @UserId";
-            var result = db.Connection.Query(query, new { userId }).FirstOrDefault();
+            var result = db.Connection.Query<User>(query, new { userId }).FirstOrDefault();
             return result;
         }
 
         public IEnumerable<User> GetUsers()
         {
             var result = db.Connection.Query<User>("SELECT * FROM [Users]");
+            return result;
+        }
+
+        public User GetUserByEmail(string email)
+        {
+            var result = db.Connection.Query<User>("SELECT * FROM [Users] WHERE [Email] = @Email", new { email }).FirstOrDefault();
             return result;
         }
     }

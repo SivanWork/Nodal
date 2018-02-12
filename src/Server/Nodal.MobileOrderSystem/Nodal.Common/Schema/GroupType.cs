@@ -1,4 +1,6 @@
-﻿namespace Nodal.Common.Schema
+﻿using System;
+
+namespace Nodal.Common.Schema
 {
     public class GroupType
     {
@@ -6,5 +8,9 @@
         public string GroupCode { get; set; }
         public string GroupName { get; set; }
         public bool IsActive { get; set; }
+        public int CreatedById { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int LastUpdatedById { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
     }
 }

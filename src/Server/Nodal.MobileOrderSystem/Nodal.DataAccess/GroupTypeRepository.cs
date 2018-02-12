@@ -16,8 +16,8 @@ namespace Nodal.DataAccess
 
         public int InsertGroupType(GroupType groupType)
         {
-            string sql = @"INSERT INTO [GroupType] ([GroupCode], [GroupName],[IsActive])
-                    VALUES (@GroupCode, @GroupName, @IsActive); SELECT CAST(SCOPE_IDENTITY() as int)";
+            string sql = @"INSERT INTO [GroupType] ([GroupCode], [GroupName],[IsActive], [CreatedById], [CreatedDate], [LastUpdatedById], [LastUpdatedDate])
+                    VALUES (@GroupCode, @GroupName, @IsActive, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate); SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Connection.Query<int>(sql, groupType).Single();
             return id;
@@ -25,8 +25,8 @@ namespace Nodal.DataAccess
 
         public int UpdateGroupType(GroupType groupType)
         {
-            string sql = @"UPDATE [GroupType] SET [GroupCode] = @GroupCode, [GroupName] = @GroupName, [IsActive] = @IsActive
-                        WHERE [Id] = @Id";
+            string sql = @"UPDATE [GroupType] SET [GroupCode] = @GroupCode, [GroupName] = @GroupName, [IsActive] = @IsActive, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate 
+                         WHERE [Id] = @Id";
 
             var id = db.Connection.Query<int>(sql, groupType).Single();
             return id;
@@ -41,7 +41,7 @@ namespace Nodal.DataAccess
         public GroupType GetGroupType(int groupTypeId)
         {
             string query = "SELECT * FROM [GroupType] WHERE [Id] = @Id";
-            var result = db.Connection.Query(query, new { groupTypeId }).FirstOrDefault();
+            var result = db.Connection.Query<GroupType>(query, new { groupTypeId }).FirstOrDefault();
             return result;
         }
 

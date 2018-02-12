@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,23 +23,39 @@ import com.example.ranad.nodalsystems.App;
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.adapter.CustomerListAdapter;
+import com.example.ranad.nodalsystems.data_holder.CustomerData;
+import com.example.ranad.nodalsystems.data_holder.UserData;
 import com.example.ranad.nodalsystems.database.Customers;
 import com.example.ranad.nodalsystems.database.CustomersDao;
 import com.example.ranad.nodalsystems.interfaces.CustomerAction;
 import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
+import com.example.ranad.nodalsystems.model.Customer;
+import com.example.ranad.nodalsystems.model.CustomerGetAll;
+import com.example.ranad.nodalsystems.model.Login;
+import com.example.ranad.nodalsystems.model.USERGETALL;
+import com.example.ranad.nodalsystems.model.User;
+import com.example.ranad.nodalsystems.restapi.ApiClient;
+import com.example.ranad.nodalsystems.restapi.CustomerApi;
+import com.example.ranad.nodalsystems.restapi.UserApi;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class CustomerFragment extends Fragment implements View.OnClickListener, CustomerAction {
     View view, add_customer, outer;
-    EditText name, amount, email, addrs, alt_addrs, number,city,state,country,pincode;
+    EditText name, amount, email, addrs, alt_addrs, number, city, state, country, pincode;
     Button add, btncancel;
     ImageView ivAdd;
     RecyclerView recyclerView;
     CustomerListAdapter customerAdapter;
-
+    ArrayList<CustomerData> customerData = new ArrayList<>();
 
 
     public CustomerFragment() {
@@ -89,15 +106,18 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
         btncancel.setOnClickListener(this);
         outer = (View) view.findViewById(R.id.outer);
 
+        List<CustomerData> customerDataList = readAllCustomers();
+
         CustomersDao customersDao = App.getDaoSession().getCustomersDao();
         List<Customers> customersList = customersDao.queryBuilder().list();
-
         recyclerView = (RecyclerView) view.findViewById(R.id.customer_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        customerAdapter = new CustomerListAdapter((ArrayList<Customers>) customersList, getContext(), this);
+        customerAdapter = new CustomerListAdapter((ArrayList<CustomerData>) customerDataList, getContext(), this);
         recyclerView.setAdapter(customerAdapter);
         customerAdapter.notifyDataSetChanged();
+
+
         TextView noOfCustomers = (TextView) view.findViewById(R.id.noOfCustomers);
         noOfCustomers.setText("Customers:" + customersList.size());
 
@@ -134,8 +154,8 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
         customers.setFirstName(name.getText().toString());
         customers.setAddress1(addrs.getText().toString());
         customers.setAddress2(alt_addrs.getText().toString());
-        if(!amount.getText().toString().isEmpty())
-        customers.setAmountLimit(Float.parseFloat(amount.getText().toString()));
+        if (!amount.getText().toString().isEmpty())
+            customers.setAmountLimit(Float.parseFloat(amount.getText().toString()));
         customers.setEmail(email.getText().toString());
         customers.setMobile(number.getText().toString());
         customers.setCreatedById(1);
@@ -145,19 +165,86 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
         customers.setPin(country.getText().toString());
         customers.setIsActive(true);
         customers.setLastUpdatedById(1);
-      //  customers.setLastUpdatedDate("11-11-2018");
+        //  customers.setLastUpdatedDate("11-11-2018");
         //customers.setCreatedDate("12-12-2018");
-        long genId=customersDao.insertOrReplace(customers);
+        long genId = customersDao.insertOrReplace(customers);
 
-        customers.setCustomerCode("CUST_00"+genId);
+        customers.setCustomerCode("CUST_00" + genId);
         customersDao.update(customers);
+    }
 
 
+    @Override
+    public Customer getCustomer() {
 
+        Customer customers = new Customer();
+        customers.setFirstName(name.getText().toString());
+        customers.setAddress1(addrs.getText().toString());
+        customers.setAddress2(alt_addrs.getText().toString());
+        if (!amount.getText().toString().isEmpty())
+            customers.setAmountLimit(Float.parseFloat(amount.getText().toString()));
+        customers.setEmail(email.getText().toString());
+        customers.setMobile(number.getText().toString());
+        customers.setCity(city.getText().toString());
+        customers.setState(state.getText().toString());
+        customers.setCountry(country.getText().toString());
+        customers.setPin(country.getText().toString());
+        customers.setIsActive(true);
 
+        customers.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
+        customers.setCreatedDate(getCurrentDate().toString());
+        customers.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
+        customers.setLastUpdatedDate(getCurrentDate().toString());
 
+        return customers;
+    }
+
+    @Override
+    public void switchToEditCustomer(int pos) {
+        int customerId = customerData.get(pos).getId();
+        Fragment fragment = new CustomerEditFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("customerid", customerId);
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
 
     }
+
+    @Override
+    public void readCustomer(int customerId) {
+
+    }
+
+
+    @Override
+    public void createCustomer(Customer customer) {
+
+
+        CustomerApi customerApi =
+                ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
+
+        Call<Customer> call = customerApi.createCustomerAPI(customer);
+        call.enqueue(new Callback<Customer>() {
+            @Override
+            public void onResponse(Call<Customer> call, Response<Customer> response) {
+
+                Log.i("CREATERES", "RESPONSE" + response.body().toString());
+                customerAdapter.notifyDataSetChanged();
+            }
+
+
+            @Override
+            public void onFailure(Call<Customer> call, Throwable t) {
+
+            }
+        });
+
+    }
+
 
     boolean validateForm() {
 
@@ -191,6 +278,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
         android.app.AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
+
     void showAlertDialog(String strMessage) {
         new AlertDialog.Builder(this.getContext())
                 .setPositiveButton("OK", null)
@@ -201,6 +289,41 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void updateCustomerInfo() {
+
+    }
+
+    @Override
+    public ArrayList<CustomerData> readAllCustomers() {
+        customerData.clear();
+        CustomerApi customerApi =
+                ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
+
+        Call<CustomerGetAll> call = customerApi.getAllCustomersAPI();
+        call.enqueue(new Callback<CustomerGetAll>() {
+            @Override
+            public void onResponse(Call<CustomerGetAll> call, Response<CustomerGetAll> response) {
+                Log.i("responseDB", response.body().getCustomerList() + "");
+
+                for (int i = 0; i < response.body().getCustomerList().size(); i++) {
+
+                    Log.i("responseNames", response.body().getCustomerList().get(i).getFirstName() + "");
+                    Log.i("responseIDS", response.body().getCustomerList().get(i).getCustomerId() + "");
+                    customerData.add(new CustomerData(response.body().getCustomerList().get(i).getCustomerId(), response.body().getCustomerList().get(i).getFirstName()));
+
+                }
+                customerAdapter.notifyDataSetChanged();
+
+
+            }
+
+
+            @Override
+            public void onFailure(Call<CustomerGetAll> call, Throwable t) {
+
+            }
+        });
+        //    Log.i("responseNNN", userData + "");
+        return customerData;
 
     }
 
@@ -234,7 +357,9 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
             case R.id.add:
                 boolean isValid = validateForm();
                 if (isValid) {
-                    saveCustomerInfo();
+                    Log.i("ADDCLICKED","CLICKED");
+                    createCustomer(getCustomer());
+
                     Fragment fragment = new CustomerFragment();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -251,5 +376,9 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
                 break;
         }
 
+    }
+    public Date getCurrentDate() {
+        Date d = new Date();
+        return d;
     }
 }

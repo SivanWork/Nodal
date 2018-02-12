@@ -1,5 +1,6 @@
 ﻿using Nodal.BusinessAccess.Model;
 using Nodal.BusinessAccess.Service;
+using Nodal.Common.Helper;
 using Nodal.Web.Filters;
 using System;
 using System.Collections.Generic;
@@ -40,21 +41,57 @@ namespace Nodal.Web.Controllers.API
         }
 
         [HttpDelete]
-        public BaseResponse DeleteUser(int discountId)
+        public BaseResponse DeleteUser(int userId)
         {
-            return _userService.DeleteUser(discountId);
+            return _userService.DeleteUser(userId);
         }
 
         [HttpGet]
-        public UserResponse GetUser(int discountId)
+        [AllowAnonymous]
+        public UserResponse GetUser(int userId)
         {
-            return _userService.GetUser(discountId);
+            return _userService.GetUser(userId);
         }
 
         [HttpGet]
         public UserResponse GetAllUsers()
         {
             return _userService.GetAllUsers();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public BaseResponse ForgotPassword(string recipientEmail)
+        {
+            var res = _userService.GetUserByEMail(recipientEmail);
+            BaseResponse response = new BaseResponse();
+
+            if (res != null && res.user != null)
+            {
+                EmailHelper.Send(
+                    ConfigurationHelper.GetInstance().GetConfig("Sender", typeof(string), "nodalmos@gmail.com"),
+                    ConfigurationHelper.GetInstance().GetConfig("SenderKey", typeof(string), "Test@1234"),
+                    res.user.Email,
+                    ConfigurationHelper.GetInstance().GetConfig("Subject", typeof(string), "We received your forgot password request!"),
+                    ConfigurationHelper.GetInstance().GetConfig("MessageContent", typeof(string),
+                    string.Format("Here you go! - User Name: {0}, Password: {1}", res.user.Username, res.user.Password)));
+
+                response.Message = "You will receive email shortly with your username and password!";
+                response.Success = true;
+            }
+            else
+            {
+                response.Message = "Given email doesn't match our records!";
+                response.Success = false;
+            }
+
+            return response;
+        }
+
+        [HttpPost]
+        public BaseResponse ChangePassword()
+        {
+            throw new NotImplementedException();
         }
     }
 }

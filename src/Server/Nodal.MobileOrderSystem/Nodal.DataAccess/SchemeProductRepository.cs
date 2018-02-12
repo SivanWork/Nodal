@@ -16,8 +16,8 @@ namespace Nodal.DataAccess
 
         public int InsertSchemeProduct(SchemeProduct schemeProduct)
         {
-            string sql = @"INSERT INTO [SchemeProduct] ([SchemeId],[ProductId],[IsActive])
-     VALUES (SchemeId, ProductId, IsActive); SELECT CAST(SCOPE_IDENTITY() as int)";
+            string sql = @"INSERT INTO [SchemeProduct] ([SchemeId],[ProductId],[IsActive], [CreatedById], [CreatedDate], [LastUpdatedById], [LastUpdatedDate])
+     VALUES (@SchemeId, @ProductId, @IsActive, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate); SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Connection.Query<int>(sql, schemeProduct).Single();
             return id;
@@ -25,7 +25,7 @@ namespace Nodal.DataAccess
 
         public int UpdateSchemeProduct(SchemeProduct schemeProduct)
         {
-            string sql = @"UPDATE [SchemeProduct] SET [SchemeId] = @SchemeId, [ProductId] = @ProductId, [IsActive] = @IsActive WHERE [Id] = @Id";
+            string sql = @"UPDATE [SchemeProduct] SET [SchemeId] = @SchemeId, [ProductId] = @ProductId, [IsActive] = @IsActive, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate WHERE [Id] = @Id";
 
             var id = db.Connection.Query<int>(sql, schemeProduct).Single();
             return id;
@@ -40,7 +40,7 @@ namespace Nodal.DataAccess
         public SchemeProduct GetSchemeProduct(int schemeProductId)
         {
             string query = "SELECT * FROM [SchemeProduct] WHERE [Id] = @Id";
-            var result = db.Connection.Query(query, new { schemeProductId }).FirstOrDefault();
+            var result = db.Connection.Query<SchemeProduct>(query, new { schemeProductId }).FirstOrDefault();
             return result;
         }
 

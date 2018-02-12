@@ -287,7 +287,7 @@ public  void makeOrder(List<OrderPojo> bulkOrder)
 
    // orderService.createBulkOrder(bulkOrder);
 
-    Call<OrderPojo> call = orderService.createBulkOrder(bulkOrder);
+    Call<OrderPojo> call = orderService.createBulkOrderAPI(bulkOrder);
 
 
     call.enqueue(new Callback<OrderPojo>() {
