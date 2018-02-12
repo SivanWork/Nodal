@@ -47,6 +47,7 @@ import com.example.ranad.nodalsystems.restapi.ApiClient;
 import com.example.ranad.nodalsystems.restapi.GroupElementTypeApi;
 import com.example.ranad.nodalsystems.restapi.GroupTypeApi;
 import com.example.ranad.nodalsystems.restapi.UserApi;
+import com.example.ranad.nodalsystems.usage.NetworkChecker;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Email;
@@ -363,51 +364,60 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
     @Override
     public ArrayList<UserData> readAllUsers() {
         userData.clear();
-
-        showProgress("User Data Feteching.", "Loading...", 2);
-        UserApi userApi =
-                ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
-
-        Call<USERGETALL> call = userApi.getAllUsersAPI();
-        call.enqueue(new Callback<USERGETALL>() {
-            @Override
-            public void onResponse(Call<USERGETALL> call, Response<USERGETALL> response) {
-                //         Log.i("responseDB", response.body().getUserList() + "");
-                dismissProgress();
-             //   UserData userData=new UserData();
-                UserData userData1;
-
-                for (int i = 0; i < response.body().getUserList().size(); i++) {
-
-                    Log.i("responseNames", response.body().getUserList().get(i).getLastName() + "");
-                    Log.i("responseIDS", response.body().getUserList().get(i).getUserId() + "");
-                    userData1=new UserData();
-
-                    userData1.setId(response.body().getUserList().get(i).getUserId());
-                    userData1.setFirstName(response.body().getUserList().get(i).getFirstName());
-                    userData1.setLastName(response.body().getUserList().get(i).getLastName());
-
-                    userData1.setUserName(response.body().getUserList().get(i).getUsername());
-                    userData1.setMobile(response.body().getUserList().get(i).getMobile());
-                    userData1.setUserElementCode(response.body().getUserList().get(i).getUserElementCode());
-                    userData1.setActive(response.body().getUserList().get(i).isIsActive());
+Log.i("NETCHKR",""+NetworkChecker.isConnected(getContext()));
+        if(NetworkChecker.isConnected(getContext())==false)
+        {
+         NetworkChecker.noNetworkDialog(getContext()).show();
+        }
+        else {
 
 
-                    userData.add(userData1);
+            showProgress("User Data Feteching.", "Loading...", 2);
+            UserApi userApi =
+                    ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
+
+            Call<USERGETALL> call = userApi.getAllUsersAPI();
+            call.enqueue(new Callback<USERGETALL>() {
+                @Override
+                public void onResponse(Call<USERGETALL> call, Response<USERGETALL> response) {
+                    //         Log.i("responseDB", response.body().getUserList() + "");
+                    dismissProgress();
+                    //   UserData userData=new UserData();
+                    UserData userData1;
+
+                    for (int i = 0; i < response.body().getUserList().size(); i++) {
+
+                        Log.i("responseNames", response.body().getUserList().get(i).getLastName() + "");
+                        Log.i("responseIDS", response.body().getUserList().get(i).getUserId() + "");
+                        userData1 = new UserData();
+
+                        userData1.setId(response.body().getUserList().get(i).getUserId());
+                        userData1.setFirstName(response.body().getUserList().get(i).getFirstName());
+                        userData1.setLastName(response.body().getUserList().get(i).getLastName());
+
+                        userData1.setUserName(response.body().getUserList().get(i).getUsername());
+                        userData1.setMobile(response.body().getUserList().get(i).getMobile());
+                        userData1.setUserElementCode(response.body().getUserList().get(i).getUserElementCode());
+                        userData1.setActive(response.body().getUserList().get(i).isIsActive());
+
+
+                        userData.add(userData1);
+
+                    }
+                    usersAdapter.notifyDataSetChanged();
+
 
                 }
-                usersAdapter.notifyDataSetChanged();
 
 
-            }
+                @Override
+                public void onFailure(Call<USERGETALL> call, Throwable t) {
 
+                }
+            });
+            Log.i("responseNNN", userData + "");
 
-            @Override
-            public void onFailure(Call<USERGETALL> call, Throwable t) {
-
-            }
-        });
-        Log.i("responseNNN", userData + "");
+        }
         return userData;
     }
 
@@ -493,10 +503,16 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
     public void deleteUser(User user) {
         //    Log.i("AAAAA", "SSSS" + position);
 
+        user.setIsActive(false);
+        user.setLastUpdatedDate(getCurrentDate());
+        user.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
+
+
         UserInfo userInfo=new UserInfo(user);
         UserApi userApi =
                 ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
-        user.setIsActive(false);
+
+
         Call<UserInfo> call = userApi.updateUserAPI(userInfo);
         call.enqueue(new Callback<UserInfo>() {
             @Override

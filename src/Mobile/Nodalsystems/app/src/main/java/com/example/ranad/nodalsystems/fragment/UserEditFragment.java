@@ -412,6 +412,10 @@ else
     @Override
     public void updateUser(User user) {
 
+        user.setLastUpdatedDate(getCurrentDate());
+        user.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
+
+
         UserInfo userInfo = new UserInfo(user);
 
         UserApi userApi =
