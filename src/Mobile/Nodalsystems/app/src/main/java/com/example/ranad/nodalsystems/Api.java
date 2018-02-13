@@ -18,11 +18,7 @@ public class Api {
     public final static String USER_GET = HOST + "/api/User/GetUser";
     public final static String CUSTOMER_GETALL = HOST + "/api/Customer/GetAllCustomers";
     public final static String CUSTOMER_CREATE = HOST + "/api/Customer/CreateCustomer";
-<<<<<<< HEAD
-    public final static String GETALL_GROUPTYPES = HOST + "/api/GroupType/GetAllGroupTypes";
     public final static String FORGOT_PASSWORD = HOST + "/api/User/ForgotPassword";
-=======
->>>>>>> master
 
     public final static String CUSTOMER_UPDATE = HOST + "/api/Customer/UpdateCustomer";
 
