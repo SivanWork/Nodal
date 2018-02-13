@@ -97,14 +97,8 @@ public class HomeFragment extends Fragment {
             homeGridElements.add(new HomeGridElement("CUSTOMERS", R.drawable.customer, android.R.color.white, FRAGMENT_CUSTOMER));
             homeGridElements.add(new HomeGridElement("PRODUCTS", R.drawable.product, android.R.color.white, FRAGMENT_PRODUCT));
             //homeGridElements.add(new HomeGridElement("SCHEME",R.drawable.scheme, android.R.color.white, FRAGMENT_SCHEME));
-<<<<<<< HEAD
-
-           // homeGridElements.add(new HomeGridElement("REPORT", R.drawable.report, android.R.color.white, FRAGMENT_REPORT));
-            homeGridElements.add(new HomeGridElement("DISCOUNT", R.drawable.discount, android.R.color.white, FRAGMENT_DISCOUNT));
-=======
            // homeGridElements.add(new HomeGridElement("REPORT", R.drawable.report, android.R.color.white, FRAGMENT_REPORT));
            // homeGridElements.add(new HomeGridElement("DISCOUNT", R.drawable.discount, android.R.color.white, FRAGMENT_DISCOUNT));
->>>>>>> master
             homeGridElements.add(new HomeGridElement("ORDER", R.drawable.order_2, android.R.color.white, FRAGMENT_ORDER));
           //  homeGridElements.add(new HomeGridElement("BILLING", R.drawable.biiling_2, android.R.color.white, FRAGMENT_BILLING));
             /*homeGridElements.add(new HomeGridElement("RETURN", R.drawable.return_2, android.R.color.white, FRAGMENT_RETURN));*/

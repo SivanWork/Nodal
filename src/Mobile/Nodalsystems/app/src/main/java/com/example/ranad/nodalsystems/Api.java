@@ -6,14 +6,6 @@ package com.example.ranad.nodalsystems;
 
 public class Api {
 
-<<<<<<< HEAD
-    public final static String HOST="http://cellordering.com";
-    public final static String
-            LOGIN_API = HOST+"/api/User/Login",
-            FORGOT_PASSWORD = HOST + "/api/User/ForgotPassword?recipientEmail",
-            ORDER_CREATE = HOST+"/api/Order/Create",
-    BULKORDER_CREATE = HOST+"/api/Order/Create";
-=======
     public final static String HOST = "http://cellordering.com";
 
     public final static String LOGIN_API = HOST + "/api/User/Login";
@@ -27,6 +19,7 @@ public class Api {
     public final static String CUSTOMER_GETALL = HOST + "/api/Customer/GetAllCustomers";
     public final static String CUSTOMER_CREATE = HOST + "/api/Customer/CreateCustomer";
     public final static String GETALL_GROUPTYPES = HOST + "/api/GroupType/GetAllGroupTypes";
+    public final static String FORGOT_PASSWORD = HOST + "/api/User/ForgotPassword";
 
     public final static String GETALL_ELEMENT_TYPES = HOST + "/api/GroupElementCode/GetAllGroupElementCodes";
 
@@ -37,6 +30,5 @@ public class Api {
     public final static String GET_ALL_PRODUCT = HOST + "/api/Product/GetAllProducts";
 
 
->>>>>>> master
 
 }

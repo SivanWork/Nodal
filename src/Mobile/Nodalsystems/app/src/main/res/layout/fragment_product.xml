@@ -316,11 +316,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="10dp"
         android:background="@drawable/float_btn" />
-<<<<<<< HEAD
-
-
-=======
->>>>>>> master
 
 </FrameLayout>
 

@@ -5,24 +5,13 @@ import android.os.Parcelable;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * Created by Kavya V on 06-02-2018.
  */
 @Entity
 public class ProductData implements Parcelable {
-    String ProductName;
-    String ProductCode;
-    int MRP;
-    int DealerPrice;
-    int WholePrice;
-    int cgst;
-    int sgst;
-    int igst;
-    boolean IsActive;
-
-<<<<<<< HEAD
-=======
     @Id
     int ProductId;
     String ProductName;
@@ -39,6 +28,7 @@ public class ProductData implements Parcelable {
     int LastUpdatedById;
     String LastUpdatedDate;
 
+
     public int getProductId() {
         return ProductId;
     }
@@ -47,7 +37,6 @@ public class ProductData implements Parcelable {
         ProductId = productId;
     }
 
->>>>>>> master
     public String getProductName() {
         return ProductName;
     }
@@ -152,71 +141,13 @@ public class ProductData implements Parcelable {
         LastUpdatedDate = lastUpdatedDate;
     }
 
-<<<<<<< HEAD
-    public int getDealerPrice() {
-        return DealerPrice;
-    }
 
-    public void setDealerPrice(int dealerPrice) {
-        DealerPrice = dealerPrice;
-    }
-
-    public int getWholePrice() {
-        return WholePrice;
-    }
-
-    public void setWholePrice(int wholePrice) {
-        WholePrice = wholePrice;
-    }
-
-    public int getCgst() {
-        return cgst;
-    }
-
-    public void setCgst(int cgst) {
-        this.cgst = cgst;
-    }
-
-    public int getSgst() {
-        return sgst;
-    }
-
-    public void setSgst(int sgst) {
-        this.sgst = sgst;
-    }
-
-    public int getIgst() {
-        return igst;
-    }
-
-    public void setIgst(int igst) {
-        this.igst = igst;
-    }
-
-    public boolean isActive() {
-        return IsActive;
-    }
-
-    public void setActive(boolean active) {
-        IsActive = active;
-    }
-=======
->>>>>>> master
 
 
     protected ProductData(Parcel in) {
         ProductId = in.readInt();
         ProductName = in.readString();
         ProductCode = in.readString();
-<<<<<<< HEAD
-        MRP = in.readInt();
-        DealerPrice = in.readInt();
-        WholePrice = in.readInt();
-        cgst = in.readInt();
-        sgst = in.readInt();
-        igst = in.readInt();
-        IsActive = in.readByte() != 0;
-=======
         MR = in.readLong();
         DealerPrice = in.readLong();
         WholesalePrice = in.readLong();
@@ -228,22 +159,35 @@ public class ProductData implements Parcelable {
         CreatedDate = in.readString();
         LastUpdatedById = in.readInt();
         LastUpdatedDate = in.readString();
->>>>>>> master
+    }
+
+    @Generated(hash = 642403405)
+    public ProductData(int ProductId, String ProductName, String ProductCode,
+            long MR, long DealerPrice, long WholesalePrice, int CGST, int SGST,
+            int IGST, boolean IsActive, int CreatedById, String CreatedDate,
+            int LastUpdatedById, String LastUpdatedDate) {
+        this.ProductId = ProductId;
+        this.ProductName = ProductName;
+        this.ProductCode = ProductCode;
+        this.MR = MR;
+        this.DealerPrice = DealerPrice;
+        this.WholesalePrice = WholesalePrice;
+        this.CGST = CGST;
+        this.SGST = SGST;
+        this.IGST = IGST;
+        this.IsActive = IsActive;
+        this.CreatedById = CreatedById;
+        this.CreatedDate = CreatedDate;
+        this.LastUpdatedById = LastUpdatedById;
+        this.LastUpdatedDate = LastUpdatedDate;
+    }
+
+    @Generated(hash = 1035286127)
+    public ProductData() {
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-<<<<<<< HEAD
-        dest.writeString(ProductName);
-        dest.writeString(ProductCode);
-        dest.writeInt(MRP);
-        dest.writeInt(DealerPrice);
-        dest.writeInt(WholePrice);
-        dest.writeInt(cgst);
-        dest.writeInt(sgst);
-        dest.writeInt(igst);
-        dest.writeByte((byte) (IsActive ? 1 : 0));
-=======
         dest.writeInt(ProductId);
         dest.writeString(ProductName);
         dest.writeString(ProductCode);
@@ -258,7 +202,6 @@ public class ProductData implements Parcelable {
         dest.writeString(CreatedDate);
         dest.writeInt(LastUpdatedById);
         dest.writeString(LastUpdatedDate);
->>>>>>> master
     }
 
     @Override
@@ -277,8 +220,6 @@ public class ProductData implements Parcelable {
             return new ProductData[size];
         }
     };
-<<<<<<< HEAD
-=======
 
     @Override
     public String toString() {
@@ -300,6 +241,11 @@ public class ProductData implements Parcelable {
                 '}';
     }
 
+    public boolean getIsActive() {
+        return this.IsActive;
+    }
 
->>>>>>> master
+    public void setIsActive(boolean IsActive) {
+        this.IsActive = IsActive;
+    }
 }
