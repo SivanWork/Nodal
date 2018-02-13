@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,33 +25,46 @@ import com.example.ranad.nodalsystems.model.Login;
 import com.example.ranad.nodalsystems.model.Users;
 import com.example.ranad.nodalsystems.restapi.ApiClient;
 import com.example.ranad.nodalsystems.restapi.ApiInterface;
+import com.example.ranad.nodalsystems.usage.DialogUtils;
+import com.example.ranad.nodalsystems.usage.NetworkChecker;
 import com.google.gson.Gson;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener, Validator.ValidationListener {
+
+    protected Validator validator;
+    protected boolean validated;
+
+
+
+    @NotEmpty
     public static EditText userName;
+    @NotEmpty
     public static EditText pwd;
     Button login;
     TextView forgot_pwd;
     LinearLayout main_contenier;
-    public static String user = "";
-
-    String auth_token, userid, email, mobile, city, country, adrs1, adrs2, fn, ln, mn, role;
-    ProgressDialog progressDialog=null;
-
-    //SharedPreferences userPref = getApplicationContext().getSharedPreferences("UserPref", 0); // 0 - for private mode
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        progressDialog=new ProgressDialog(this);
+
+        validator = new Validator(this);
+        validator.setValidationListener(this);
+
+
         userName = (EditText) findViewById(R.id.user_name);
         pwd = (EditText) findViewById(R.id.password);
         login = (Button) findViewById(R.id.login);
@@ -60,14 +74,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login.setOnClickListener(this);
 
 
-
     }
-
-    /*public  String getUserType() {
-      return   userPref.getString("userType", null);
-
-    }
-*/
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -76,49 +83,82 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 forgotPasswordDialog.show(getSupportFragmentManager(), "Forgot Password");
                   break;
             case R.id.login:
-                showProgress("User Login","Processing...",2);
-                ApiInterface loginService =
-                        ApiClient.createService(ApiInterface.class, userName.getText().toString(), pwd.getText().toString());
-                Call<Login> call = loginService.basicLogin();
-                call.enqueue(new Callback<Login>() {
-                    @Override
-                    public void onResponse(Call<Login> call, Response<Login> response) {
-                        try {
 
-                            if (response.isSuccessful()) {
-                                dismissProgress();
-                                Log.d("response", response.body().toString());
-                                response.body().saveLogin(LoginActivity.this);
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                // error response, no access to resource?
+                if (!NetworkChecker.isConnected(getApplicationContext())) {
+                    NetworkChecker.noNetworkDialogLogin(this,2);
+                } else {
 
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Login> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
+                    validator.validate();
+                }
 
                 break;
         }
     }
-    public void showProgress(String title, String msg, int theme) {
-        progressDialog.setTitle(title);
-        progressDialog.setMessage(msg);
 
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setIndeterminate(true);
+    @Override
+    public void onValidationSucceeded() {
+        //Log.i("CCCC",getApplicationContext()+"");
+
+        validated = true;
+        final ProgressDialog progressDialog = DialogUtils.progressDialog(this, "Login Status.", "Processing...");
         progressDialog.show();
+
+        ApiInterface loginService =
+                ApiClient.createService(ApiInterface.class, userName.getText().toString(), pwd.getText().toString());
+        Call<Login> call = loginService.basicLogin();
+        call.enqueue(new Callback<Login>() {
+            @Override
+            public void onResponse(Call<Login> call, Response<Login> response) {
+                try {
+
+
+                    if (response.isSuccessful() && response.body().getUser().getActive()) {
+                        DialogUtils.dismissProgress(progressDialog);
+                        Log.d("response", response.body().toString());
+                        response.body().saveLogin(LoginActivity.this);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                      DialogUtils.alertDialog(LoginActivity.this,"Login Error.","Invalid UserName or passoword",2);
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                DialogUtils.dismissProgress(progressDialog);
+            }
+
+            @Override
+            public void onFailure(Call<Login> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+
     }
-    public void dismissProgress() {
-        progressDialog.dismiss();
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        validated = false;
+
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(getApplicationContext());
+
+
+            // Display error messages
+            if (view instanceof Spinner) {
+                Spinner sp = (Spinner) view;
+                view = ((LinearLayout) sp.getSelectedView()).getChildAt(0);        // we are actually interested in the text view spinner has
+            }
+
+            if (view instanceof TextView) {
+                TextView et = (TextView) view;
+                et.setError(message);
+            }
+        }
+
     }
+
+
 }

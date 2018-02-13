@@ -41,7 +41,7 @@ public class NetworkChecker {
 
 
 
-    public static AlertDialog.Builder noNetworkDialog(Context c,final FragmentActivity fragmentActivity,int theme) {
+    public static void noNetworkDialog(Context c,final FragmentActivity fragmentActivity,int theme) {
 
 
         if (theme == 1) theme = R.style.Theme_AppCompat_DayNight_Dialog;
@@ -80,10 +80,35 @@ public class NetworkChecker {
 
             }
         });
+builder.show();
 
-        return builder;
     }
 
+    public static void noNetworkDialogLogin(Context c,int theme) {
+
+
+        if (theme == 1) theme = R.style.Theme_AppCompat_DayNight_Dialog;
+        else theme = R.style.Theme_AppCompat_DayNight_Dialog_Alert;
+
+
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(
+                c, R.style.Theme_AppCompat_DayNight_Dialog);
+        alertDialogBuilder.setTitle("No Internet Connection");
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("You need to have Mobile Data or wifi to access this. Press ok to Exit")
+                .setCancelable(true)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+
+    }
 
 
 }

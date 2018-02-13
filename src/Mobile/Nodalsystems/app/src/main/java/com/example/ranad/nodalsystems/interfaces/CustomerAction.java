@@ -16,6 +16,7 @@ public interface CustomerAction {
     public Customer getCustomer();
     public void switchToEditCustomer(int customer);
     public void readCustomer(int customerId);
+    void deleteCustomer(Customer customer);
 
     public void createCustomer(Customer customer);
     public ArrayList<CustomerData> readAllCustomers();
