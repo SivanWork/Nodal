@@ -68,7 +68,7 @@ public class Customer implements Serializable, Parcelable
     @SerializedName("LastUpdatedDate")
     @Expose
     private String lastUpdatedDate;
-    public final static Creator<Customer> CREATOR = new Creator<Customer>() {
+    public final static Parcelable.Creator<Customer> CREATOR = new Creator<Customer>() {
 
 
         @SuppressWarnings({
@@ -84,7 +84,7 @@ public class Customer implements Serializable, Parcelable
 
     }
     ;
-    private final static long serialVersionUID = -8976409642470940250L;
+    private final static long serialVersionUID = 392197946297082889L;
 
     protected Customer(Parcel in) {
         this.customerId = ((int) in.readValue((int.class.getClassLoader())));

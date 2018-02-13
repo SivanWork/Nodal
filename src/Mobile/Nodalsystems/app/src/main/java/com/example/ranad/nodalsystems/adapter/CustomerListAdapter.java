@@ -67,7 +67,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
 
     public class CustomerViewHolder extends RecyclerView.ViewHolder implements ViewSwitcher.ViewFactory {
         View itemView;
-        TextView customerName, email, mobile, code,date;
+        TextView customerName, email, mobile, code,date,isActive;
         ImageView edit,delete;
 
         public CustomerViewHolder(final Context context, View itemView) {
@@ -77,7 +77,9 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
             email = (TextView) itemView.findViewById(R.id.email);
             mobile = (TextView) itemView.findViewById(R.id.mobile);
             code = (TextView) itemView.findViewById(R.id.customercode);
-            date = (TextView) itemView.findViewById(R.id.date);
+
+            isActive=(TextView) itemView.findViewById(R.id.isActive);
+            //date = (TextView) itemView.findViewById(R.id.date);
             edit= (ImageView) itemView.findViewById(R.id.edit);
             delete= (ImageView) itemView.findViewById(R.id.delete);
 
@@ -86,10 +88,11 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
 
         public void bindData(final CustomerData customerData, final int position) {
             customerName.setText(customerData.getName());
-           /* code.setText(customerData.getCustomerCode());
+            code.setText(customerData.getCustomerCode());
             email.setText(customerData.getEmail());
             mobile.setText(customerData.getMobile());
-            date.setText(customerData.getCreatedDate()+"");*/
+            isActive.setText(customerData.getIsActive());
+            //date.setText(customerData.getCreatedDate()+"");
 
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override

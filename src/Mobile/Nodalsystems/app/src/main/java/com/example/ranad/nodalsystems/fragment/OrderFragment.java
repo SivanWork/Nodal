@@ -409,7 +409,7 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
 
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                getContext(), R.style.Theme_AppCompat_DayNight_Dialog);
+                getContext(), theme);
         alertDialogBuilder.setTitle(title);
 
         // set dialog message

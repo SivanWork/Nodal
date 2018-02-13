@@ -1,5 +1,7 @@
 package com.example.ranad.nodalsystems.fragment;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -17,6 +19,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.ranad.nodalsystems.App;
@@ -30,10 +34,18 @@ import com.example.ranad.nodalsystems.interfaces.CustomerAction;
 import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
 import com.example.ranad.nodalsystems.model.Customer;
 import com.example.ranad.nodalsystems.model.CustomerGetAll;
+import com.example.ranad.nodalsystems.model.CustomerInfo;
 import com.example.ranad.nodalsystems.model.Login;
 import com.example.ranad.nodalsystems.restapi.ApiClient;
 import com.example.ranad.nodalsystems.restapi.CustomerApi;
+import com.example.ranad.nodalsystems.usage.DialogUtils;
+import com.example.ranad.nodalsystems.usage.FragmentSwitch;
+import com.example.ranad.nodalsystems.usage.NetworkChecker;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,15 +55,22 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class CustomerEditFragment extends Fragment implements View.OnClickListener, CustomerAction {
+public class CustomerEditFragment extends Fragment implements View.OnClickListener, CustomerAction, Validator.ValidationListener {
     View view, add_customer, outer;
-    EditText name, amount, email, addrs, alt_addrs, number, city, state, country, pincode;
+    protected Validator validator;
+    protected boolean validated;
+
+    TextView noOfCustomers;
+    EditText midName;
+    @NotEmpty
+    EditText firstName, lastName, amount, email, addrs, alt_addrs, number, city, state, country, pincode;
     Button edit, btncancel;
     //ImageView ivAdd;
 //    RecyclerView recyclerView;
     //  CustomerListAdapter customerAdapter;
     ArrayList<CustomerData> customerData = new ArrayList<>();
 
+    int customerId;
 
     public CustomerEditFragment() {
         // Required empty public constructor
@@ -80,12 +99,19 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_customer, container, false);
+        view = inflater.inflate(R.layout.fragment_edit_customer, container, false);
         //   recyclerView = (RecyclerView) view.findViewById(R.id.customer_list);
         // ivAdd = (ImageView) view.findViewById(R.id.ivAdd);
         //ivAdd.setOnClickListener(this);
-        add_customer = (View) view.findViewById(R.id.add_customer);
-        name = (EditText) view.findViewById(R.id.cust_name);
+        validator = new Validator(this);
+        validator.setValidationListener((Validator.ValidationListener) this);
+
+
+        firstName = (EditText) view.findViewById(R.id.ftName);
+        midName = (EditText) view.findViewById(R.id.midName);
+        lastName = (EditText) view.findViewById(R.id.lastName);
+
+
         amount = (EditText) view.findViewById(R.id.amt_limit);
         email = (EditText) view.findViewById(R.id.cust_email);
         number = (EditText) view.findViewById(R.id.cust_num);
@@ -116,6 +142,11 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
             }
         });
 
+        if (getArguments() != null) {
+            customerId = getArguments().getInt("customerid");
+            readCustomer(customerId);
+        }
+
 
         return view;
     }
@@ -134,10 +165,36 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
 
     @Override
     public Customer getCustomer() {
-        return null;
-    }
 
-    @Override
+        Customer customer = new Customer();
+        customer.setCustomerId(customerId);
+
+        customer.setFirstName(firstName.getText().toString());
+        customer.setLastName(lastName.getText().toString());
+        customer.setMiddleName(midName.getText().toString());
+        customer.setAddress1(addrs.getText().toString());
+        customer.setAddress2(alt_addrs.getText().toString());
+        if (!amount.getText().toString().isEmpty())
+            customer.setAmountLimit(Float.parseFloat(amount.getText().toString()));
+        customer.setEmail(email.getText().toString());
+        customer.setMobile(number.getText().toString());
+        customer.setCity(city.getText().toString());
+        customer.setState(state.getText().toString());
+        customer.setCountry(country.getText().toString());
+        customer.setPin(country.getText().toString());
+        customer.setIsActive(true);
+
+    /*    customer.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
+        customer.setCreatedDate(getCurrentDate().toString());
+    */
+        customer.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
+        customer.setLastUpdatedDate(getCurrentDate().toString());
+        customer.setCustomerId(0);
+        customer.setCustomerCode("");
+
+
+        return customer;
+    }@Override
     public void switchToEditCustomer(int pos) {
 
 
@@ -146,28 +203,38 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
     @Override
     public void readCustomer(int customerId) {
 
-        CustomerApi customerApi =
-                ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
-
-        Call<CustomerGetAll> call = customerApi.getCustomerAPI("http://cellordering.com/api/Customer/GetCustomer?discountId=" + customerId);;
-        call.enqueue(new Callback<CustomerGetAll>() {
-            @Override
-            public void onResponse(Call<CustomerGetAll> call, Response<CustomerGetAll> response) {
-                Log.i("responseDB", response.body() + "");
-                // User user = new User();
-                //user = response.body().getUser();
-                //   Log.i("USERDATA", "LL" + user);
+        Log.i("NETCHKR", "" + NetworkChecker.isConnected(getContext()));
+        if (NetworkChecker.isConnected(getContext()) == false) {
+            NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2).show();
+        } else {
 
 
-            }
+            final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Customer Data", "Loading");
 
 
-            @Override
-            public void onFailure(Call<CustomerGetAll> call, Throwable t) {
+            CustomerApi customerApi =
+                    ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
 
-            }
-        });
+            Call<CustomerGetAll> call = customerApi.getCustomerAPI("http://cellordering.com/api/Customer/GetCustomer?customerId=" + customerId);
+            ;
+            call.enqueue(new Callback<CustomerGetAll>() {
+                @Override
+                public void onResponse(Call<CustomerGetAll> call, Response<CustomerGetAll> response) {
 
+                    DialogUtils.dismissProgress(progressDialog);
+                  fetchCustomer(response.body().getCustomer());
+
+
+
+                }
+
+
+                @Override
+                public void onFailure(Call<CustomerGetAll> call, Throwable t) {
+
+                }
+            });
+        }
 
     }
 
@@ -177,16 +244,41 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
 
 
     }
+    @Override
+    public void updateCustomer(Customer customer) {
+
+        if(!NetworkChecker.isConnected(getContext()))
+            NetworkChecker.noNetworkDialog(getContext(),getActivity(),2);
+        else {
+
+            final   ProgressDialog progressDialog= DialogUtils.progressDialog(getContext(),"Customer Updation.","Processing..");
+            CustomerInfo customerInfo = new CustomerInfo(customer);
+
+            CustomerApi customerApi =
+                    ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
+
+            Call<CustomerInfo> call = customerApi.updateCustomerAPI(customerInfo);
+            call.enqueue(new Callback<CustomerInfo>() {
+
+                @Override
+                public void onResponse(Call<CustomerInfo> call, Response<CustomerInfo> response) {
+
+                    Log.i("CREATERES", "RESPONSE" + response.body().toString());
+              //      customerAdapter.notifyDataSetChanged();
+
+                    DialogUtils.dismissProgress(progressDialog);
+                    DialogUtils.alertDialog(getContext(),"Customer Updation..","Success!",2);
+                }
 
 
-    boolean validateForm() {
+                @Override
+                public void onFailure(Call<CustomerInfo> call, Throwable t) {
 
-        if (name.getText().toString().isEmpty()) {
-            showAlert("Alert", "Enter Customer Name", 1);
-            return false;
+                }
+            });
         }
-        return true;
     }
+
 
     public void showAlert(String title, String msg, int theme) {
 
@@ -232,6 +324,35 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
+    public void fetchCustomer(Customer customer) {
+
+
+        firstName.setText(customer.getFirstName());
+
+        lastName.setText(customer.getLastName());
+
+        midName.setText(customer.getMiddleName());
+
+        number.setText(customer.getMobile());
+        email.setText(customer.getEmail());
+
+        city.setText(customer.getCity());
+        country.setText(customer.getCountry());
+        state.setText(customer.getState());
+        pincode.setText(customer.getPin());
+        firstName.setText(customer.getFirstName());
+        lastName.setText(customer.getLastName());
+        midName.setText(customer.getMiddleName());
+        addrs.setText(customer.getAddress1());
+        alt_addrs.setText(customer.getAddress2());
+        amount.setText((String.valueOf(customer.getAmountLimit())));
+
+
+
+
+    }
+
+    @Override
     public void delete(int pos) {
 
     }
@@ -258,19 +379,8 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
                 outer.setVisibility(View.GONE);
                 MainActivity.setAppTitle(R.string.add_customer);
                 break;
-            case R.id.add:
-                boolean isValid = validateForm();
-                if (isValid) {
-                    Log.i("ADDCLICKED", "CLICKED");
-                    createCustomer(getCustomer());
-
-                    Fragment fragment = new CustomerEditFragment();
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.content, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                }
+            case R.id.edit:
+                validator.validate();
                 break;
             case R.id.btnCancel:
                 Fragment fragment = new CustomerFragment();
@@ -285,8 +395,41 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
 
     }
 
-    public Date getCurrentDate() {
-        Date d = new Date();
-        return d;
+    public String getCurrentDate() {
+
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
+
     }
+
+    @Override
+    public void onValidationSucceeded() {
+        validated = true;
+
+        updateCustomer(getCustomer());
+        FragmentSwitch.switchTo(getActivity(), new CustomerFragment(), R.string.customer_title);
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        validated = false;
+
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(getContext());
+
+
+            // Display error messages
+            if (view instanceof Spinner) {
+                Spinner sp = (Spinner) view;
+                view = ((LinearLayout) sp.getSelectedView()).getChildAt(0);        // we are actually interested in the text view spinner has
+            }
+
+            if (view instanceof TextView) {
+                TextView et = (TextView) view;
+                et.setError(message);
+            }
+        }
+
+    }
+
 }
