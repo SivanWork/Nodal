@@ -1,5 +1,6 @@
 package com.example.ranad.nodalsystems.fragment;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,7 +28,6 @@ import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.adapter.CustomerListAdapter;
 import com.example.ranad.nodalsystems.data_holder.CustomerData;
-import com.example.ranad.nodalsystems.data_holder.UserData;
 import com.example.ranad.nodalsystems.database.Customers;
 import com.example.ranad.nodalsystems.database.CustomersDao;
 import com.example.ranad.nodalsystems.interfaces.CustomerAction;
@@ -36,11 +36,8 @@ import com.example.ranad.nodalsystems.model.Customer;
 import com.example.ranad.nodalsystems.model.CustomerGetAll;
 import com.example.ranad.nodalsystems.model.CustomerInfo;
 import com.example.ranad.nodalsystems.model.Login;
-import com.example.ranad.nodalsystems.model.USERGETALL;
-import com.example.ranad.nodalsystems.model.User;
 import com.example.ranad.nodalsystems.restapi.ApiClient;
 import com.example.ranad.nodalsystems.restapi.CustomerApi;
-import com.example.ranad.nodalsystems.restapi.UserApi;
 import com.example.ranad.nodalsystems.usage.DialogUtils;
 import com.example.ranad.nodalsystems.usage.FragmentSwitch;
 import com.example.ranad.nodalsystems.usage.NetworkChecker;
@@ -53,13 +50,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class CustomerFragment extends Fragment implements View.OnClickListener, CustomerAction, Validator.ValidationListener {
+public class CustomerEditFragment extends Fragment implements View.OnClickListener, CustomerAction, Validator.ValidationListener {
     View view, add_customer, outer;
     protected Validator validator;
     protected boolean validated;
@@ -68,21 +64,22 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
     EditText midName;
     @NotEmpty
     EditText firstName, lastName, amount, email, addrs, alt_addrs, number, city, state, country, pincode;
-    Button add, btncancel;
-    ImageView ivAdd;
-    RecyclerView recyclerView;
-    CustomerListAdapter customerAdapter;
+    Button edit, btncancel;
+    //ImageView ivAdd;
+//    RecyclerView recyclerView;
+    //  CustomerListAdapter customerAdapter;
     ArrayList<CustomerData> customerData = new ArrayList<>();
 
+    int customerId;
 
-    public CustomerFragment() {
+    public CustomerEditFragment() {
         // Required empty public constructor
     }
 
 
     // TODO: Rename and change types and number of parameters
-    public static CustomerFragment newInstance(SwitchFragment switchFragment) {
-        CustomerFragment fragment = new CustomerFragment();
+    public static CustomerEditFragment newInstance(SwitchFragment switchFragment) {
+        CustomerEditFragment fragment = new CustomerEditFragment();
         fragment.Construct(switchFragment);
         return fragment;
     }
@@ -102,16 +99,12 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_customer, container, false);
-
+        view = inflater.inflate(R.layout.fragment_edit_customer, container, false);
+        //   recyclerView = (RecyclerView) view.findViewById(R.id.customer_list);
+        // ivAdd = (ImageView) view.findViewById(R.id.ivAdd);
+        //ivAdd.setOnClickListener(this);
         validator = new Validator(this);
         validator.setValidationListener((Validator.ValidationListener) this);
-
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.customer_list);
-        ivAdd = (ImageView) view.findViewById(R.id.ivAdd);
-        ivAdd.setOnClickListener(this);
-        add_customer = (View) view.findViewById(R.id.add_customer);
 
 
         firstName = (EditText) view.findViewById(R.id.ftName);
@@ -128,32 +121,18 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
         state = (EditText) view.findViewById(R.id.state);
         country = (EditText) view.findViewById(R.id.country);
         pincode = (EditText) view.findViewById(R.id.pin_code);
-        add = (Button) view.findViewById(R.id.add);
-        add.setOnClickListener(this);
+        edit = (Button) view.findViewById(R.id.edit);
+        edit.setOnClickListener(this);
         btncancel = (Button) view.findViewById(R.id.btnCancel);
         btncancel.setOnClickListener(this);
         outer = (View) view.findViewById(R.id.outer);
-
-        List<CustomerData> customerDataList = readAllCustomers();
-
-        CustomersDao customersDao = App.getDaoSession().getCustomersDao();
-        List<Customers> customersList = customersDao.queryBuilder().list();
-        recyclerView = (RecyclerView) view.findViewById(R.id.customer_list);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        customerAdapter = new CustomerListAdapter((ArrayList<CustomerData>) customerDataList, getContext(), this);
-        recyclerView.setAdapter(customerAdapter);
-        customerAdapter.notifyDataSetChanged();
-
-
-        noOfCustomers = (TextView) view.findViewById(R.id.noOfCustomers);
 
         ImageButton backButton = (ImageButton) view.findViewById(R.id.backbutton);
         backButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Fragment fragment = new CustomerFragment();
+                Fragment fragment = new CustomerEditFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.content, fragment);
@@ -163,6 +142,11 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
             }
         });
 
+        if (getArguments() != null) {
+            customerId = getArguments().getInt("customerid");
+            readCustomer(customerId);
+        }
+
 
         return view;
     }
@@ -170,38 +154,12 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
-        MainActivity.setAppTitle(R.string.customer_title);
+        MainActivity.setAppTitle(R.string.edit_customer);
     }
 
 
     @Override
     public void saveCustomerInfo() {
-        CustomersDao customersDao = App.getDaoSession().getCustomersDao();
-        Customers customers = new Customers();
-        customers.setFirstName(firstName.getText().toString());
-        customers.setMiddleName(midName.getText().toString());
-        customers.setLastName(lastName.getText().toString());
-
-
-        customers.setAddress1(addrs.getText().toString());
-        customers.setAddress2(alt_addrs.getText().toString());
-        if (!amount.getText().toString().isEmpty())
-            customers.setAmountLimit(Float.parseFloat(amount.getText().toString()));
-        customers.setEmail(email.getText().toString());
-        customers.setMobile(number.getText().toString());
-        customers.setCreatedById(1);
-        customers.setCity(city.getText().toString());
-        customers.setState(state.getText().toString());
-        customers.setCountry(country.getText().toString());
-        customers.setPin(country.getText().toString());
-        customers.setIsActive(true);
-        customers.setLastUpdatedById(1);
-        //  customers.setLastUpdatedDate("11-11-2018");
-        //customers.setCreatedDate("12-12-2018");
-        long genId = customersDao.insertOrReplace(customers);
-
-        customers.setCustomerCode("CUST_00" + genId);
-        customersDao.update(customers);
     }
 
 
@@ -209,6 +167,8 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
     public Customer getCustomer() {
 
         Customer customer = new Customer();
+        customer.setCustomerId(customerId);
+
         customer.setFirstName(firstName.getText().toString());
         customer.setLastName(lastName.getText().toString());
         customer.setMiddleName(midName.getText().toString());
@@ -224,8 +184,9 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
         customer.setPin(country.getText().toString());
         customer.setIsActive(true);
 
-        customer.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
+    /*    customer.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
         customer.setCreatedDate(getCurrentDate().toString());
+    */
         customer.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
         customer.setLastUpdatedDate(getCurrentDate().toString());
         customer.setCustomerId(0);
@@ -233,25 +194,47 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
 
 
         return customer;
-    }
-
-    @Override
+    }@Override
     public void switchToEditCustomer(int pos) {
-        int customerId = customerData.get(pos).getId();
-        Fragment fragment = new CustomerEditFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("customerid", customerId);
-        fragment.setArguments(bundle);
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.content, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+
 
     }
 
     @Override
     public void readCustomer(int customerId) {
+
+        Log.i("NETCHKR", "" + NetworkChecker.isConnected(getContext()));
+        if (NetworkChecker.isConnected(getContext()) == false) {
+            NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2).show();
+        } else {
+
+
+            final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Customer Data", "Loading");
+
+
+            CustomerApi customerApi =
+                    ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
+
+            Call<CustomerGetAll> call = customerApi.getCustomerAPI("http://cellordering.com/api/Customer/GetCustomer?customerId=" + customerId);
+            ;
+            call.enqueue(new Callback<CustomerGetAll>() {
+                @Override
+                public void onResponse(Call<CustomerGetAll> call, Response<CustomerGetAll> response) {
+
+                    DialogUtils.dismissProgress(progressDialog);
+                  fetchCustomer(response.body().getCustomer());
+
+
+
+                }
+
+
+                @Override
+                public void onFailure(Call<CustomerGetAll> call, Throwable t) {
+
+                }
+            });
+        }
 
     }
 
@@ -259,27 +242,32 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void createCustomer(Customer customer) {
 
-        if (!NetworkChecker.isConnected(getContext()))
-            NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2);
+
+    }
+    @Override
+    public void updateCustomer(Customer customer) {
+
+        if(!NetworkChecker.isConnected(getContext()))
+            NetworkChecker.noNetworkDialog(getContext(),getActivity(),2);
         else {
 
-            final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Customer Creation.", "Processing..");
+            final   ProgressDialog progressDialog= DialogUtils.progressDialog(getContext(),"Customer Updation.","Processing..");
             CustomerInfo customerInfo = new CustomerInfo(customer);
 
             CustomerApi customerApi =
                     ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
 
-            Call<CustomerInfo> call = customerApi.createCustomerAPI(customerInfo);
+            Call<CustomerInfo> call = customerApi.updateCustomerAPI(customerInfo);
             call.enqueue(new Callback<CustomerInfo>() {
 
                 @Override
                 public void onResponse(Call<CustomerInfo> call, Response<CustomerInfo> response) {
 
                     Log.i("CREATERES", "RESPONSE" + response.body().toString());
-                    customerAdapter.notifyDataSetChanged();
+              //      customerAdapter.notifyDataSetChanged();
 
                     DialogUtils.dismissProgress(progressDialog);
-                    DialogUtils.alertDialog(getContext(), "Customer Creation.", "Success", 2);
+                    DialogUtils.alertDialog(getContext(),"Customer Updation..","Success!",2);
                 }
 
 
@@ -331,73 +319,38 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public ArrayList<CustomerData> readAllCustomers() {
-
-        customerData.clear();
-        //    Log.i("ZZZZ", ""+NetworkChecker.isConnected(getContext()));
-
-        if (NetworkChecker.isConnected(getContext()) == false)
-            NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2).show();
-        else {
-
-
-            final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Customer Data fetching.", "Loading...");
-            CustomerApi customerApi =
-                    ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
-
-            Call<CustomerGetAll> call = customerApi.getAllCustomersAPI();
-            call.enqueue(new Callback<CustomerGetAll>() {
-                @Override
-                public void onResponse(Call<CustomerGetAll> call, Response<CustomerGetAll> response) {
-                    Log.i("responseDB", response.body().getCustomerList() + "");
-
-                    DialogUtils.dismissProgress(progressDialog);
-                    CustomerData customerData1 = null;
-
-                    for (int i = 0; i < response.body().getCustomerList().size(); i++) {
-
-                        customerData1 = new CustomerData();
-                        Log.i("responseNames", response.body().getCustomerList().get(i).getFirstName() + "");
-                        Log.i("responseIDS", response.body().getCustomerList().get(i).getCustomerId() + "");
-                        customerData1.setCustomerCode(response.body().getCustomerList().get(i).getCustomerCode());
-                        customerData1.setEmail(response.body().getCustomerList().get(i).getEmail());
-                        customerData1.setId(response.body().getCustomerList().get(i).getCustomerId());
-                        if (response.body().getCustomerList().get(i).isIsActive())
-
-                            customerData1.setIsActive("Active");
-                        else customerData1.setIsActive("Passive");
-                        customerData1.setName(response.body().getCustomerList().get(i).getFirstName() + " " + response.body().getCustomerList().get(i).getLastName());
-                        customerData1.setMobile(response.body().getCustomerList().get(i).getMobile());
-                        //customerData.add(new CustomerData(response.body().getCustomerList().get(i).getCustomerId(), response.body().getCustomerList().get(i).getFirstName()));
-
-                        customerData.add(customerData1);
-
-                    }
-                    customerAdapter.notifyDataSetChanged();
-                    noOfCustomers.setText("Customers:" + response.body().getCustomerList().size());
-
-
-                }
-
-
-                @Override
-                public void onFailure(Call<CustomerGetAll> call, Throwable t) {
-
-                }
-            });
-        }            //    Log.i("responseNNN", userData + "");
-        return customerData;
-    }
-
-    @Override
-    public void updateCustomer(Customer customer) {
+        return null;
 
     }
 
     @Override
     public void fetchCustomer(Customer customer) {
 
-    }
 
+        firstName.setText(customer.getFirstName());
+
+        lastName.setText(customer.getLastName());
+
+        midName.setText(customer.getMiddleName());
+
+        number.setText(customer.getMobile());
+        email.setText(customer.getEmail());
+
+        city.setText(customer.getCity());
+        country.setText(customer.getCountry());
+        state.setText(customer.getState());
+        pincode.setText(customer.getPin());
+        firstName.setText(customer.getFirstName());
+        lastName.setText(customer.getLastName());
+        midName.setText(customer.getMiddleName());
+        addrs.setText(customer.getAddress1());
+        alt_addrs.setText(customer.getAddress2());
+        amount.setText((String.valueOf(customer.getAmountLimit())));
+
+
+
+
+    }
 
     @Override
     public void delete(int pos) {
@@ -422,30 +375,20 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
         switch (view.getId()) {
             case R.id.ivAdd:
                 add_customer.setVisibility(View.VISIBLE);
-                ivAdd.setVisibility(View.GONE);
+                //ivAdd.setVisibility(View.GONE);
                 outer.setVisibility(View.GONE);
                 MainActivity.setAppTitle(R.string.add_customer);
                 break;
-            case R.id.add:
-
+            case R.id.edit:
                 validator.validate();
-
-/*
-                    Log.i("ADDCLICKED","CLICKED");
-                    createCustomer(getCustomer());
-
-                    Fragment fragment = new CustomerFragment();
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.content, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();*/
-
                 break;
             case R.id.btnCancel:
-                add_customer.setVisibility(View.GONE);
-                ivAdd.setVisibility(View.VISIBLE);
-                outer.setVisibility(View.VISIBLE);
+                Fragment fragment = new CustomerFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.content, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
                 MainActivity.setAppTitle(R.string.customer_title);
                 break;
         }
@@ -462,7 +405,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
     public void onValidationSucceeded() {
         validated = true;
 
-        createCustomer(getCustomer());
+        updateCustomer(getCustomer());
         FragmentSwitch.switchTo(getActivity(), new CustomerFragment(), R.string.customer_title);
     }
 
@@ -488,4 +431,5 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
         }
 
     }
+
 }

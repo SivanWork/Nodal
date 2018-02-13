@@ -13,6 +13,8 @@
     <string name="scheme_title">SCHEME</string>
     <string name="add_customer">ADD CUSTOMER</string>
     <string name="add_user">ADD USER</string>
+    <string name="edit_user">EDIT USER</string>
+    <string name="edit_customer">EDIT CUSTOMER</string>
     <string name="add_product">ADD PRODUCT</string>
     <string name="add_order">ADD ORDER</string>
 
@@ -21,4 +23,10 @@
     <string name="update_title">UPDATE CUSTOMER</string>
     <string name="cancel">CANCEL</string>
     <string name="product_title">PRODUCTS</string>
+
+
+
+<string name="radio_active">Active</string>
+<string name="radio_passive">Passive</string>
+
 </resources>

@@ -9,8 +9,13 @@ import android.os.Parcelable;
 
 public class CustomerData implements Parcelable {
 
-    public CustomerData(String name){
+    public CustomerData(int userId,String name){
+        this.id=userId;
         this.name = name;
+    }
+
+    public CustomerData(){
+
     }
 
     public String getName() {
@@ -30,7 +35,47 @@ public class CustomerData implements Parcelable {
     }
 
     String name;
+
+    public String getCustomerCode() {
+        return customerCode;
+    }
+
+    public void setCustomerCode(String customerCode) {
+        this.customerCode = customerCode;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(String isActive) {
+        this.isActive = isActive;
+    }
+
+    String customerCode;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    String mobile;
+    String email;
+    String isActive;
     int id;
+
+
 
 
     protected CustomerData(Parcel in) {

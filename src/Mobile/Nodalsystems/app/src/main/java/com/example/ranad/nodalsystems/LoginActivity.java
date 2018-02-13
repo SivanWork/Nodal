@@ -3,6 +3,7 @@ package com.example.ranad.nodalsystems;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -38,13 +39,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     TextView forgot_pwd;
     LinearLayout main_contenier;
     public static String user = "";
-    ProgressDialog progressDialog;
+
     String auth_token, userid, email, mobile, city, country, adrs1, adrs2, fn, ln, mn, role;
+    ProgressDialog progressDialog=null;
+
+    //SharedPreferences userPref = getApplicationContext().getSharedPreferences("UserPref", 0); // 0 - for private mode
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        progressDialog=new ProgressDialog(this);
         userName = (EditText) findViewById(R.id.user_name);
         pwd = (EditText) findViewById(R.id.password);
         login = (Button) findViewById(R.id.login);
@@ -52,17 +57,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         forgot_pwd.setOnClickListener(this);
         main_contenier = (LinearLayout) findViewById(R.id.main_contenier);
         login.setOnClickListener(this);
+
+
+
     }
 
-    public static String getUserType() {
-        if (userName.getText().toString().equals("admin") && pwd.getText().toString().equals("admin@123")) {
-            user = "Admin";
-        } else if (userName.getText().toString().equals("testuser") && pwd.getText().toString().equals("user@123")) {
-            user = "customer";
-        }
-        return user;
-    }
+    /*public  String getUserType() {
+      return   userPref.getString("userType", null);
 
+    }
+*/
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -72,16 +76,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
             case R.id.login:
-               /* getUserType();
-                Log.d("user", user);
-                if (user.equals("Admin") || user.equals("customer")){
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }else{
-                    Toast.makeText(getApplicationContext(), "Please enter valid username or password", Toast.LENGTH_SHORT).show();
-                }*/
-
+                showProgress("User Login","Processing...",2);
                 ApiInterface loginService =
                         ApiClient.createService(ApiInterface.class, userName.getText().toString(), pwd.getText().toString());
                 Call<Login> call = loginService.basicLogin();
@@ -91,11 +86,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         try {
 
                             if (response.isSuccessful()) {
-                                // user object available
+                                dismissProgress();
                                 Log.d("response", response.body().toString());
                                 response.body().saveLogin(LoginActivity.this);
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                //  intent.putExtra(auth_token,response.body().getAuthToken());
                                 startActivity(intent);
                                 finish();
                             } else {
@@ -115,5 +109,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
         }
+    }
+    public void showProgress(String title, String msg, int theme) {
+        progressDialog.setTitle(title);
+        progressDialog.setMessage(msg);
+
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
+    }
+    public void dismissProgress() {
+        progressDialog.dismiss();
     }
 }

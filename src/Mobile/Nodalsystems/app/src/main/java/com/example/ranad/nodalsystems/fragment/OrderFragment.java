@@ -73,7 +73,7 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
     ScrollView lists;
     int customerId;
 
-    ProgressDialog progressDialog;
+    ProgressDialog progressDialog=null;
 
     ArrayList<OrderDetailDB> orderDetailsListDB = new ArrayList<OrderDetailDB>();
     OrderDetailDB orderDetailDB = new OrderDetailDB();
@@ -106,7 +106,7 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
         super.onResume();
 
         MainActivity.setAppTitle(R.string.order_title);
-        //cart.clear();
+        cart.clear();
 
         currentItem = customers.getSelectedItemPosition();
         List<CartItem> tempCart = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(customerId)).list();
@@ -120,6 +120,8 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        progressDialog=new ProgressDialog(getContext());
         view = inflater.inflate(R.layout.fragment_order, container, false);
         cName = (AutoCompleteTextView) view.findViewById(R.id.cName);
         total = (TextView) view.findViewById(R.id.total_price);
@@ -407,7 +409,7 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
 
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                getContext(), R.style.Theme_AppCompat_DayNight_Dialog);
+                getContext(), theme);
         alertDialogBuilder.setTitle(title);
 
         // set dialog message

@@ -16,7 +16,7 @@ import static com.example.ranad.nodalsystems.usage.Keys.SESSION_FILE;
 
 public class Users implements Parcelable {
 
-    String UserId;
+    int UserId;
     String FirstName;
     String MiddleName;
     String LastName;
@@ -35,11 +35,11 @@ public class Users implements Parcelable {
     String ActiveTo;
     Boolean IsActive;
 
-    public String getUserId() {
+    public int getUserId() {
         return UserId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         UserId = userId;
     }
 
@@ -185,7 +185,7 @@ public class Users implements Parcelable {
     }
 
     public Users(Parcel in) {
-        UserId = in.readString();
+        UserId = in.readInt();
         FirstName = in.readString();
         MiddleName = in.readString();
         LastName = in.readString();
@@ -225,7 +225,7 @@ public class Users implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(UserId);
+        parcel.writeInt(UserId);
         parcel.writeString(FirstName);
         parcel.writeString(MiddleName);
         parcel.writeString(LastName);
