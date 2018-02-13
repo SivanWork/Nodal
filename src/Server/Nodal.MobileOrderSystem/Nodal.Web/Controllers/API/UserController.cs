@@ -89,9 +89,9 @@ namespace Nodal.Web.Controllers.API
         }
 
         [HttpPost]
-        public BaseResponse ChangePassword()
+        public BaseResponse ChangePassword(ChangePasswordRequest request)
         {
-            throw new NotImplementedException();
+            return _userService.ChangePassword(request);
         }
     }
 }

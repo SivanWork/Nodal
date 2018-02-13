@@ -19,7 +19,7 @@ namespace Nodal.DataAccess
             string sql = @"INSERT INTO [SchemeProduct] ([SchemeId],[ProductId],[IsActive], [CreatedById], [CreatedDate], [LastUpdatedById], [LastUpdatedDate])
      VALUES (@SchemeId, @ProductId, @IsActive, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate); SELECT CAST(SCOPE_IDENTITY() as int)";
 
-            var id = db.Connection.Query<int>(sql, schemeProduct).Single();
+            var id = db.Connection.Query<int>(sql, schemeProduct).FirstOrDefault();
             return id;
         }
 
@@ -27,7 +27,7 @@ namespace Nodal.DataAccess
         {
             string sql = @"UPDATE [SchemeProduct] SET [SchemeId] = @SchemeId, [ProductId] = @ProductId, [IsActive] = @IsActive, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate WHERE [Id] = @Id";
 
-            var id = db.Connection.Query<int>(sql, schemeProduct).Single();
+            var id = db.Connection.Query<int>(sql, schemeProduct).FirstOrDefault();
             return id;
         }
 

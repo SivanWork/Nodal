@@ -162,5 +162,22 @@ namespace Nodal.BusinessAccess.Service
             }
             return userResponse;
         }
+
+        public BaseResponse ChangePassword(ChangePasswordRequest request)
+        {
+            BaseResponse userResponse = new BaseResponse();
+            try
+            {
+                var orderID = repository.ChangePassword(request.userId, request.password);
+                userResponse.Success = true;
+            }
+            catch (Exception ex)
+            {
+                userResponse.Success = false;
+                userResponse.Message = ex.Message;
+                userResponse.StackTrace = ex.StackTrace;
+            }
+            return userResponse;
+        }
     }
 }

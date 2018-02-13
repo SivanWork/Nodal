@@ -22,5 +22,10 @@ namespace Nodal.Common.Schema
         public DateTime ActiveFrom { get; set; }
         public DateTime ActiveTo { get; set; }
         public bool IsActive { get; set; }
+
+        public override string ToString()
+        {
+            return FirstName + " " + LastName;
+        }
     }
 }

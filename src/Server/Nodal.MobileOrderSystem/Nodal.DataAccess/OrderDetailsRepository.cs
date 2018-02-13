@@ -20,7 +20,7 @@ namespace Nodal.DataAccess
             string sql = @"INSERT INTO [OrderDetails] ([OrderId],[ProductId],[Quantity],[CGST],[SGST],[IGST],[Discount],[NetPrice], [CreatedById], [CreatedDate], [LastUpdatedById], [LastUpdatedDate])
 VALUES (@OrderId, @ProductId, @Quantity, @CGST, @SGST, @IGST, @Discount, @NetPrice, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate) ; SELECT CAST(SCOPE_IDENTITY() as int)";
 
-            var id = db.Connection.Query<int>(sql, orderDetail).Single();
+            var id = db.Connection.Query<int>(sql, orderDetail).FirstOrDefault();
             return id;
         }
 
@@ -30,7 +30,7 @@ VALUES (@OrderId, @ProductId, @Quantity, @CGST, @SGST, @IGST, @Discount, @NetPri
    SET [OrderId] = @OrderId, [ProductId] = @ProductId, [Quantity] = @Quantity, [CGST] = @CGST,  
        [SGST] = @SGST, [IGST] = @IGST, [Discount] = @Discount, [NetPrice] = @NetPrice, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate WHERE [Id] = @Id";
 
-            var id = db.Connection.Query<int>(sql, orderDetail).Single();
+            var id = db.Connection.Query<int>(sql, orderDetail).FirstOrDefault();
             return id;
         }
 

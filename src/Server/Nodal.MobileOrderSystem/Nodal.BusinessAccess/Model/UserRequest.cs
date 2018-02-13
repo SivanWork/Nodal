@@ -6,4 +6,10 @@ namespace Nodal.BusinessAccess.Model
     {
         public User user { get; set; }
     }
+
+    public class ChangePasswordRequest
+    {
+        public int userId { get; set; }
+        public string password { get; set; }
+    }
 }

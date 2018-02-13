@@ -21,7 +21,7 @@ namespace Nodal.DataAccess
                             INSERT INTO [Orders] ([CustomerId],[TotalOrderAmount],[OrderStatusGroup],[OrderStatusElementCode], [CreatedById], [CreatedDate], [LastUpdatedById], [LastUpdatedDate]) VALUES (@CustomerId,@TotalOrderAmount,@OrderStatusGroup,@OrderStatusElementCode, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate);
                             SELECT CAST(SCOPE_IDENTITY() as int)";
 
-            var id = db.Connection.Query<int>(sql, order).Single();
+            var id = db.Connection.Query<int>(sql, order).FirstOrDefault();
             return id;
         }
 
@@ -37,7 +37,7 @@ namespace Nodal.DataAccess
                             [OrderStatusGroup] = @OrderStatusGroup, [OrderStatusElementCode] = @OrderStatusElementCode, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate 
                              WHERE OrderId = @OrderId";
 
-            var id = db.Connection.Query<int>(sql, order).Single();
+            var id = db.Connection.Query<int>(sql, order).FirstOrDefault();
             return id;
         }
 

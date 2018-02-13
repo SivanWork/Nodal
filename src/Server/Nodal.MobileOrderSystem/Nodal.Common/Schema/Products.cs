@@ -18,5 +18,10 @@ namespace Nodal.Common.Schema
         public DateTime CreatedDate { get; set; }
         public int LastUpdatedById { get; set; }
         public DateTime LastUpdatedDate { get; set; }
+
+        public override string ToString()
+        {
+            return ProductName + " " + ProductCode; 
+        }
     }
 }
