@@ -33,9 +33,9 @@ public class Products {
     private float iGST;
     private boolean isActive;
     private int createdById;
-    private Date createdDate;
+    private String createdDate;
     private int lastUpdatedById;
-    private Date lastUpdatedDate;
+    private String lastUpdatedDate;
 
     /**
      * No args constructor for use in serialization
@@ -57,7 +57,7 @@ public class Products {
      * @param lastUpdatedById
      * @param sGST
      */
-    public Products(String productName, float mRP, float dealerPrice, float wholesalePrice, float cGST, float sGST, float iGST, boolean isActive, int createdById, Date createdDate, int lastUpdatedById, Date lastUpdatedDate) {
+    public Products(String productName, float mRP, float dealerPrice, float wholesalePrice, float cGST, float sGST, float iGST, boolean isActive, int createdById, String createdDate, int lastUpdatedById, String lastUpdatedDate) {
         super();
         this.productName = productName;
         this.mRP = mRP;
@@ -73,8 +73,9 @@ public class Products {
         this.lastUpdatedDate = lastUpdatedDate;
     }
 
-    @Generated(hash = 747382157)
-    public Products(Long id, String productName, float mRP, float dealerPrice, float wholesalePrice, float cGST, float sGST, float iGST, boolean isActive, int createdById, Date createdDate, int lastUpdatedById, Date lastUpdatedDate) {
+    @Generated(hash = 885777213)
+    public Products(Long id, String productName, float mRP, float dealerPrice, float wholesalePrice, float cGST, float sGST, float iGST, boolean isActive, int createdById, String createdDate, int lastUpdatedById,
+            String lastUpdatedDate) {
         this.id = id;
         this.productName = productName;
         this.mRP = mRP;
@@ -89,6 +90,7 @@ public class Products {
         this.lastUpdatedById = lastUpdatedById;
         this.lastUpdatedDate = lastUpdatedDate;
     }
+
 
     public String getProductName() {
         return productName;
@@ -167,19 +169,19 @@ public class Products {
         return lastUpdatedById;
     }
 
-    public Date getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Date getLastUpdatedDate() {
+    public String getLastUpdatedDate() {
         return lastUpdatedDate;
     }
 
-    public void setLastUpdatedDate(Date lastUpdatedDate) {
+    public void setLastUpdatedDate(String lastUpdatedDate) {
         this.lastUpdatedDate = lastUpdatedDate;
     }
 

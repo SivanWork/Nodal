@@ -1,5 +1,6 @@
 package com.example.ranad.nodalsystems.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -26,9 +27,22 @@ import com.example.ranad.nodalsystems.database.Products;
 import com.example.ranad.nodalsystems.database.ProductsDao;
 import com.example.ranad.nodalsystems.interfaces.ProductAction;
 import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
+import com.example.ranad.nodalsystems.model.Login;
+import com.example.ranad.nodalsystems.model.ProductInfo;
+import com.example.ranad.nodalsystems.restapi.ApiClient;
+import com.example.ranad.nodalsystems.restapi.ProductApi;
+import com.example.ranad.nodalsystems.usage.DialogUtils;
+import com.example.ranad.nodalsystems.usage.FragmentSwitch;
+import com.example.ranad.nodalsystems.usage.NetworkChecker;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class ProductFragment extends Fragment implements View.OnClickListener,ProductAction{
@@ -42,6 +56,7 @@ public class ProductFragment extends Fragment implements View.OnClickListener,Pr
     ImageView add;
     RadioGroup radioGroup;
     RadioButton radio_btn1, radio_btn0;
+    boolean validated;
 
     public ProductFragment() {
         // Required empty public constructor
@@ -251,8 +266,110 @@ public class ProductFragment extends Fragment implements View.OnClickListener,Pr
 
     }
 
+
+    public String getCurrentDate() {
+
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
+
+    }
+
+    public void switchToEditProduct(int pos) {
+        int productId = productData.get(pos).getProductId();
+        ProductFragment productFragment = new ProductFragment();
+        add_product.setVisibility(View.VISIBLE);
+        add.setVisibility(View.GONE);
+        outer_layout.setVisibility(View.GONE);
+        MainActivity.setAppTitle(R.string.add_product);
+        Bundle bundle = new Bundle();
+        bundle.putInt("productId", productId);
+        productFragment.setArguments(bundle);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content, productFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+
+    }
+
+    @Override
+    public void readProduct(int productId) {
+
+    }
+
+    @Override
+    public void creatProduct(Products products) {
+
+        if (!NetworkChecker.isConnected(getContext()))
+            NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2);
+        else {
+
+            final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Product Creation.", "Processing..");
+            ProductInfo productInfo = new ProductInfo(products);
+
+            ProductApi productApi = ApiClient.addProduct(getContext());
+
+            Call<ProductInfo> call = productApi.addProduct(products);
+            call.enqueue(new Callback<ProductInfo>() {
+                @Override
+                public void onResponse(Call<ProductInfo> call, Response<ProductInfo> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<ProductInfo> call, Throwable t) {
+
+                }
+            });
+        }
+
+    }
+
+    @Override
+    public ArrayList<Products> readAllproducts() {
+        return null;
+    }
+
+    @Override
+    public void updateProduct(Products products) {
+
+    }
+
+    @Override
+    public void fetchProduct(Products products) {
+
+    }
+
     @Override
     public void updateProductInfo() {
 
     }
+
+    @Override
+    public Products getProducts() {
+        Products products = new Products();
+        products.setProductName(name.getText().toString());
+        products.setDealerPrice(Float.parseFloat(dealerprice.getText().toString()));
+        products.setWholesalePrice(Float.parseFloat(wholesaleprice.getText().toString()));
+        products.setCGST(Float.parseFloat(cgst.getText().toString()));
+        products.setSGST(Float.parseFloat(sgst.getText().toString()));
+        products.setIGST(Float.parseFloat(igst.getText().toString()));
+        products.setIsActive(true);
+
+        products.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
+        products.setCreatedDate(getCurrentDate().toString());
+        products.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
+        products.setLastUpdatedDate(getCurrentDate().toString());
+        return products;
+    }
+
+    public void onValidationSucceeded() {
+        validated = true;
+
+        creatProduct(getProducts());
+        FragmentSwitch.switchTo(getActivity(), new ProductFragment(), R.string.product_title);
+    }
+
+
+
 }

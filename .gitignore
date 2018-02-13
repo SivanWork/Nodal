@@ -68,3 +68,4 @@ src/Server/Nodal.MobileOrderSystem/.vs/Nodal.MobileOrderSystem/v15/Server/sqlite
 /src/Server/Nodal.MobileOrderSystem/packages
 /src/Server/Nodal.MobileOrderSystem/Nodal.Database/Nodal.Database.jfm
 /src/Server/Nodal.MobileOrderSystem/Nodal.Database/Nodal.Database.dbmdl
+src/Mobile/Nodalsystems/app/src/main/res/layout/fragment_add_product_dialog.xml

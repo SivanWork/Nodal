@@ -19,6 +19,7 @@ public class Api {
     public final static String CUSTOMER_GETALL = HOST + "/api/Customer/GetAllCustomers";
     public final static String CUSTOMER_CREATE = HOST + "/api/Customer/CreateCustomer";
     public final static String FORGOT_PASSWORD = HOST + "/api/User/ForgotPassword";
+    public final static String CHANGE_PASSWORD = HOST + "/api/User/ChangePassword";
 
     public final static String CUSTOMER_UPDATE = HOST + "/api/Customer/UpdateCustomer";
 

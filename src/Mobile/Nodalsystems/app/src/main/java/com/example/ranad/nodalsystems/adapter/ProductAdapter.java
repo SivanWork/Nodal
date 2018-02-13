@@ -82,7 +82,7 @@ public class ProductAdapter extends BaseAdapter implements View.OnClickListener 
     @Override
     public void onClick(View view) {
        /* Log.i("EDDD","PPP");
-        if(view.getId()==edit.getId()){
+        if(view.getProductId()==edit.getProductId()){
             Log.i("EDDD","PPP");
         }*/
         switch (view.getId()) {
