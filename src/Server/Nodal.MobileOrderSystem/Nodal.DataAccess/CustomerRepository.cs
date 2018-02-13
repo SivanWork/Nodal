@@ -21,7 +21,7 @@ namespace Nodal.DataAccess
 			VALUES (@FirstName, @MiddleName, @LastName, @CustomerCode, @AmountLimit, @Mobile, @Email, @Address1, @Address2, @City, @State, @Country, @Pin, @IsActive, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate); 
             SELECT CAST(SCOPE_IDENTITY() as int)";
 
-            var id = db.Connection.Query<int>(sql, customer).Single();
+            var id = db.Connection.Query<int>(sql, customer).FirstOrDefault();
             return id;
         }
 
@@ -33,7 +33,7 @@ namespace Nodal.DataAccess
       [State] = @State, [Country] = @Country, [Pin] = @Pin, [IsActive] = @IsActive, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate 
 	  WHERE [CustomerId] = @CustomerId";
 
-            var id = db.Connection.Query<int>(sql, customer).Single();
+            var id = db.Connection.Query<int>(sql, customer).FirstOrDefault();
             return id;
         }
 

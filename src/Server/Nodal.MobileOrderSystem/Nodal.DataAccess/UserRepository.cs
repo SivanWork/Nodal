@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Nodal.Common.Helper;
 using Nodal.Common.Schema;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -36,19 +37,19 @@ namespace Nodal.DataAccess
             @Email, @Address1, @Address2, @City, @State, @Country, 
             @Pin, @UserGroupType, @UserElementCode, @ActiveFrom, @ActiveTo, @IsActive, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate); SELECT CAST(SCOPE_IDENTITY() as int)";
 
-            var id = db.Connection.Query<int>(sql, user).Single();
+            var id = db.Connection.Query<int>(sql, user).FirstOrDefault();
             return id;
         }
 
         public int UpdateUser(User user)
         {
-            string sql = @"UPDATE [Users] SET [Username] = @Username, [Password] = @Password, [FirstName] = @FirstName, 
+            string sql = @"UPDATE [Users] SET [Username] = @Username, [FirstName] = @FirstName, 
        [MiddleName] = @MiddleName, [LastName] = @LastName, [Mobile] = @Mobile, [Email] = @Email, 
        [Address1] = @Address1, [Address2] = @Address2, [City] = @City, [State] = @State, 
        [Country] = @Country, [Pin] = @Pin, [UserGroupType] = @UserGroupType, [UserElementCode] = @UserElementCode, 
        [ActiveFrom] = @ActiveFrom, [ActiveTo] = @ActiveTo, [IsActive] = @IsActive, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate WHERE [UserId] = @UserId";
 
-            var id = db.Connection.Query<int>(sql, user).Single();
+            var id = db.Connection.Query<int>(sql, user).FirstOrDefault();
             return id;
         }
 
@@ -75,6 +76,14 @@ namespace Nodal.DataAccess
         {
             var result = db.Connection.Query<User>("SELECT * FROM [Users] WHERE [Email] = @Email", new { email }).FirstOrDefault();
             return result;
+        }
+
+        public int ChangePassword(int userId, string password)
+        {
+            string sql = @"UPDATE [Users] SET [Password] = @Password, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate WHERE [UserId] = @UserId";
+
+            var id = db.Connection.Query<int>(sql, new { Password = password, LastUpdatedById = userId, LastUpdatedDate = DateTime.Now, UserId = userId }).FirstOrDefault();
+            return id;
         }
     }
 }

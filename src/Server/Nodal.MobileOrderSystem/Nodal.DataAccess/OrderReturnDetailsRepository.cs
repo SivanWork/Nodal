@@ -23,7 +23,7 @@ namespace Nodal.DataAccess
            (@OrderId, @ProductId, @Quantity, @CGST, @SGST, @IGST, @Discount, @NetPrice, 
 		    @OrderReturnGroup, @OrderReturnElementCode, @Comments, @CreatedById, @CreatedDate, @LastUpdatedById, @LastUpdatedDate) ; SELECT CAST(SCOPE_IDENTITY() as int)";
 
-            var id = db.Connection.Query<int>(sql, orderReturnDetail).Single();
+            var id = db.Connection.Query<int>(sql, orderReturnDetail).FirstOrDefault();
             return id;
         }
 
@@ -34,7 +34,7 @@ namespace Nodal.DataAccess
        [IGST] = @IGST, [Discount] = @Discount, [NetPrice] = @NetPrice, [OrderReturnGroup] = @OrderReturnGroup, 
        [OrderReturnElementCode] = @OrderReturnElementCode, [Comments] = @Comments, [LastUpdatedById] = @LastUpdatedById, [LastUpdatedDate] = @LastUpdatedDate WHERE [Id] = @Id";
 
-            var id = db.Connection.Query<int>(sql, orderReturnDetail).Single();
+            var id = db.Connection.Query<int>(sql, orderReturnDetail).FirstOrDefault();
             return id;
         }
 
