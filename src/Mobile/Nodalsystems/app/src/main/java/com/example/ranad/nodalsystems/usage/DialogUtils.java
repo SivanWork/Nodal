@@ -53,7 +53,7 @@ public static     ProgressDialog progressDialog = null;
         progressDialog.setCancelable(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(true);
-        progressDialog.show();
+//        progressDialog.show();
 
         return progressDialog;
 

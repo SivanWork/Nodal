@@ -11,19 +11,11 @@ public class CustomerData implements Parcelable {
 
     public CustomerData(int userId,String name){
         this.id=userId;
-        this.name = name;
+
     }
 
     public CustomerData(){
 
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getId() {
@@ -34,7 +26,35 @@ public class CustomerData implements Parcelable {
         this.id = id;
     }
 
-    String name;
+    String firstName;
+    String midName;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getMidName() {
+        return midName;
+    }
+
+    public void setMidName(String midName) {
+        this.midName = midName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    String lastName;
+
 
     public String getCustomerCode() {
         return customerCode;
@@ -79,7 +99,7 @@ public class CustomerData implements Parcelable {
 
 
     protected CustomerData(Parcel in) {
-        name = in.readString();
+       // name = in.readString();
         id = in.readInt();
     }
 
@@ -102,7 +122,7 @@ public class CustomerData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
+       // parcel.writeString(name);
         parcel.writeInt(id);
     }
 }

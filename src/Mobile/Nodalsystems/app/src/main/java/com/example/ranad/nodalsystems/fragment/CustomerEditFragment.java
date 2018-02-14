@@ -104,7 +104,7 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
         // ivAdd = (ImageView) view.findViewById(R.id.ivAdd);
         //ivAdd.setOnClickListener(this);
         validator = new Validator(this);
-        validator.setValidationListener((Validator.ValidationListener) this);
+        validator.setValidationListener(this);
 
 
         firstName = (EditText) view.findViewById(R.id.ftName);
@@ -181,7 +181,7 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
         customer.setCity(city.getText().toString());
         customer.setState(state.getText().toString());
         customer.setCountry(country.getText().toString());
-        customer.setPin(country.getText().toString());
+        customer.setPin(pincode.getText().toString());
         customer.setIsActive(true);
 
     /*    customer.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
@@ -189,7 +189,7 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
     */
         customer.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
         customer.setLastUpdatedDate(getCurrentDate().toString());
-        customer.setCustomerId(0);
+        //customer.setCustomerId(0);
         customer.setCustomerCode("");
 
 
@@ -205,7 +205,7 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
 
         Log.i("NETCHKR", "" + NetworkChecker.isConnected(getContext()));
         if (NetworkChecker.isConnected(getContext()) == false) {
-            NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2).show();
+            NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2);
         } else {
 
 
@@ -235,6 +235,11 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
                 }
             });
         }
+
+    }
+
+    @Override
+    public void deleteCustomer(Customer customer) {
 
     }
 

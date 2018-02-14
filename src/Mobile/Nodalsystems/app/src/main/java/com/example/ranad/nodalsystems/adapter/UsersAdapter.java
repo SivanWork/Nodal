@@ -48,7 +48,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         //  Log.i("userData", "LLLL" + userData.get(0).);
     }
 
-
+    public void updateList(List<UserData> list){
+        userData = (ArrayList<UserData>) list;
+        notifyDataSetChanged();
+    }
     @Override
     public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.total_user_listing, parent, false);

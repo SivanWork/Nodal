@@ -87,7 +87,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
         }
 
         public void bindData(final CustomerData customerData, final int position) {
-            customerName.setText(customerData.getName());
+            customerName.setText(customerData.getFirstName()+" "+customerData.getLastName());
             code.setText(customerData.getCustomerCode());
             email.setText(customerData.getEmail());
             mobile.setText(customerData.getMobile());
@@ -97,6 +97,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    customerAction.readCustomer(customerData.getId());
                     // Toast.makeText(context, "unable to delete", Toast.LENGTH_SHORT).show();
                     //   userAction.deleteUser(position);
                 }

@@ -253,6 +253,75 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void readCustomer(int customerId) {
 
+        Log.i("NETCHKR", "" + NetworkChecker.isConnected(getContext()));
+        if (NetworkChecker.isConnected(getContext()) == false) {
+            NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2);
+        } else {
+
+
+            final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Customer Data", "Loading");
+
+
+            CustomerApi customerApi =
+                    ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
+
+            Call<CustomerGetAll> call = customerApi.getCustomerAPI("http://cellordering.com/api/Customer/GetCustomer?customerId=" + customerId);
+            ;
+            call.enqueue(new Callback<CustomerGetAll>() {
+                @Override
+                public void onResponse(Call<CustomerGetAll> call, Response<CustomerGetAll> response) {
+
+                    DialogUtils.dismissProgress(progressDialog);
+                    //fetchCustomer(response.body().getCustomer());
+
+                    Customer customer = new Customer();
+                    customer = response.body().getCustomer();
+                    deleteCustomer(customer);
+                    showAlert("Customer Inactivation.", "Inactivated successfully", 2);
+                    FragmentSwitch.switchTo(getActivity(), new CustomerFragment(), R.string.customer_title);
+
+                }
+
+
+                @Override
+                public void onFailure(Call<CustomerGetAll> call, Throwable t) {
+
+                }
+            });
+        }
+
+    }
+
+    @Override
+    public void deleteCustomer(Customer customer) {
+
+
+        //    Log.i("AAAAA", "SSSS" + position);
+
+        customer.setIsActive(false);
+        customer.setLastUpdatedDate(getCurrentDate());
+        customer.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
+
+
+        CustomerInfo customerInfo=new CustomerInfo(customer);
+        CustomerApi customerApi =
+                ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
+        Call<CustomerInfo> call = customerApi.updateCustomerAPI(customerInfo);
+        call.enqueue(new Callback<CustomerInfo>() {
+            @Override
+            public void onResponse(Call<CustomerInfo> call, Response<CustomerInfo> response) {
+
+
+            }
+
+
+            @Override
+            public void onFailure(Call<CustomerInfo> call, Throwable t) {
+
+            }
+        });
+
+
     }
 
 
@@ -336,11 +405,12 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
         //    Log.i("ZZZZ", ""+NetworkChecker.isConnected(getContext()));
 
         if (NetworkChecker.isConnected(getContext()) == false)
-            NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2).show();
+            NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2);
         else {
 
 
             final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Customer Data fetching.", "Loading...");
+            progressDialog.show();
             CustomerApi customerApi =
                     ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
 
@@ -356,8 +426,10 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
                     for (int i = 0; i < response.body().getCustomerList().size(); i++) {
 
                         customerData1 = new CustomerData();
+/*
                         Log.i("responseNames", response.body().getCustomerList().get(i).getFirstName() + "");
                         Log.i("responseIDS", response.body().getCustomerList().get(i).getCustomerId() + "");
+*/
                         customerData1.setCustomerCode(response.body().getCustomerList().get(i).getCustomerCode());
                         customerData1.setEmail(response.body().getCustomerList().get(i).getEmail());
                         customerData1.setId(response.body().getCustomerList().get(i).getCustomerId());
@@ -365,7 +437,9 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
 
                             customerData1.setIsActive("Active");
                         else customerData1.setIsActive("Passive");
-                        customerData1.setName(response.body().getCustomerList().get(i).getFirstName() + " " + response.body().getCustomerList().get(i).getLastName());
+
+                        customerData1.setFirstName(response.body().getCustomerList().get(i).getFirstName());
+                        customerData1.setLastName(response.body().getCustomerList().get(i).getLastName());
                         customerData1.setMobile(response.body().getCustomerList().get(i).getMobile());
                         //customerData.add(new CustomerData(response.body().getCustomerList().get(i).getCustomerId(), response.body().getCustomerList().get(i).getFirstName()));
 

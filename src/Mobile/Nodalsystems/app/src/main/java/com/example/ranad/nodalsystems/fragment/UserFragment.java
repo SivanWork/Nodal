@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -94,7 +97,9 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
     ProgressDialog progressDialog = null;
     Spinner userType_spinner, userElement_spinner;
     private RadioGroup radioStatusGroup;
-
+    TextView noOfUsers;
+    private EditText searchBox;
+    List<UserData> userDataList;
 
     GetAllGroupTypes gtAll;
 
@@ -168,7 +173,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         btncancel.setOnClickListener(this);
         activeTo.setOnClickListener(this);
         activeFrom.setOnClickListener(this);
-        List<UserData> userDataList = readAllUsers();
+         userDataList = readAllUsers();
 
         user_list = (RecyclerView) view.findViewById(R.id.user_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -176,11 +181,38 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         usersAdapter = new UsersAdapter(userDataList, getContext(), this);
         user_list.setAdapter(usersAdapter);
         usersAdapter.notifyDataSetChanged();
-
+        noOfUsers = (TextView) view.findViewById(R.id.noOfUsers) ;
 
         radioStatusGroup = (RadioGroup) view.findViewById(R.id.radioStatus);
+        searchBox = (EditText)view.findViewById(R.id.search_box);
+
+        searchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filter(s.toString());            }
+        });
+
+
+
 
         return view;
+    }
+    void filter(String text){
+        List<UserData> temp = new ArrayList();
+        for(UserData d: userDataList){
+            if(d.getUserName().contains(text)){
+                temp.add(d);
+            }
+        }
+        usersAdapter.updateList(temp);
     }
 
     @Override
@@ -348,7 +380,6 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         fragmentTransaction.commit();
 
     }
-
     public void delete(int pos) {
 
       /*  List<CartItem> deleteList = cartItemDao.queryBuilder().where(CartItemDao.Properties.Id.eq(cart.get(pos).getId())).list();
@@ -361,31 +392,23 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
     @Override
     public ArrayList<UserData> readAllUsers() {
         userData.clear();
-Log.i("NETCHKR",""+NetworkChecker.isConnected(getContext()));
-        if(NetworkChecker.isConnected(getContext())==false)
-        {
-         NetworkChecker.noNetworkDialog(getContext(),getActivity(),2).show();
-        }
-        else {
-
+        Log.i("NETCHKR", "" + NetworkChecker.isConnected(getContext()));
+        if (NetworkChecker.isConnected(getContext()) == false) {
+            NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2);
+        } else {
 
             showProgress("User Data Feteching.", "Loading...", 2);
             UserApi userApi =
                     ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
-
             Call<USERGETALL> call = userApi.getAllUsersAPI();
             call.enqueue(new Callback<USERGETALL>() {
                 @Override
                 public void onResponse(Call<USERGETALL> call, Response<USERGETALL> response) {
                     //         Log.i("responseDB", response.body().getUserList() + "");
                     dismissProgress();
-                    //   UserData userData=new UserData();
                     UserData userData1;
-
+                    noOfUsers.setText("Users:" + response.body().getUserList().size());
                     for (int i = 0; i < response.body().getUserList().size(); i++) {
-
-                        Log.i("responseNames", response.body().getUserList().get(i).getLastName() + "");
-                        Log.i("responseIDS", response.body().getUserList().get(i).getUserId() + "");
                         userData1 = new UserData();
 
                         userData1.setId(response.body().getUserList().get(i).getUserId());
@@ -413,10 +436,9 @@ Log.i("NETCHKR",""+NetworkChecker.isConnected(getContext()));
                 }
             });
             Log.i("responseNNN", userData + "");
-
         }
-        return userData;
-    }
+            return userData;
+        }
 
     @Override
     public User getUser() {
@@ -508,8 +530,6 @@ Log.i("NETCHKR",""+NetworkChecker.isConnected(getContext()));
         UserInfo userInfo=new UserInfo(user);
         UserApi userApi =
                 ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
-
-
         Call<UserInfo> call = userApi.updateUserAPI(userInfo);
         call.enqueue(new Callback<UserInfo>() {
             @Override
