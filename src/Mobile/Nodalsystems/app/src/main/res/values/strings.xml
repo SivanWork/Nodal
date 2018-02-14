@@ -9,6 +9,7 @@
     <string name="return_title">RETURN</string>
     <string name="customer_title">CUSTOMERS</string>
     <string name="user_title">USERS</string>
+    <string name="changepwd_title">CHANGE PASSWORD</string>
     <string name="report_title">REPORT</string>
     <string name="scheme_title">SCHEME</string>
     <string name="add_customer">ADD CUSTOMER</string>

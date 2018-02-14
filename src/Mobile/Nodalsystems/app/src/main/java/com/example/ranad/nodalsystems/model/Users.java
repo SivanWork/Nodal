@@ -262,26 +262,5 @@ public class Users implements Parcelable {
         editor.commit();
     }
 
-    @Override
-    public String toString() {
-        return "UserId = " + UserId + " " +
-                "FirstName = " + FirstName + " " +
-                "MiddleName = " + MiddleName + " " +
-                "LastName = " + LastName + " " +
-                "Mobile = " + Mobile + " " +
-                "UserTypeCode = " + UserTypeCode + " " +
-                "UserTypeName = " + UserTypeName + " " +
-                "UserTypeActive = " + UserTypeActive + " " +
-                "Email = " + Email + " " +
-                "Address1 = " + Address1 + " " +
-                "Address2 = " + Address2 + " " +
-                "City = " + City + " " +
-                "State = " + State + " " +
-                "Country = " + Country + " " +
-                "Pin = " + Pin + " " +
-                "ActiveFrom = " + ActiveFrom + " " +
-                "ActiveTo = " + ActiveTo + " " +
-                "IsActive = " + IsActive;
 
-    }
 }

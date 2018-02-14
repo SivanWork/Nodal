@@ -1,16 +1,10 @@
 package com.example.ranad.nodalsystems.fragment;
 
-import android.app.Dialog;
+
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +12,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.ranad.nodalsystems.App;
+import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
+import com.example.ranad.nodalsystems.data_holder.ChangePasswordData;
+import com.example.ranad.nodalsystems.data_holder.ResponseData;
+import com.example.ranad.nodalsystems.model.Login;
+import com.example.ranad.nodalsystems.restapi.ApiClient;
+import com.example.ranad.nodalsystems.restapi.ApiInterface;
 
-public class ChangePassword extends DialogFragment implements View.OnClickListener {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ChangePassword extends Fragment implements View.OnClickListener {
     View view;
     Context context;
     EditText new_pwd, renter_pwd;
@@ -71,17 +76,18 @@ public class ChangePassword extends DialogFragment implements View.OnClickListen
     @Override
     public void onStart() {
         super.onStart();
-        Dialog dialog = getDialog();
+       /* Dialog dialog = getDialog();
         if (dialog != null) {
-            dialog.getWindow().setLayout(500, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             dialog.getWindow().setGravity(Gravity.CENTER);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        }
+        }*/
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        MainActivity.setAppTitle(R.string.changepwd_title);
     }
 
     @Override
@@ -95,7 +101,7 @@ public class ChangePassword extends DialogFragment implements View.OnClickListen
         super.onDetach();
     }
 
-    @NonNull
+   /* @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -104,20 +110,41 @@ public class ChangePassword extends DialogFragment implements View.OnClickListen
             setStyle(STYLE_NO_TITLE, android.R.style.Theme_Material_Dialog);
         }
         return super.onCreateDialog(savedInstanceState);
-    }
+    }*/
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.cancel:
-                dismiss();
+                getActivity().getFragmentManager().popBackStack();
                 break;
             case R.id.change:
                 if (new_pwd.getText().toString().equals(renter_pwd.getText().toString())) {
                     Toast.makeText(getContext(), "Changed Password", Toast.LENGTH_SHORT).show();
-                    dismiss();
-                } else {
-                    Toast.makeText(getContext(), "Please try again", Toast.LENGTH_SHORT).show();
+                    ChangePasswordData changePasswordData = new ChangePasswordData();
+                    changePasswordData.setUserId(Login.getInstance(getContext()).getUser().getUserId());
+                    changePasswordData.setPassword(renter_pwd.getText().toString()) ;
+                    ApiInterface apiInterface =
+                            ApiClient.createService(ApiInterface.class, Login.getInstance(getContext()).getAuthToken());
+                    Call<ChangePasswordData> call = apiInterface.changePassword(changePasswordData);
+                    call.enqueue(new Callback<ChangePasswordData>() {
+                        @Override
+                        public void onResponse(Call<ChangePasswordData> call, Response<ChangePasswordData> response) {
+                            Log.d("response", response.body().toString());
+                            if (response.code() == 200){
+                                ResponseData responseData = new ResponseData();
+                                if (responseData.isSuccess()){
+                                    Toast.makeText(getContext(), "Password changedd succesfully..!", Toast.LENGTH_SHORT).show();
+                                    getActivity().getFragmentManager().popBackStack();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ChangePasswordData> call, Throwable t) {
+                            Toast.makeText(getContext(), "Unable to change Password", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
                 break;
         }

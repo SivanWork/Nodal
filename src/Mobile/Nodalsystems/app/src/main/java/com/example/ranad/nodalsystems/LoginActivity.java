@@ -21,6 +21,7 @@ import com.example.ranad.nodalsystems.fragment.ForgotPasswordDialog;
 import com.example.ranad.nodalsystems.fragment.HomeFragment;
 import com.example.ranad.nodalsystems.fragment.OrderFragment;
 import com.example.ranad.nodalsystems.model.Login;
+import com.example.ranad.nodalsystems.model.User;
 import com.example.ranad.nodalsystems.model.Users;
 import com.example.ranad.nodalsystems.restapi.ApiClient;
 import com.example.ranad.nodalsystems.restapi.ApiInterface;
@@ -87,11 +88,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                             if (response.isSuccessful()) {
                                 dismissProgress();
-                                Log.d("response", response.body().toString());
+                                Log.d("response", response.body().getUser()+"");
                                 response.body().saveLogin(LoginActivity.this);
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                                try {
+                                    String favData = new Gson().toJson(response.body());
+                                    JSONObject jsonObject = new JSONObject(favData);
+                                    JSONObject object = new JSONObject(jsonObject.get("User").toString());
+                                    Log.d("userId",jsonObject.toString() );
+                                    Log.d("user",object.toString() );
+                                    Users users = new Users();
+                                   users.setUserId(object.getInt("UserId"));
+                                    users.save(LoginActivity.this);
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+
                             } else {
                                 // error response, no access to resource?
 
