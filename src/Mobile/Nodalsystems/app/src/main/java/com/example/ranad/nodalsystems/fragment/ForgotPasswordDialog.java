@@ -20,9 +20,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ranad.nodalsystems.R;
+import com.example.ranad.nodalsystems.data_holder.ResponseData;
 import com.example.ranad.nodalsystems.model.Login;
 import com.example.ranad.nodalsystems.restapi.ApiClient;
 import com.example.ranad.nodalsystems.restapi.ApiInterface;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -107,17 +112,31 @@ public class ForgotPasswordDialog extends DialogFragment implements View.OnClick
                 break;
             case R.id.okay:
                 ApiInterface apiInterface = ApiClient.forgotPassword(getContext());
-                Call<Login> c = apiInterface.forgotPassword(emailId.getText().toString());
-                c.enqueue(new Callback<Login>() {
+                Call<ResponseData> c = apiInterface.forgotPassword(emailId.getText().toString());
+                c.enqueue(new Callback<ResponseData>() {
                     @Override
-                    public void onResponse(Call<Login> call, Response<Login> response) {
+                    public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
 
-                        Log.d("response of forgotpwd", response.body().toString());
+                        if (response.code() == 200) {
+                            try {
+                                String favData = new Gson().toJson(response.body());
+                                JSONObject jsonObject = new JSONObject(favData);
+
+                                Log.d("response", favData + "  " +jsonObject.getString("Success"));
+                                if (jsonObject.getString("Success").contains("true")) {
+                                    Toast.makeText(getContext(), "Please check your mail.Password has been sent.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getContext(), "Please try again later..!", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<Login> call, Throwable t) {
-
+                    public void onFailure(Call<ResponseData> call, Throwable t) {
+                        Toast.makeText(getContext(), "Please try again later..!", Toast.LENGTH_SHORT).show();
                     }
                 });
                 break;
