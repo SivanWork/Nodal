@@ -1,18 +1,33 @@
-
 package com.example.ranad.nodalsystems.model;
 
-import java.io.Serializable;
-import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+import java.util.List;
 
-public class CustomerGetAll implements Serializable, Parcelable
-{
 
+public class CustomerGetAll implements Serializable, Parcelable {
+
+    public final static Creator<CustomerGetAll> CREATOR = new Creator<CustomerGetAll>() {
+
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public CustomerGetAll createFromParcel(Parcel in) {
+            return new CustomerGetAll(in);
+        }
+
+        public CustomerGetAll[] newArray(int size) {
+            return (new CustomerGetAll[size]);
+        }
+
+    };
+    private final static long serialVersionUID = -2877257314805307238L;
     @SerializedName("customer")
     @Expose
     private Customer customer;
@@ -31,23 +46,6 @@ public class CustomerGetAll implements Serializable, Parcelable
     @SerializedName("StackTrace")
     @Expose
     private String stackTrace;
-    public final static Creator<CustomerGetAll> CREATOR = new Creator<CustomerGetAll>() {
-
-
-        @SuppressWarnings({
-            "unchecked"
-        })
-        public CustomerGetAll createFromParcel(Parcel in) {
-            return new CustomerGetAll(in);
-        }
-
-        public CustomerGetAll[] newArray(int size) {
-            return (new CustomerGetAll[size]);
-        }
-
-    }
-    ;
-    private final static long serialVersionUID = -2877257314805307238L;
 
     protected CustomerGetAll(Parcel in) {
         this.customer = ((Customer) in.readValue((Customer.class.getClassLoader())));
@@ -60,13 +58,11 @@ public class CustomerGetAll implements Serializable, Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public CustomerGetAll() {
     }
 
     /**
-     * 
      * @param message
      * @param isWarning
      * @param customer
@@ -142,7 +138,7 @@ public class CustomerGetAll implements Serializable, Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

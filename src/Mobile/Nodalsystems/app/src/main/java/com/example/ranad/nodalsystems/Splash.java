@@ -1,8 +1,8 @@
 package com.example.ranad.nodalsystems;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.example.ranad.nodalsystems.model.Login;
 
@@ -27,9 +27,6 @@ public class Splash extends AppCompatActivity {
                     public void run() {
                         try {
                             Intent intent;
-                        /*intent = new Intent(Splash.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();*/
                             if (Login.getInstance(Splash.this) == null) {
                                 intent = new Intent(Splash.this, LoginActivity.class);
                             } else {

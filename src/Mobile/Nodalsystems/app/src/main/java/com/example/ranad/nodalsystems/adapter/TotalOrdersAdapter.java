@@ -2,13 +2,13 @@ package com.example.ranad.nodalsystems.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
+
 import com.example.ranad.nodalsystems.App;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.database.Customers;
@@ -18,12 +18,9 @@ import com.example.ranad.nodalsystems.database.OrderDetailDBDao;
 import com.example.ranad.nodalsystems.database.Orders;
 import com.example.ranad.nodalsystems.fragment.OrderViewFragment;
 import com.example.ranad.nodalsystems.interfaces.OrderAction;
+
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by Rana D on 2/1/2018.
- */
 
 public class TotalOrdersAdapter extends RecyclerView.Adapter<TotalOrdersAdapter.OrderViewHolder> {
     ArrayList<Orders> orderData;
@@ -36,7 +33,6 @@ public class TotalOrdersAdapter extends RecyclerView.Adapter<TotalOrdersAdapter.
         this.orderData = orderData;
         inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         this.orderAction = orderAction;
-        Log.i("orderData", "LLLL" + orderData.size());
     }
 
 
@@ -81,11 +77,11 @@ public class TotalOrdersAdapter extends RecyclerView.Adapter<TotalOrdersAdapter.
             List<Customers> customersList = customersDao.queryBuilder().where(CustomersDao.Properties.Id.eq(orderData.getCustomerId())).list();
             OrderDetailDBDao orderDetailDBDao = App.getDaoSession().getOrderDetailDBDao();
             List<OrderDetailDB> orderDetailDBList = orderDetailDBDao.queryBuilder().where(OrderDetailDBDao.Properties.OrderId.eq(orderData.getId())).list();
-            customerName.setText(customersList.get(0).getFirstName());
-            code.setText("CD00" + customersList.get(0).getId());
+            customerName.setText(customersList.get(position).getFirstName());
+            code.setText("CD00" + customersList.get(position).getId());
             amount.setText(orderData.getTotalOrderAmount() + "");
             dateview.setText(orderData.getCreatedDate() + "");
-            items.setText(orderDetailDBList.size()+"");
+            items.setText(orderDetailDBList.size() + "");
         }
 
 

@@ -1,16 +1,15 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.ranad.nodalsystems.fragment.CustomerFragment">
-
-
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:id="@+id/add_user"
             android:layout_width="match_parent"
@@ -60,8 +59,8 @@
                     android:background="@android:color/transparent"
                     android:fontFamily="sans-serif-condensed"
                     android:hint="Password"
-                    android:textSize="16sp"
                     android:inputType="textPassword"
+                    android:textSize="16sp"
                     android:theme="@style/EdittextTheme" />
             </android.support.design.widget.TextInputLayout>
 
@@ -164,8 +163,8 @@
                     android:background="@android:color/transparent"
                     android:fontFamily="sans-serif-condensed"
                     android:hint="Contact Number"
-                    android:textSize="16sp"
                     android:inputType="phone"
+                    android:textSize="16sp"
                     android:theme="@style/EdittextTheme" />
             </android.support.design.widget.TextInputLayout>
 
@@ -340,8 +339,8 @@
                     android:layout_marginLeft="8dp"
                     android:background="@android:color/transparent"
                     android:fontFamily="sans-serif-condensed"
-                    android:inputType="number"
                     android:hint="Pin Code"
+                    android:inputType="number"
                     android:textSize="16sp"
                     android:theme="@style/EdittextTheme" />
             </android.support.design.widget.TextInputLayout>
@@ -374,15 +373,12 @@
             -->
 
 
-
             <Spinner
                 android:id="@+id/userType"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
 
                 android:layout_marginTop="20dp"></Spinner>
-
-
 
 
             <ImageView
@@ -419,10 +415,6 @@
                 android:layout_marginTop="20dp"></Spinner>
 
 
-
-
-
-
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
@@ -450,10 +442,10 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
                             android:background="@android:color/transparent"
+                            android:clickable="true"
+                            android:focusable="false"
                             android:fontFamily="sans-serif-condensed"
                             android:hint="Active From"
-                            android:focusable="false"
-                            android:clickable="true"
                             android:textSize="16sp"
                             android:theme="@style/EdittextTheme" />
                     </android.support.design.widget.TextInputLayout>
@@ -476,10 +468,10 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
                             android:background="@android:color/transparent"
+                            android:clickable="true"
+                            android:focusable="false"
                             android:fontFamily="sans-serif-condensed"
                             android:hint="Active To"
-                            android:focusable="false"
-                            android:clickable="true"
                             android:textSize="16sp"
                             android:theme="@style/EdittextTheme" />
                     </android.support.design.widget.TextInputLayout>
@@ -504,9 +496,9 @@
                     android:id="@+id/radioActive"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/radio_active"
+                    android:buttonTint="@color/btn_bg"
                     android:checked="true"
-                    android:buttonTint="@color/btn_bg"/>
+                    android:text="@string/radio_active" />
 
                 <RadioButton
                     android:id="@+id/radioPassive"
@@ -544,7 +536,6 @@
 -->
 
 
-
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
@@ -570,9 +561,6 @@
                         android:layout_width="125dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textColor="@color/btn_bg"
-                        android:background="@drawable/button_ripple"
-                        android:backgroundTint="@android:color/transparent"
                         android:fontFamily="sans-serif-condensed"
                         android:foreground="?attr/selectableItemBackground"
                         android:text="CANCEL"
@@ -591,7 +579,6 @@
                         android:layout_width="125dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:background="@drawable/button_ripple"
                         android:fontFamily="sans-serif-condensed"
                         android:foreground="?attr/selectableItemBackground"
                         android:text="Update"

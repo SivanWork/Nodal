@@ -4,11 +4,9 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toolbar;
 
-import com.example.ranad.nodalsystems.LoginActivity;
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.adapter.HomeGridAdapter;
@@ -30,38 +25,31 @@ import com.example.ranad.nodalsystems.model.Users;
 
 import java.util.ArrayList;
 
-import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_BILLING;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_CUSTOMER;
-import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_DISCOUNT;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_ORDER;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_PRODUCT;
-import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_REPORT;
-import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_RETURN;
-import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_SCHEME;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_USER;
 
 
 public class HomeFragment extends Fragment {
-    ProgressDialog progressDialog=null;
+    ProgressDialog progressDialog = null;
 
-    //SharedPreferences userPref = getApplicationContext().getSharedPreferences("UserPref", 0); // 0 - for private mode
-
-
-
-
-        GridView home_grid;
+    GridView home_grid;
     View view;
     ArrayList<HomeGridElement> homeGridElements = new ArrayList<>();
     HomeGridAdapter homeGridAdapter;
     SwitchFragment switchFragment;
     LinearLayout placeholder;
+    Users users;
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            homeGridAdapter.notifyDataSetChanged();
+        }
+    };
 
     public HomeFragment() {
         // Required empty public constructor
-    }
-
-    public void Construct(SwitchFragment switchFragment) {
-
     }
 
     public static HomeFragment newInstance(SwitchFragment switchFragment) {
@@ -70,7 +58,9 @@ public class HomeFragment extends Fragment {
         return fragment;
     }
 
-    Users users;
+    public void Construct(SwitchFragment switchFragment) {
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,28 +69,18 @@ public class HomeFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         home_grid = (GridView) view.findViewById(R.id.home_grid);
         placeholder = (LinearLayout) view.findViewById(R.id.placeholder);
-
         homeGridElements.clear();
-       users = Login.getInstance(getContext()).getUser();
-
-
-       Log.i("UserType",users.getUserTypeCode());
-
-        //Log.d("user type", users.getInstance(getContext()).getUserTypeCode());
-
-  //      SharedPreferences userPref = getActivity().getSharedPreferences("UserPref", 0); // 0 - for private mode
-
-//String userType=userPref.getString("userType",null);
-        progressDialog=new ProgressDialog(getContext());
-         if (users.getUserTypeCode().equals("Admin")){
+        users = Login.getInstance(getContext()).getUser();
+        progressDialog = new ProgressDialog(getContext());
+        if (users.getUserTypeCode().equals("Admin")) {
             homeGridElements.add(new HomeGridElement("USERS", R.drawable.user, android.R.color.white, FRAGMENT_USER));
             homeGridElements.add(new HomeGridElement("CUSTOMERS", R.drawable.customer, android.R.color.white, FRAGMENT_CUSTOMER));
             homeGridElements.add(new HomeGridElement("PRODUCTS", R.drawable.product, android.R.color.white, FRAGMENT_PRODUCT));
             //homeGridElements.add(new HomeGridElement("SCHEME",R.drawable.scheme, android.R.color.white, FRAGMENT_SCHEME));
-           // homeGridElements.add(new HomeGridElement("REPORT", R.drawable.report, android.R.color.white, FRAGMENT_REPORT));
-           // homeGridElements.add(new HomeGridElement("DISCOUNT", R.drawable.discount, android.R.color.white, FRAGMENT_DISCOUNT));
+            // homeGridElements.add(new HomeGridElement("REPORT", R.drawable.report, android.R.color.white, FRAGMENT_REPORT));
+            // homeGridElements.add(new HomeGridElement("DISCOUNT", R.drawable.discount, android.R.color.white, FRAGMENT_DISCOUNT));
             homeGridElements.add(new HomeGridElement("ORDER", R.drawable.order_2, android.R.color.white, FRAGMENT_ORDER));
-          //  homeGridElements.add(new HomeGridElement("BILLING", R.drawable.biiling_2, android.R.color.white, FRAGMENT_BILLING));
+            //  homeGridElements.add(new HomeGridElement("BILLING", R.drawable.biiling_2, android.R.color.white, FRAGMENT_BILLING));
             /*homeGridElements.add(new HomeGridElement("RETURN", R.drawable.return_2, android.R.color.white, FRAGMENT_RETURN));*/
 
         } else if (users.getUserTypeCode().equals("Agent")) {
@@ -127,6 +107,13 @@ public class HomeFragment extends Fragment {
 
         this.switchFragment = MainActivity.getSwitchFragment();
         super.onResume();
+
+        super.onResume();
+        MainActivity activity = (MainActivity) getActivity();
+        if (activity != null) {
+            activity.hideUpButton();
+        }
+
         MainActivity.setAppTitle(R.string.home_title);
     }
 
@@ -136,17 +123,11 @@ public class HomeFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            homeGridAdapter.notifyDataSetChanged();
-        }
-    };
-
     @Override
     public void onPause() {
         super.onPause();
     }
+
     public void showProgress(String title, String msg, int theme) {
         progressDialog.setTitle(title);
         progressDialog.setMessage(msg);
@@ -155,6 +136,7 @@ public class HomeFragment extends Fragment {
         progressDialog.setIndeterminate(true);
         progressDialog.show();
     }
+
     public void dismissProgress() {
         progressDialog.dismiss();
     }

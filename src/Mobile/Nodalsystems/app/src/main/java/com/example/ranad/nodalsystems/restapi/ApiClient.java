@@ -12,9 +12,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-/**
- * Created by Rana D on 1/30/2018.
- */
 
 public class ApiClient {
 
@@ -72,7 +69,7 @@ public class ApiClient {
     }
 
 
-    public static ApiInterface forgotPassword(Context context){
+    public static ApiInterface forgotPassword(Context context) {
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -88,10 +85,10 @@ public class ApiClient {
                 .client(builder.build())
                 .build();
 
-        return  retrofit.create(ApiInterface.class);
+        return retrofit.create(ApiInterface.class);
     }
 
-    public static ProductApi addProduct(Context context){
+    public static ProductApi addProduct(Context context) {
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -107,6 +104,6 @@ public class ApiClient {
                 .client(builder.build())
                 .build();
 
-        return  retrofit.create(ProductApi.class);
+        return retrofit.create(ProductApi.class);
     }
 }

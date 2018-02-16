@@ -1,17 +1,32 @@
-
 package com.example.ranad.nodalsystems.model;
 
-import java.io.Serializable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 
-public class GroupType implements Serializable, Parcelable
-{
 
+public class GroupType implements Serializable, Parcelable {
+
+    public final static Creator<GroupType> CREATOR = new Creator<GroupType>() {
+
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public GroupType createFromParcel(Parcel in) {
+            return new GroupType(in);
+        }
+
+        public GroupType[] newArray(int size) {
+            return (new GroupType[size]);
+        }
+
+    };
+    private final static long serialVersionUID = 4891319119745986427L;
     @SerializedName("Id")
     @Expose
     private int id;
@@ -36,23 +51,6 @@ public class GroupType implements Serializable, Parcelable
     @SerializedName("LastUpdatedDate")
     @Expose
     private String lastUpdatedDate;
-    public final static Creator<GroupType> CREATOR = new Creator<GroupType>() {
-
-
-        @SuppressWarnings({
-            "unchecked"
-        })
-        public GroupType createFromParcel(Parcel in) {
-            return new GroupType(in);
-        }
-
-        public GroupType[] newArray(int size) {
-            return (new GroupType[size]);
-        }
-
-    }
-    ;
-    private final static long serialVersionUID = 4891319119745986427L;
 
     protected GroupType(Parcel in) {
         this.id = ((int) in.readValue((int.class.getClassLoader())));
@@ -67,13 +65,11 @@ public class GroupType implements Serializable, Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public GroupType() {
     }
 
     /**
-     * 
      * @param isActive
      * @param id
      * @param groupName
@@ -172,7 +168,7 @@ public class GroupType implements Serializable, Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

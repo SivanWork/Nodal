@@ -7,13 +7,14 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -23,6 +24,7 @@ import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.database.CartItem;
 import com.example.ranad.nodalsystems.database.Products;
 import com.example.ranad.nodalsystems.database.ProductsDao;
+import com.example.ranad.nodalsystems.usage.DialogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,13 @@ public class AddProductDialog extends DialogFragment {
     EditText quantity;
     Button add;
     OnProductAddListener onProductAddListener;
-    int productId;
+    int productId, currentItemPosition;
+    AutoCompleteTextView productAutoCompleterView;
+
+    List<Products> productsList;
+
+    List<String> product;
+    ArrayAdapter productAdapter;
 
     public AddProductDialog() {
 
@@ -61,61 +69,68 @@ public class AddProductDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         view = inflater.inflate(R.layout.fragment_add_product_dialog, container, false);
         quantity = (EditText) view.findViewById(R.id.quantity);
-        prod_spinner = (Spinner) view.findViewById(R.id.prod_spinner);
-        arrayList.clear();
+        productAutoCompleterView = (AutoCompleteTextView) view.findViewById(R.id.product_autocompleter);
+        product = new ArrayList<>();
+        product.clear();
         final ProductsDao productsDao = App.getDaoSession().getProductsDao();
-        List<Products> productsList = productsDao.queryBuilder().list();
+        productsList = productsDao.queryBuilder().list();
         for (int i = 0; i < productsList.size(); i++) {
-            arrayList.add(productsList.get(i).getProductName());
+            product.add(productsList.get(i).getProductName());
+            productAdapter = new ArrayAdapter(getActivity(), R.layout.dropdown, product);
+            productAutoCompleterView.setAdapter(productAdapter);
+            productAutoCompleterView.setThreshold(1);
         }
-       /* arrayList.add("1");
-        arrayList.add("2");
-        arrayList.add("3");
-        arrayList.add("4");
-        arrayList.add("5");*/
-        final ArrayAdapter<String> product = new ArrayAdapter<String>(getActivity(), R.layout.spinner_checcked, arrayList);
-        product.setDropDownViewResource(R.layout.spinner_item);
-        prod_spinner.setAdapter(product);
 
-        prod_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                productId = i + 1;
-                Log.d("productid", productId + " ");
+        if (!product.isEmpty())
+            productAutoCompleterView.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View paramView, MotionEvent paramMotionEvent) {
+                    if (product.size() > 0) {
+                        if (!productAutoCompleterView.getText().toString().equals(""))
+                            productAdapter.getFilter().filter(null);
+                        productAutoCompleterView.showDropDown();
+                    }
+                    productAutoCompleterView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            // selectedServiceId = serviceList.get(position).getServiceId();
+                            //new SelectedServiceList().execute();
+                            productId = Integer.parseInt(productsList.get(position).getId().toString());
+
+                            currentItemPosition = position;
 
 
-            }
+                        }
+                    });
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+                    return false;
+                }
+            });
 
         add = (Button) view.findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CartItem cartItemItem = new CartItem();
 
+                if (productId != 0 && !quantity.getText().toString().isEmpty()) {
+                    CartItem cartItemItem = new CartItem();
+                    cartItemItem.setProductId(productId);
+                    cartItemItem.setQuantity(Integer.parseInt(quantity.getText().toString()));
+                    float netprice = Integer.parseInt(quantity.getText().toString()) * (float) productsList.get(currentItemPosition).getDealerPrice();
+                    cartItemItem.setProductName(productsList.get(currentItemPosition).getProductName());
+                    cartItemItem.setNetPrice(netprice);
+                    onProductAddListener.onProductAdd(cartItemItem);
 
-                cartItemItem.setProductId(productId);
-                cartItemItem.setQuantity(Integer.parseInt(quantity.getText().toString()));
-
-                List<Products> productsList1 = productsDao.queryBuilder().where(ProductsDao.Properties.Id.eq(productId)).list();
-                float netprice = Integer.parseInt(quantity.getText().toString()) * (float) productsList1.get(0).getDealerPrice();
-
-
-                cartItemItem.setNetPrice(netprice);
-                onProductAddListener.onProductAdd(cartItemItem);
+                } else
+                    DialogUtils.alertDialog(view.getContext(), "Validation", "Choose product and Quantity", 2);
             }
         });
 
 
         return view;
+
     }
 
 
@@ -124,7 +139,7 @@ public class AddProductDialog extends DialogFragment {
         super.onStart();
         Dialog dialog = getDialog();
         if (dialog != null) {
-            dialog.getWindow().setLayout(500, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setLayout(1000, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().setGravity(Gravity.CENTER);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }

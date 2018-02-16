@@ -9,30 +9,30 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.Unique;
 
-/**
- * Created by Rana D on 2/3/2018.
- */
+
 @Entity(
         // Define indexes spanning multiple columns here.
         indexes = {
                 @Index(value = "customerId , ProductId ", unique = true)
         })
 public class CartItem implements Parcelable {
+    public static final Creator<CartItem> CREATOR = new Creator<CartItem>() {
+        @Override
+        public CartItem createFromParcel(Parcel in) {
+            return new CartItem(in);
+        }
+
+        @Override
+        public CartItem[] newArray(int size) {
+            return new CartItem[size];
+        }
+    };
     @Id(autoincrement = true)
     @Unique
     Long id;
     int customerId, ProductId;
+    String productName;
     int Quantity;
-
-
-    public float getNetPrice() {
-        return netPrice;
-    }
-
-    public void setNetPrice(float netPrice) {
-        this.netPrice = netPrice;
-    }
-
     float netPrice;
 
 
@@ -45,7 +45,6 @@ public class CartItem implements Parcelable {
         this.Quantity = Quantity;
     }
 
-
     protected CartItem(Parcel in) {
         customerId = in.readInt();
         ProductId = in.readInt();
@@ -53,26 +52,32 @@ public class CartItem implements Parcelable {
         netPrice = in.readFloat();
     }
 
-    @Generated(hash = 1670443573)
-    public CartItem(Long id, int customerId, int ProductId, int Quantity, float netPrice) {
+
+    @Generated(hash = 1653419056)
+    public CartItem(Long id, int customerId, int ProductId, String productName, int Quantity, float netPrice) {
         this.id = id;
         this.customerId = customerId;
         this.ProductId = ProductId;
+        this.productName = productName;
         this.Quantity = Quantity;
         this.netPrice = netPrice;
     }
 
-    public static final Creator<CartItem> CREATOR = new Creator<CartItem>() {
-        @Override
-        public CartItem createFromParcel(Parcel in) {
-            return new CartItem(in);
-        }
+    public String getProductName() {
+        return productName;
+    }
 
-        @Override
-        public CartItem[] newArray(int size) {
-            return new CartItem[size];
-        }
-    };
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public float getNetPrice() {
+        return netPrice;
+    }
+
+    public void setNetPrice(float netPrice) {
+        this.netPrice = netPrice;
+    }
 
     public int getCustomerId() {
         return customerId;

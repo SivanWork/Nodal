@@ -1,24 +1,20 @@
-
 package com.example.ranad.nodalsystems.model;
 
-import java.io.Serializable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserInfo implements Serializable, Parcelable
-{
+import java.io.Serializable;
 
-    @SerializedName("user")
-    @Expose
-    private User user;
+public class UserInfo implements Serializable, Parcelable {
+
     public final static Creator<UserInfo> CREATOR = new Creator<UserInfo>() {
 
 
         @SuppressWarnings({
-            "unchecked"
+                "unchecked"
         })
         public UserInfo createFromParcel(Parcel in) {
             return new UserInfo(in);
@@ -28,9 +24,11 @@ public class UserInfo implements Serializable, Parcelable
             return (new UserInfo[size]);
         }
 
-    }
-    ;
+    };
     private final static long serialVersionUID = -4164207490182568756L;
+    @SerializedName("user")
+    @Expose
+    private User user;
 
     protected UserInfo(Parcel in) {
         this.user = ((User) in.readValue((User.class.getClassLoader())));
@@ -38,13 +36,11 @@ public class UserInfo implements Serializable, Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public UserInfo() {
     }
 
     /**
-     * 
      * @param user
      */
     public UserInfo(User user) {
@@ -66,7 +62,7 @@ public class UserInfo implements Serializable, Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

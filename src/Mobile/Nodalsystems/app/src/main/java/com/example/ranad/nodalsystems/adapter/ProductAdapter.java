@@ -1,99 +1,100 @@
 package com.example.ranad.nodalsystems.adapter;
 
 import android.content.Context;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.data_holder.ProductData;
-import com.example.ranad.nodalsystems.database.Products;
-import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
+import com.example.ranad.nodalsystems.fragment.ProductFragment;
+import com.example.ranad.nodalsystems.interfaces.ProductAction;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_EDIT;
 
-/**
- * Created by Kavya V on 06-02-2018.
- */
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
+    ArrayList<ProductData> productData;
+    InputMethodManager inputMethodManager;
+    ProductAction productAction;
+    private Context context;
 
-public class ProductAdapter extends BaseAdapter implements View.OnClickListener {
-
-    ArrayList<Products> productData;
-    LayoutInflater layoutInflater;
-    Context context;
-    SwitchFragment switchFragment;
-
-
-    public ProductAdapter(SwitchFragment switchFragment) {
-        this.switchFragment = switchFragment;
-    }
-
-    public ProductAdapter(Context context, ArrayList<Products> productData) {
+    public ProductAdapter(ArrayList<ProductData> productData, Context context, ProductFragment productAction) {
         this.context = context;
         this.productData = productData;
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        this.productAction = productAction;
     }
 
 
     @Override
-    public int getCount() {
-        return productData.size();
+    public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_listing, parent, false);
+        return new ProductAdapter.ProductViewHolder(this.context, view);
+    }
+
+    public void updateList(List<ProductData> list) {
+        productData = (ArrayList<ProductData>) list;
+        notifyDataSetChanged();
     }
 
     @Override
-    public Object getItem(int i) {
-        return productData.get(i);
+    public void onBindViewHolder(ProductViewHolder holder, int position) {
+        ProductData productData = this.productData.get(position);
+        holder.bindData(productData, position);
     }
 
     @Override
-    public long getItemId(int i) {
-        return 0;
+    public int getItemCount() {
+        return this.productData.size();
     }
 
-    // ImageView edit;
-    //ImageView delete;
+    public class ProductViewHolder extends RecyclerView.ViewHolder implements ViewSwitcher.ViewFactory {
+        View itemView;
+        TextView productName, price;
 
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        View v = view;
-        v = layoutInflater.inflate(R.layout.product_list, null);
+        ImageView edit, delete;
 
-        TextView name = (TextView) v.findViewById(R.id.product_name);
-        name.setText(productData.get(i).getProductName());
-        TextView price = (TextView) v.findViewById(R.id.product_price);
-        price.setText(productData.get(i).getDealerPrice() + "");
-        ImageView edit = (ImageView) v.findViewById(R.id.edit);
-        ImageView delete = (ImageView) v.findViewById(R.id.delete);
 
-        edit.setOnClickListener(this);
-        delete.setOnClickListener(this);
+        public ProductViewHolder(final Context context, View itemView) {
+            super(itemView);
+            this.itemView = itemView;
+            productName = (TextView) itemView.findViewById(R.id.product_name);
+            price = (TextView) itemView.findViewById(R.id.product_price);
+            edit = (ImageView) itemView.findViewById(R.id.edit);
+            delete = (ImageView) itemView.findViewById(R.id.delete);
 
-        return v;
-    }
+        }
 
-    @Override
-    public void onClick(View view) {
-       /* Log.i("EDDD","PPP");
-        if(view.getProductId()==edit.getProductId()){
-            Log.i("EDDD","PPP");
-        }*/
-        switch (view.getId()) {
-            case R.id.edit:
-                Log.i("EDDD", "PPP");
-                Toast.makeText(context, "unable to edit", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.delete:
-                Toast.makeText(context, "unable to delete", Toast.LENGTH_SHORT).show();
-                break;
+        public void bindData(final ProductData productData, final int position) {
+            productName.setText(productData.getProductName());
+            price.setText(productData.getDealerPrice() + "");
 
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    productAction.readProduct(productData.getProductId());
+
+                }
+            });
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+
+                public void onClick(View view) {
+                    productAction.switchToEditProduct(productData.getProductId());
+                }
+            });
+        }
+
+        @Override
+        public View makeView() {
+            return null;
         }
     }
 }

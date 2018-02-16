@@ -1,18 +1,33 @@
-
 package com.example.ranad.nodalsystems.model;
 
-import java.io.Serializable;
-import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+import java.util.List;
 
-public class GetAllGroupTypes implements Serializable, Parcelable
-{
 
+public class GetAllGroupTypes implements Serializable, Parcelable {
+
+    public final static Creator<GetAllGroupTypes> CREATOR = new Creator<GetAllGroupTypes>() {
+
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public GetAllGroupTypes createFromParcel(Parcel in) {
+            return new GetAllGroupTypes(in);
+        }
+
+        public GetAllGroupTypes[] newArray(int size) {
+            return (new GetAllGroupTypes[size]);
+        }
+
+    };
+    private final static long serialVersionUID = -4538659893196604584L;
     @SerializedName("groupType")
     @Expose
     private GroupType groupType;
@@ -31,23 +46,6 @@ public class GetAllGroupTypes implements Serializable, Parcelable
     @SerializedName("StackTrace")
     @Expose
     private String stackTrace;
-    public final static Creator<GetAllGroupTypes> CREATOR = new Creator<GetAllGroupTypes>() {
-
-
-        @SuppressWarnings({
-            "unchecked"
-        })
-        public GetAllGroupTypes createFromParcel(Parcel in) {
-            return new GetAllGroupTypes(in);
-        }
-
-        public GetAllGroupTypes[] newArray(int size) {
-            return (new GetAllGroupTypes[size]);
-        }
-
-    }
-    ;
-    private final static long serialVersionUID = -4538659893196604584L;
 
     protected GetAllGroupTypes(Parcel in) {
         this.groupType = ((GroupType) in.readValue((GroupType.class.getClassLoader())));
@@ -60,13 +58,11 @@ public class GetAllGroupTypes implements Serializable, Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public GetAllGroupTypes() {
     }
 
     /**
-     * 
      * @param message
      * @param groupType
      * @param groupTypeList
@@ -143,7 +139,7 @@ public class GetAllGroupTypes implements Serializable, Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

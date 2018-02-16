@@ -9,19 +9,62 @@ import android.util.Log;
 import com.example.ranad.nodalsystems.usage.Keys;
 import com.google.gson.Gson;
 
-
 import static com.example.ranad.nodalsystems.usage.Keys.SESSION_FILE;
 
-/**
- * Created by Rana D on 1/30/2018.
- */
 
 public class Login implements Parcelable {
+
+    public static final Creator<Login> CREATOR = new Creator<Login>() {
+        @Override
+        public Login createFromParcel(Parcel in) {
+            return new Login(in);
+        }
+
+        @Override
+        public Login[] newArray(int size) {
+            return new Login[size];
+        }
+    };
+    String AuthToken;
+    Boolean Success;
+    Boolean IsWarning;
+    String Message;
+    String StackTrace;
+    Users User;
 
     public Login() {
 
     }
 
+    protected Login(Parcel in) {
+        AuthToken = in.readString();
+        byte tmpSuccess = in.readByte();
+        Success = tmpSuccess == 0 ? null : tmpSuccess == 1;
+        byte tmpIsWarning = in.readByte();
+        IsWarning = tmpIsWarning == 0 ? null : tmpIsWarning == 1;
+        Message = in.readString();
+        StackTrace = in.readString();
+        User = in.readParcelable(Users.class.getClassLoader());
+    }
+
+    public static Login getInstance(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SESSION_FILE, context.MODE_PRIVATE);
+        String string = sharedPreferences.getString(Keys.LOGIN, "null");
+        Login login = new Gson().fromJson(string, Login.class);
+        Log.d("string", string);
+        Log.d("login", String.valueOf(login));
+
+        if (!string.equalsIgnoreCase("null")) {
+            if (login.getAuthToken() != null) {
+                if (login.getUser() == null) {
+
+                    Log.d("adding roles", login.getAuthToken());
+
+                }
+            }
+        }
+        return login;
+    }
 
     public String getAuthToken() {
         return AuthToken;
@@ -71,37 +114,6 @@ public class Login implements Parcelable {
         User = user;
     }
 
-    String AuthToken;
-    Boolean Success;
-    Boolean IsWarning;
-    String Message;
-    String StackTrace;
-    Users User;
-
-
-    protected Login(Parcel in) {
-        AuthToken = in.readString();
-        byte tmpSuccess = in.readByte();
-        Success = tmpSuccess == 0 ? null : tmpSuccess == 1;
-        byte tmpIsWarning = in.readByte();
-        IsWarning = tmpIsWarning == 0 ? null : tmpIsWarning == 1;
-        Message = in.readString();
-        StackTrace = in.readString();
-        User = in.readParcelable(Users.class.getClassLoader());
-    }
-
-    public static final Creator<Login> CREATOR = new Creator<Login>() {
-        @Override
-        public Login createFromParcel(Parcel in) {
-            return new Login(in);
-        }
-
-        @Override
-        public Login[] newArray(int size) {
-            return new Login[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
@@ -125,26 +137,6 @@ public class Login implements Parcelable {
                 "Message = " + Message + " " +
                 "StackTrace = " + StackTrace + " " +
                 "User = " + User;
-    }
-
-
-    public static Login getInstance(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SESSION_FILE, context.MODE_PRIVATE);
-        String string = sharedPreferences.getString(Keys.LOGIN, "null");
-        Login login = new Gson().fromJson(string, Login.class);
-        Log.d("string", string);
-        Log.d("login", String.valueOf(login));
-
-        if (!string.equalsIgnoreCase("null")) {
-            if (login.getAuthToken() != null) {
-                if (login.getUser() == null) {
-
-                    Log.d("adding roles", login.getAuthToken());
-
-                }
-            }
-        }
-        return login;
     }
 
     public void saveLogin(Context context) {

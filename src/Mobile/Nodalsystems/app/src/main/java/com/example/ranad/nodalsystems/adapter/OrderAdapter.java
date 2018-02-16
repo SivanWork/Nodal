@@ -11,19 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import com.example.ranad.nodalsystems.App;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.database.CartItem;
-import com.example.ranad.nodalsystems.database.Products;
-import com.example.ranad.nodalsystems.database.ProductsDao;
 import com.example.ranad.nodalsystems.interfaces.OrderAction;
 
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Created by Rana D on 2/1/2018.
- */
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
     ArrayList<CartItem> orderData;
@@ -77,23 +70,20 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
 
         public void bindData(final CartItem orderData, final int position) {
+            if (orderData != null) {
+                prod_name.setText(orderData.getProductName());
+                quantity.setText(orderData.getQuantity() + "");
+                float total = orderData.getNetPrice();
+                net_price.setText(total + "");
+                delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        orderAction.delete(position);
 
-            ProductsDao productsDao = App.getDaoSession().getProductsDao();
-            List<Products> productsList = productsDao.queryBuilder().where(ProductsDao.Properties.Id.eq(orderData.getProductId())).list();
-            String productName = productsList.get(0).getProductName();
+                    }
+                });
+            }
 
-            prod_name.setText(productName);
-            quantity.setText(orderData.getQuantity() + "");
-            float total = orderData.getNetPrice();
-            net_price.setText(total + "");
-            delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Toast.makeText(context, "unable to delete", Toast.LENGTH_SHORT).show();
-                    orderAction.delete(position);
-
-                }
-            });
 
         }
 

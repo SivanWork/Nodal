@@ -1,16 +1,31 @@
-
 package com.example.ranad.nodalsystems.model;
 
-import java.io.Serializable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Customer implements Serializable, Parcelable
-{
+import java.io.Serializable;
 
+public class Customer implements Serializable, Parcelable {
+
+    public final static Parcelable.Creator<Customer> CREATOR = new Creator<Customer>() {
+
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public Customer createFromParcel(Parcel in) {
+            return new Customer(in);
+        }
+
+        public Customer[] newArray(int size) {
+            return (new Customer[size]);
+        }
+
+    };
+    private final static long serialVersionUID = 392197946297082889L;
     @SerializedName("CustomerId")
     @Expose
     private int customerId;
@@ -68,23 +83,6 @@ public class Customer implements Serializable, Parcelable
     @SerializedName("LastUpdatedDate")
     @Expose
     private String lastUpdatedDate;
-    public final static Parcelable.Creator<Customer> CREATOR = new Creator<Customer>() {
-
-
-        @SuppressWarnings({
-            "unchecked"
-        })
-        public Customer createFromParcel(Parcel in) {
-            return new Customer(in);
-        }
-
-        public Customer[] newArray(int size) {
-            return (new Customer[size]);
-        }
-
-    }
-    ;
-    private final static long serialVersionUID = 392197946297082889L;
 
     protected Customer(Parcel in) {
         this.customerId = ((int) in.readValue((int.class.getClassLoader())));
@@ -110,13 +108,11 @@ public class Customer implements Serializable, Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public Customer() {
     }
 
     /**
-     * 
      * @param middleName
      * @param lastName
      * @param createdById
@@ -336,7 +332,7 @@ public class Customer implements Serializable, Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

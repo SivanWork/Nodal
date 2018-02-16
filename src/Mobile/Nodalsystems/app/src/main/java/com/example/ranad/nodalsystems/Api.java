@@ -1,8 +1,5 @@
 package com.example.ranad.nodalsystems;
 
-/**
- * Created by Rana D on 1/30/2018.
- */
 
 public class Api {
 
@@ -23,7 +20,7 @@ public class Api {
 
     public final static String CUSTOMER_UPDATE = HOST + "/api/Customer/UpdateCustomer";
 
-    public final static String ADD_PRODUCT = HOST + "/api/Product/CreateProduct";
+    public final static String CREATE_PRODUCT = HOST + "/api/Product/CreateProduct";
     public final static String GET_PRODUCT = HOST + "/api/Product/GetProduct";
     public final static String UPDATE_PRODUCT = HOST + "/api/Product/UpdateProduct";
     public final static String DELETE_PRODUCT = HOST + "/api/Product/DeleteProduct";

@@ -11,19 +11,9 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
 
-/**
- * Created by Rana D on 2/1/2018.
- */
+
 
 public interface UserApi {
-
-
-
-    //@FormUrlEncoded
-
-   /* @GET(Api.USER_GET)
-    Call<User> getUser();
-*/
 
 
     @GET(Api.USER_GETALL)
@@ -39,6 +29,7 @@ public interface UserApi {
     Call<User> deleteteUserAPI(@Body User user);
 
 
-    @GET     public Call<USERGETALL> getUserAPI(@Url String url);
+    @GET
+    public Call<USERGETALL> getUserAPI(@Url String url);
 
 }

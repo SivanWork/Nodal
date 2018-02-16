@@ -1,17 +1,32 @@
-
 package com.example.ranad.nodalsystems.model;
 
-import java.io.Serializable;
-import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class GetAllElementTypes implements Serializable, Parcelable
-{
+import java.io.Serializable;
+import java.util.List;
 
+public class GetAllElementTypes implements Serializable, Parcelable {
+
+    public final static Creator<GetAllElementTypes> CREATOR = new Creator<GetAllElementTypes>() {
+
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public GetAllElementTypes createFromParcel(Parcel in) {
+            return new GetAllElementTypes(in);
+        }
+
+        public GetAllElementTypes[] newArray(int size) {
+            return (new GetAllElementTypes[size]);
+        }
+
+    };
+    private final static long serialVersionUID = -8846892683750112684L;
     @SerializedName("groupElementCode")
     @Expose
     private GroupElementCode groupElementCode;
@@ -30,23 +45,6 @@ public class GetAllElementTypes implements Serializable, Parcelable
     @SerializedName("StackTrace")
     @Expose
     private String stackTrace;
-    public final static Creator<GetAllElementTypes> CREATOR = new Creator<GetAllElementTypes>() {
-
-
-        @SuppressWarnings({
-            "unchecked"
-        })
-        public GetAllElementTypes createFromParcel(Parcel in) {
-            return new GetAllElementTypes(in);
-        }
-
-        public GetAllElementTypes[] newArray(int size) {
-            return (new GetAllElementTypes[size]);
-        }
-
-    }
-    ;
-    private final static long serialVersionUID = -8846892683750112684L;
 
     protected GetAllElementTypes(Parcel in) {
         this.groupElementCode = ((GroupElementCode) in.readValue((GroupElementCode.class.getClassLoader())));
@@ -59,13 +57,11 @@ public class GetAllElementTypes implements Serializable, Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public GetAllElementTypes() {
     }
 
     /**
-     * 
      * @param message
      * @param groupElementCode
      * @param isWarning
@@ -132,7 +128,6 @@ public class GetAllElementTypes implements Serializable, Parcelable
     }
 
 
-
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(groupElementCode);
         dest.writeList(groupElementCodeList);
@@ -143,7 +138,7 @@ public class GetAllElementTypes implements Serializable, Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

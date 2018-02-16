@@ -12,110 +12,46 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/noOfCustomers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:textColor="#000000"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/customer_list"
+            android:id="@+id/product_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp" />
 
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"></android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 
-    <ScrollView
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
-            android:id="@+id/add_customer"
+            android:id="@+id/add_product"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="16dp"
             android:visibility="visible">
 
-
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 app:hintTextAppearance="@style/floating_hint">
 
                 <EditText
-                    android:id="@+id/ftName"
+                    android:id="@+id/product_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:background="@android:color/transparent"
                     android:fontFamily="sans-serif-condensed"
-                    android:hint="First Name"
-                    android:inputType="text"
-                    android:textSize="16sp"
-                    android:theme="@style/EdittextTheme" />
-            </android.support.design.widget.TextInputLayout>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/black" />
-
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                app:hintTextAppearance="@style/floating_hint">
-
-                <EditText
-                    android:id="@+id/midName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="sans-serif-condensed"
-                    android:hint="Middle Name"
-                    android:inputType="text"
-                    android:textSize="16sp"
-                    android:theme="@style/EdittextTheme" />
-            </android.support.design.widget.TextInputLayout>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/black" />
-
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                app:hintTextAppearance="@style/floating_hint">
-
-                <EditText
-                    android:id="@+id/lastName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="sans-serif-condensed"
-                    android:hint="Last Name"
+                    android:hint="Product Name"
                     android:textSize="16sp"
                     android:theme="@style/EdittextTheme" />
             </android.support.design.widget.TextInputLayout>
@@ -133,13 +69,63 @@
                 app:hintTextAppearance="@style/floating_hint">
 
                 <EditText
-                    android:id="@+id/amt_limit"
+                    android:id="@+id/mrp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:background="@android:color/transparent"
                     android:fontFamily="sans-serif-condensed"
-                    android:hint="Amount Limit"
+                    android:hint="MRP"
+                    android:inputType="number"
+                    android:textSize="16sp"
+                    android:theme="@style/EdittextTheme" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/black" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:hintTextAppearance="@style/floating_hint">
+
+                <EditText
+                    android:id="@+id/dealer_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="Dealer Price"
+                    android:inputType="number"
+                    android:textSize="16sp"
+                    android:theme="@style/EdittextTheme" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/black" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:hintTextAppearance="@style/floating_hint">
+
+                <EditText
+                    android:id="@+id/wholesale_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="WholeSale Price"
                     android:inputType="number"
                     android:textSize="16sp"
                     android:theme="@style/EdittextTheme" />
@@ -159,13 +145,13 @@
                 app:hintTextAppearance="@style/floating_hint">
 
                 <EditText
-                    android:id="@+id/cust_num"
+                    android:id="@+id/cgst"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:background="@android:color/transparent"
                     android:fontFamily="sans-serif-condensed"
-                    android:hint="Contact Number"
+                    android:hint="CGST"
                     android:inputType="phone"
                     android:textSize="16sp"
                     android:theme="@style/EdittextTheme" />
@@ -185,180 +171,99 @@
                 app:hintTextAppearance="@style/floating_hint">
 
                 <EditText
-                    android:id="@+id/cust_email"
+                    android:id="@+id/sgst"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:background="@android:color/transparent"
                     android:fontFamily="sans-serif-condensed"
-                    android:hint="Email Id"
-                    android:textSize="16sp"
-                    android:theme="@style/EdittextTheme" />
-            </android.support.design.widget.TextInputLayout>
-
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/black" />
-
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                app:hintTextAppearance="@style/floating_hint">
-
-                <EditText
-                    android:id="@+id/cust_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="sans-serif-condensed"
-                    android:hint="Address"
-                    android:textSize="16sp"
-                    android:theme="@style/EdittextTheme" />
-            </android.support.design.widget.TextInputLayout>
-
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/black" />
-
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                app:hintTextAppearance="@style/floating_hint">
-
-                <EditText
-                    android:id="@+id/cust_altaddrs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="sans-serif-condensed"
-                    android:hint="Alternate Address"
-                    android:textSize="16sp"
-                    android:theme="@style/EdittextTheme" />
-            </android.support.design.widget.TextInputLayout>
-
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/black" />
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                app:hintTextAppearance="@style/floating_hint">
-
-                <EditText
-                    android:id="@+id/city"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="sans-serif-condensed"
-                    android:hint="City"
-                    android:textSize="16sp"
-                    android:theme="@style/EdittextTheme" />
-            </android.support.design.widget.TextInputLayout>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/black" />
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                app:hintTextAppearance="@style/floating_hint">
-
-                <EditText
-                    android:id="@+id/state"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="sans-serif-condensed"
-                    android:hint="State"
-                    android:inputType="text"
-                    android:textSize="16sp"
-                    android:theme="@style/EdittextTheme" />
-            </android.support.design.widget.TextInputLayout>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/black" />
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                app:hintTextAppearance="@style/floating_hint">
-
-                <EditText
-                    android:id="@+id/country"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="sans-serif-condensed"
-                    android:hint="Country"
-                    android:inputType="text"
-                    android:textSize="16sp"
-                    android:theme="@style/EdittextTheme" />
-            </android.support.design.widget.TextInputLayout>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/black" />
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                app:hintTextAppearance="@style/floating_hint">
-
-                <EditText
-                    android:id="@+id/pin_code"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="sans-serif-condensed"
-                    android:hint="Pin Code"
+                    android:hint="SGST"
                     android:inputType="phone"
                     android:textSize="16sp"
                     android:theme="@style/EdittextTheme" />
             </android.support.design.widget.TextInputLayout>
 
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="5dp"
                 android:background="@android:color/black" />
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:hintTextAppearance="@style/floating_hint">
+
+                <EditText
+                    android:id="@+id/igst"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="IGST"
+                    android:inputType="phone"
+                    android:textSize="16sp"
+                    android:theme="@style/EdittextTheme" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="Is Active?"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radioActive"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:buttonTint="@color/btn_bg"
+                        android:checked="true"
+                        android:text="Yes" />
+
+                    <RadioButton
+                        android:id="@+id/radioPassive"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:buttonTint="@color/btn_bg"
+                        android:text="No" />
+
+                </RadioGroup>
+            </LinearLayout>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:padding="16dp">
 
@@ -393,7 +298,7 @@
                         android:layout_gravity="center"
                         android:fontFamily="sans-serif-condensed"
                         android:foreground="?attr/selectableItemBackground"
-                        android:text="UPDATE"
+                        android:text="Update"
                         android:textSize="18sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -401,7 +306,6 @@
 
         </LinearLayout>
     </ScrollView>
-
 
 </FrameLayout>
 

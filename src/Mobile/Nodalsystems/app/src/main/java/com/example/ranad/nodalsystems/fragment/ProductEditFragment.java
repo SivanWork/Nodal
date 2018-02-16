@@ -4,10 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -53,34 +53,35 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class ProductFragment extends Fragment implements View.OnClickListener, ProductAction, Validator.ValidationListener {
+public class ProductEditFragment extends Fragment implements View.OnClickListener, ProductAction, Validator.ValidationListener {
     protected Validator validator;
     protected boolean validated;
     View view, add_product, outer_layout;
-    EditText searchBox;
-    TextView noOfProducts;
-
+    int productId, createdById;
+    String createdDate;
     SwitchFragment switchFragment;
 
     @NotEmpty
     EditText name, mrp, dealerprice, wholesaleprice;
     EditText cgst, sgst, igst;
-
-    ArrayList<ProductData> productData;
+    ListView list;
+    ArrayList<ProductData> productData = new ArrayList<>();
     ProductAdapter productAdapter;
-    Button cancel, add;
+    Button cancel, edit;
     ImageView ivadd;
     RadioGroup radioGroup;
     RadioButton radio_btn1, radio_btn0;
     RecyclerView recyclerView;
+    //CustomerListAdapter customerAdapter;
+    //ArrayList<CustomerData> customerData = new ArrayList<>();
 
-    public ProductFragment() {
+    public ProductEditFragment() {
         // Required empty public constructor
     }
 
 
-    public static ProductFragment newInstance(SwitchFragment switchFragment) {
-        ProductFragment fragment = new ProductFragment();
+    public static ProductEditFragment newInstance(SwitchFragment switchFragment) {
+        ProductEditFragment fragment = new ProductEditFragment();
         fragment.Construct(switchFragment);
         return fragment;
     }
@@ -98,13 +99,8 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_product, container, false);
+        view = inflater.inflate(R.layout.fragment_edit_product, container, false);
         name = (EditText) view.findViewById(R.id.product_name);
-
-        productData = new ArrayList<ProductData>();
-
-        //  list = (R) view.findViewById(R.id.product_listing);
         mrp = (EditText) view.findViewById(R.id.mrp);
         dealerprice = (EditText) view.findViewById(R.id.dealer_price);
         wholesaleprice = (EditText) view.findViewById(R.id.wholesale_price);
@@ -114,58 +110,21 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
         outer_layout = (View) view.findViewById(R.id.outer);
         add_product = (View) view.findViewById(R.id.add_product);
         ivadd = (ImageView) view.findViewById(R.id.ivAdd);
-        add = (Button) view.findViewById(R.id.add);
+        edit = (Button) view.findViewById(R.id.edit);
         cancel = (Button) view.findViewById(R.id.btnCancel);
-        ivadd.setOnClickListener(this);
-
         cancel.setOnClickListener(this);
-
+        edit.setOnClickListener(this);
         validator = new Validator(this);
         validator.setValidationListener((Validator.ValidationListener) this);
-
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
-
-        productData = readAllProducts();
-        recyclerView = (RecyclerView) view.findViewById(R.id.product_list);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        productAdapter = new ProductAdapter(productData, getContext(), this);
-        recyclerView.setAdapter(productAdapter);
-        productAdapter.notifyDataSetChanged();
-
-
-        noOfProducts = (TextView) view.findViewById(R.id.noOfProducts);
-
-        searchBox = (EditText) view.findViewById(R.id.search_box);
-
-        searchBox.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                filter(s.toString());
-            }
-        });
-
+        if (getArguments() != null) {
+            productId = getArguments().getInt("productid");
+            readProduct(productId);
+        }
 
         return view;
     }
 
-    void filter(String text) {
-        List<ProductData> temp = new ArrayList();
-        for (ProductData d : productData) {
-            if (d.getProductName().toString().toLowerCase().contains(text.toString().toLowerCase())) {
-                temp.add(d);
-            }
-        }
-        productAdapter.updateList(temp);
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -199,13 +158,12 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
                 outer_layout.setVisibility(View.GONE);
                 MainActivity.setAppTitle(R.string.add_product);
                 break;
-            case R.id.add:
+            case R.id.edit:
 
                 validator.validate();
                 break;
             case R.id.btnCancel:
                 FragmentSwitch.switchTo(getActivity(), new ProductFragment(), R.string.product_title);
-
                 break;
         }
     }
@@ -243,19 +201,29 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
 
     }
 
-    public void switchToEditProduct(int productId) {
+    public void switchToEditProduct(int pos) {
+        int productId = productData.get(pos).getProductId();
+        ProductEditFragment productFragment = new ProductEditFragment();
+        add_product.setVisibility(View.VISIBLE);
+        ivadd.setVisibility(View.GONE);
+        outer_layout.setVisibility(View.GONE);
         MainActivity.setAppTitle(R.string.add_product);
-        ProductEditFragment productEditFragment = new ProductEditFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("productid", productId);
-        productEditFragment.setArguments(bundle);
-        FragmentSwitch.switchTo(getActivity(), productEditFragment, R.string.product_title);
+        bundle.putInt("productId", productId);
+        productFragment.setArguments(bundle);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content, productFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
 
     }
 
     @Override
     public void readProduct(int productId) {
 
+        Log.i("NETCHKR", "" + NetworkChecker.isConnected(getContext()));
         if (NetworkChecker.isConnected(getContext()) == false) {
             NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2);
         } else {
@@ -274,10 +242,7 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
                 public void onResponse(Call<ProductGetAll> call, Response<ProductGetAll> response) {
 
                     DialogUtils.dismissProgress(progressDialog);
-
-                    deleteProduct(response.body().getProduct());
-                    DialogUtils.alertDialog(getContext(), "Product Inactivation.", "Inactivated successfully", 2);
-                    FragmentSwitch.switchTo(getActivity(), new ProductFragment(), R.string.product_title);
+                    fetchProduct(response.body().getProduct());
 
 
                 }
@@ -293,35 +258,6 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
 
     }
 
-
-    @Override
-    public void deleteProduct(Product product) {
-
-
-        //    Log.i("AAAAA", "SSSS" + position);
-
-        product.setIsActive(false);
-        product.setLastUpdatedDate(getCurrentDate());
-        product.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
-        ProductInfo productInfo = new ProductInfo(product);
-        ProductApi productApi =
-                ApiClient.createService(ProductApi.class, Login.getInstance(getContext()).getAuthToken());
-        Call<ProductInfo> call = productApi.updateProduct(productInfo);
-        call.enqueue(new Callback<ProductInfo>() {
-            @Override
-            public void onResponse(Call<ProductInfo> call, Response<ProductInfo> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<ProductInfo> call, Throwable t) {
-
-            }
-        });
-
-    }
-
-
     @Override
     public void createProduct(final Product product) {
 
@@ -329,7 +265,7 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
             NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2);
         else {
 
-            final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Product Creation.", "Processing..");
+            final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Customer Creation.", "Processing..");
             ProductInfo productInfo = new ProductInfo(product);
 
             ProductApi productApi =
@@ -346,7 +282,6 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
 
                     DialogUtils.dismissProgress(progressDialog);
                     DialogUtils.alertDialog(getContext(), "Product Creation.", "Success", 2);
-                    FragmentSwitch.switchTo(getActivity(), new ProductFragment(), R.string.product_title);
                 }
 
 
@@ -388,14 +323,13 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
 
                         productData1 = new ProductData();
                         productData1.setProductCode(response.body().getProductList().get(i).getProductCode());
-                        productData1.setProductId(response.body().getProductList().get(i).getProductId());
                         productData1.setProductName(response.body().getProductList().get(i).getProductName());
                         productData1.setDealerPrice(response.body().getProductList().get(i).getDealerPrice());
                         productData.add(productData1);
 
                     }
                     productAdapter.notifyDataSetChanged();
-                    noOfProducts.setText("Products:" + response.body().getProductList().size());
+                    // noOfproducts.setText("Customers:" + response.body().getCustomerList().size());
 
 
                 }
@@ -417,12 +351,61 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
     @Override
     public void updateProduct(Product product) {
 
+        if (!NetworkChecker.isConnected(getContext()))
+            NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2);
+        else {
+
+            final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Product Updation.", "Processing..");
+            ProductInfo productInfo = new ProductInfo(product);
+
+            ProductApi productApi =
+                    ApiClient.createService(ProductApi.class, Login.getInstance(getContext()).getAuthToken());
+
+            Call<ProductInfo> call = productApi.updateProduct(productInfo);
+            call.enqueue(new Callback<ProductInfo>() {
+
+                @Override
+                public void onResponse(Call<ProductInfo> call, Response<ProductInfo> response) {
+                    DialogUtils.dismissProgress(progressDialog);
+                    DialogUtils.alertDialog(getContext(), "Product Updation.", "Success", 2);
+
+                    FragmentSwitch.switchTo(getActivity(), new ProductFragment(), R.string.product_title);
+                }
+
+
+                @Override
+                public void onFailure(Call<ProductInfo> call, Throwable t) {
+
+                }
+            });
+        }
     }
 
+    @Override
+    public void deleteProduct(Product product) {
+
+    }
 
     @Override
     public void fetchProduct(Product product) {
 
+        productId = product.getProductId();
+
+        createdById = product.getCreatedById();
+        createdDate = product.getCreatedDate();
+
+        name.setText(product.getProductName());
+        mrp.setText((String.valueOf(product.getMRP())));
+        dealerprice.setText(String.valueOf(product.getDealerPrice()));
+        wholesaleprice.setText(String.valueOf(product.getWholesalePrice()));
+        cgst.setText(String.valueOf(product.getCGST()));
+        sgst.setText(String.valueOf(product.getSGST()));
+        igst.setText(String.valueOf(product.getIGST()));
+
+        if (product.isIsActive())
+            radioGroup.check(R.id.radioActive);
+        else
+            radioGroup.check(R.id.radioPassive);
     }
 
     @Override
@@ -435,9 +418,15 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
 
 
         Product product = new Product();
+
+        product.setProductId(productId);
+
+        product.setCreatedById(createdById);
+
+        product.setCreatedDate(createdDate);
+
         product.setProductName(name.getText().toString());
 
-        product.setProductId(0);
         product.setProductCode("");
 
         product.setMRP(Float.parseFloat(mrp.getText().toString()));
@@ -459,8 +448,8 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
         else
             product.setIsActive(false);
 
-        product.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
-        product.setCreatedDate(getCurrentDate().toString());
+//        product.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
+        //       product.setCreatedDate(getCurrentDate().toString());
         product.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
         product.setLastUpdatedDate(getCurrentDate().toString());
         return product;
@@ -471,7 +460,7 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
     public void onValidationSucceeded() {
         validated = true;
 
-        createProduct(getProduct());
+        updateProduct(getProduct());
 
     }
 

@@ -10,12 +10,21 @@ import com.google.gson.Gson;
 
 import static com.example.ranad.nodalsystems.usage.Keys.SESSION_FILE;
 
-/**
- * Created by Rana D on 1/30/2018.
- */
+
 
 public class Users implements Parcelable {
 
+    public static final Creator<Users> CREATOR = new Creator<Users>() {
+        @Override
+        public Users createFromParcel(Parcel in) {
+            return new Users(in);
+        }
+
+        @Override
+        public Users[] newArray(int size) {
+            return new Users[size];
+        }
+    };
     int UserId;
     String FirstName;
     String MiddleName;
@@ -34,6 +43,38 @@ public class Users implements Parcelable {
     String ActiveFrom;
     String ActiveTo;
     Boolean IsActive;
+
+    public Users() {
+
+    }
+
+    public Users(Parcel in) {
+        UserId = in.readInt();
+        FirstName = in.readString();
+        MiddleName = in.readString();
+        LastName = in.readString();
+        Mobile = in.readString();
+        UserTypeCode = in.readString();
+        UserTypeName = in.readString();
+        UserTypeActive = in.readString();
+        Email = in.readString();
+        Address1 = in.readString();
+        Address2 = in.readString();
+        City = in.readString();
+        State = in.readString();
+        Country = in.readString();
+        Pin = in.readString();
+        ActiveFrom = in.readString();
+        ActiveTo = in.readString();
+        byte tmpIsActive = in.readByte();
+        IsActive = tmpIsActive == 0 ? null : tmpIsActive == 1;
+    }
+
+    public static Users getInstance(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SESSION_FILE, Context.MODE_PRIVATE);
+        String s = sharedPreferences.getString(Keys.UserInstance, "null");
+        return new Gson().fromJson(s, Users.class);
+    }
 
     public int getUserId() {
         return UserId;
@@ -179,45 +220,6 @@ public class Users implements Parcelable {
         IsActive = active;
     }
 
-
-    public Users() {
-
-    }
-
-    public Users(Parcel in) {
-        UserId = in.readInt();
-        FirstName = in.readString();
-        MiddleName = in.readString();
-        LastName = in.readString();
-        Mobile = in.readString();
-        UserTypeCode = in.readString();
-        UserTypeName = in.readString();
-        UserTypeActive = in.readString();
-        Email = in.readString();
-        Address1 = in.readString();
-        Address2 = in.readString();
-        City = in.readString();
-        State = in.readString();
-        Country = in.readString();
-        Pin = in.readString();
-        ActiveFrom = in.readString();
-        ActiveTo = in.readString();
-        byte tmpIsActive = in.readByte();
-        IsActive = tmpIsActive == 0 ? null : tmpIsActive == 1;
-    }
-
-    public static final Creator<Users> CREATOR = new Creator<Users>() {
-        @Override
-        public Users createFromParcel(Parcel in) {
-            return new Users(in);
-        }
-
-        @Override
-        public Users[] newArray(int size) {
-            return new Users[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
@@ -245,12 +247,6 @@ public class Users implements Parcelable {
         parcel.writeByte((byte) (IsActive == null ? 0 : IsActive ? 1 : 2));
     }
 
-    public static Users getInstance(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SESSION_FILE, Context.MODE_PRIVATE);
-        String s = sharedPreferences.getString(Keys.UserInstance, "null");
-        return new Gson().fromJson(s, Users.class);
-    }
-
     public void save(Context context) {
         saveUsers(context, this);
     }
@@ -262,5 +258,26 @@ public class Users implements Parcelable {
         editor.commit();
     }
 
+    @Override
+    public String toString() {
+        return "UserId = " + UserId + " " +
+                "FirstName = " + FirstName + " " +
+                "MiddleName = " + MiddleName + " " +
+                "LastName = " + LastName + " " +
+                "Mobile = " + Mobile + " " +
+                "UserTypeCode = " + UserTypeCode + " " +
+                "UserTypeName = " + UserTypeName + " " +
+                "UserTypeActive = " + UserTypeActive + " " +
+                "Email = " + Email + " " +
+                "Address1 = " + Address1 + " " +
+                "Address2 = " + Address2 + " " +
+                "City = " + City + " " +
+                "State = " + State + " " +
+                "Country = " + Country + " " +
+                "Pin = " + Pin + " " +
+                "ActiveFrom = " + ActiveFrom + " " +
+                "ActiveTo = " + ActiveTo + " " +
+                "IsActive = " + IsActive;
 
+    }
 }

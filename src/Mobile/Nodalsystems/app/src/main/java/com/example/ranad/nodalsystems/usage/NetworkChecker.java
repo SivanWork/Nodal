@@ -14,11 +14,8 @@ import android.util.Log;
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.fragment.HomeFragment;
-import com.example.ranad.nodalsystems.fragment.UserFragment;
 
-/**
- * Created by pattabhi on 12/2/18.
- */
+
 
 public class NetworkChecker {
 
@@ -40,18 +37,17 @@ public class NetworkChecker {
     }
 
 
-
-    public static void noNetworkDialog(Context c,final FragmentActivity fragmentActivity,int theme) {
+    public static void noNetworkDialog(Context c, final FragmentActivity fragmentActivity, int theme) {
 
 
         if (theme == 1) theme = R.style.Theme_AppCompat_DayNight_Dialog;
         else theme = R.style.Theme_AppCompat_DayNight_Dialog_Alert;
 
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(c,theme);
+        AlertDialog.Builder builder = new AlertDialog.Builder(c, theme);
         builder.setTitle("No Internet Connection");
 
-        Log.i("ZZZAAA",fragmentActivity+"");
+        Log.i("ZZZAAA", fragmentActivity + "");
 
         builder.setMessage("You need to have Mobile Data or wifi to access this. Press ok to Exit")
                 .setCancelable(true)
@@ -80,11 +76,11 @@ public class NetworkChecker {
 
             }
         });
-builder.show();
+        builder.show();
 
     }
 
-    public static void noNetworkDialogLogin(Context c,int theme) {
+    public static void noNetworkDialogLogin(Context c, int theme) {
 
 
         if (theme == 1) theme = R.style.Theme_AppCompat_DayNight_Dialog;

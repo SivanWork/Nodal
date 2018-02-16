@@ -7,13 +7,12 @@ import android.widget.RelativeLayout;
 
 import com.example.ranad.nodalsystems.R;
 
-/**
- * Created by Rana D on 1/20/2018.
- */
+
 
 public class GridViewItem extends RelativeLayout {
 
     boolean height;
+
     public GridViewItem(Context context) {
         super(context);
     }
@@ -23,16 +22,17 @@ public class GridViewItem extends RelativeLayout {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.GridViewItem, 0, 0);
         try {
             height = a.getBoolean(R.styleable.GridViewItem_heightbase, false);
-        }finally {
+        } finally {
             a.recycle();
         }
     }
 
     public GridViewItem(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle); TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.GridViewItem, 0, 0);
+        super(context, attrs, defStyle);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.GridViewItem, 0, 0);
         try {
             height = a.getBoolean(R.styleable.GridViewItem_heightbase, false);
-        }finally {
+        } finally {
             a.recycle();
         }
 
@@ -42,9 +42,9 @@ public class GridViewItem extends RelativeLayout {
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, widthMeasureSpec); // This is the key that will make the height equivalent to its width
 
-        if (height){
+        if (height) {
             super.onMeasure(heightMeasureSpec, heightMeasureSpec);
-        }else {
+        } else {
             super.onMeasure(widthMeasureSpec, widthMeasureSpec);
         }
     }

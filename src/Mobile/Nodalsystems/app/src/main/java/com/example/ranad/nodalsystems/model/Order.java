@@ -1,17 +1,32 @@
-
 package com.example.ranad.nodalsystems.model;
 
-import java.io.Serializable;
-import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Order implements Serializable, Parcelable
-{
+import java.io.Serializable;
+import java.util.List;
 
+public class Order implements Serializable, Parcelable {
+
+    public final static Creator<Order> CREATOR = new Creator<Order>() {
+
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public Order createFromParcel(Parcel in) {
+            return new Order(in);
+        }
+
+        public Order[] newArray(int size) {
+            return (new Order[size]);
+        }
+
+    };
+    private final static long serialVersionUID = -2144291877282598453L;
     @SerializedName("OrderId")
     @Expose
     private int orderId;
@@ -42,23 +57,6 @@ public class Order implements Serializable, Parcelable
     @SerializedName("LastUpdatedDate")
     @Expose
     private String lastUpdatedDate;
-    public final static Creator<Order> CREATOR = new Creator<Order>() {
-
-
-        @SuppressWarnings({
-            "unchecked"
-        })
-        public Order createFromParcel(Parcel in) {
-            return new Order(in);
-        }
-
-        public Order[] newArray(int size) {
-            return (new Order[size]);
-        }
-
-    }
-    ;
-    private final static long serialVersionUID = -2144291877282598453L;
 
     protected Order(Parcel in) {
         this.orderId = ((int) in.readValue((int.class.getClassLoader())));
@@ -75,13 +73,11 @@ public class Order implements Serializable, Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public Order() {
     }
 
     /**
-     * 
      * @param orderDetails
      * @param totalOrderAmount
      * @param customerId
@@ -188,7 +184,6 @@ public class Order implements Serializable, Parcelable
     }
 
 
-
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(orderId);
         dest.writeValue(customerId);
@@ -203,7 +198,7 @@ public class Order implements Serializable, Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

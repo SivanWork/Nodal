@@ -1,22 +1,13 @@
 package com.example.ranad.nodalsystems.database;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
-/**
- * Created by Rana D on 2/3/2018.
- */
+
 @Entity(
         // Define indexes spanning multiple columns here.
         indexes = {
@@ -24,7 +15,7 @@ import java.util.Map;
         })
 
 public class Customers {
-    @Id(autoincrement = true)
+    @Id
     Long id;
     private String firstName;
     private String middleName;
@@ -51,27 +42,6 @@ public class Customers {
     public Customers() {
     }
 
-    /**
-     * @param middleName
-     * @param lastName
-     * @param createdById
-     * @param state
-     * @param address1
-     * @param address2
-     * @param country
-     * @param city
-     * @param isActive
-     * @param
-     * @param pin
-     * @param email
-     * @param customerCode
-     * @param lastUpdatedDate
-     * @param firstName
-     * @param createdDate
-     * @param amountLimit
-     * @param lastUpdatedById
-     * @param mobile
-     */
     public Customers(String firstName, String middleName, String lastName, String customerCode, float amountLimit, String mobile, String email, String address1, String address2, String city, String state, String country, String pin, boolean isActive, int createdById, Date createdDate, int lastUpdatedById, Date lastUpdatedDate) {
         super();
         this.firstName = firstName;
@@ -154,16 +124,16 @@ public class Customers {
         return mobile;
     }
 
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
     public float getAmountLimit() {
         return amountLimit;
     }
 
     public void setAmountLimit(float amountLimit) {
         this.amountLimit = amountLimit;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
     }
 
     public String getEmail() {
@@ -226,10 +196,6 @@ public class Customers {
         return isActive;
     }
 
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
-    }
-
     public int getCreatedById() {
         return createdById;
     }
@@ -238,7 +204,6 @@ public class Customers {
         this.createdById = createdById;
     }
 
-
     public int getLastUpdatedById() {
         return lastUpdatedById;
     }
@@ -246,7 +211,6 @@ public class Customers {
     public void setLastUpdatedById(int lastUpdatedById) {
         this.lastUpdatedById = lastUpdatedById;
     }
-
 
     public Long getId() {
         return this.id;
@@ -258,6 +222,10 @@ public class Customers {
 
     public boolean getIsActive() {
         return this.isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     public Date getCreatedDate() {

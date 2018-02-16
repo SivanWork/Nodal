@@ -9,9 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
-/**
- * Created by Rana D on 2/1/2018.
- */
+
 
 public interface OrderApi {
 

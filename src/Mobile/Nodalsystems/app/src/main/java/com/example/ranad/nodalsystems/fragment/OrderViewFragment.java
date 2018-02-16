@@ -3,12 +3,9 @@ package com.example.ranad.nodalsystems.fragment;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -73,7 +70,14 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
 
+//        ((AppCompatActivity)getActivity()).getSupportActionBar().getCustomView(
+
         MainActivity.setAppTitle(R.string.order_title);
+
+        MainActivity activity = (MainActivity) getActivity();
+        if (activity != null) {
+            activity.showUpButton();
+        }
         //cart.clear();
 
        /* currentItem = customers.getSelectedItemPosition();
@@ -101,23 +105,6 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
         totalOrderAdapter = new TotalOrdersAdapter((ArrayList<Orders>) ordersList, getContext(), this);
         order_list.setAdapter(totalOrderAdapter);
         totalOrderAdapter.notifyDataSetChanged();
-
-        ImageButton backButton = (ImageButton) view.findViewById(R.id.backbutton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = new OrderFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.content, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
-            }
-        });
-
-
         ImageButton syncButton = (ImageButton) view.findViewById(R.id.sync);
         syncButton.setOnClickListener(new View.OnClickListener() {
 
@@ -190,7 +177,6 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
                 orderDetail.setLastUpdatedDate("2018-02-07T12:31:39.4566652-07:00");
 
 
-
                 orderDetailList.add(orderDetail);
 
             }
@@ -202,11 +188,8 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
 
         }
         makeOrder(bulkOrder);
-   /*     if (i == ordersList.size()) {
-             //progressDialog.dismiss();
-            showAlert("Order Status", "Success! Saved in Server", 2);
-        }
-*/    }
+
+    }
 
     public void showAlert(String title, String msg, int theme) {
 
@@ -272,40 +255,35 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
         totalOrderAdapter.notifyDataSetChanged();
 
 
-
     }
 
     @Override
     public void saveOrderOffline() {
 
     }
-public  void makeOrder(List<OrderPojo> bulkOrder)
-{
-    OrderApi orderService =
-            ApiClient.createService(OrderApi.class, Login.getInstance(getContext()).getAuthToken());
+
+    public void makeOrder(List<OrderPojo> bulkOrder) {
+        OrderApi orderService =
+                ApiClient.createService(OrderApi.class, Login.getInstance(getContext()).getAuthToken());
+     Call<OrderPojo> call = orderService.createBulkOrderAPI(bulkOrder);
 
 
-   // orderService.createBulkOrder(bulkOrder);
-
-    Call<OrderPojo> call = orderService.createBulkOrderAPI(bulkOrder);
-
-
-    call.enqueue(new Callback<OrderPojo>() {
-        @Override
-        public void onResponse(Call<OrderPojo> call, Response<OrderPojo> response) {
-            Log.i("response", response.body().toString());
-        }
+        call.enqueue(new Callback<OrderPojo>() {
+            @Override
+            public void onResponse(Call<OrderPojo> call, Response<OrderPojo> response) {
+                Log.i("response", response.body().toString());
+            }
 
 
-        @Override
-        public void onFailure(Call<OrderPojo> call, Throwable t) {
+            @Override
+            public void onFailure(Call<OrderPojo> call, Throwable t) {
 
-        }
-    });
+            }
+        });
 
-    showAlert("Order Status", "Success! Saved in Server", 2);
-    removeOrdersAfterSync();
+        showAlert("Order Status", "Success! Saved in Server", 2);
+        removeOrdersAfterSync();
 
-}
+    }
 
 }

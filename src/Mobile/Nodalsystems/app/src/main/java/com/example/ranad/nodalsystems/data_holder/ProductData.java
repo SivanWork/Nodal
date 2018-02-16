@@ -4,30 +4,151 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
-/**
- * Created by Kavya V on 06-02-2018.
- */
+
 @Entity
 public class ProductData implements Parcelable {
+    public static final Creator<ProductData> CREATOR = new Creator<ProductData>() {
+        @Override
+        public ProductData createFromParcel(Parcel in) {
+            return new ProductData(in);
+        }
+
+        @Override
+        public ProductData[] newArray(int size) {
+            return new ProductData[size];
+        }
+    };
     @Id
     int ProductId;
     String ProductName;
     String ProductCode;
-    long MR;
-    long DealerPrice;
-    long WholesalePrice;
-    int CGST;
-    int SGST;
-    int IGST;
+    float MR;
+    double DealerPrice;
+    double WholesalePrice;
+    float CGST;
+    float SGST;
+    float IGST;
     boolean IsActive;
     int CreatedById;
     String CreatedDate;
     int LastUpdatedById;
     String LastUpdatedDate;
 
+    protected ProductData(Parcel in) {
+        ProductId = in.readInt();
+        ProductName = in.readString();
+        ProductCode = in.readString();
+        MR = in.readLong();
+        DealerPrice = in.readLong();
+        WholesalePrice = in.readLong();
+        CGST = in.readInt();
+        SGST = in.readInt();
+        IGST = in.readInt();
+        IsActive = in.readByte() != 0;
+        CreatedById = in.readInt();
+        CreatedDate = in.readString();
+        LastUpdatedById = in.readInt();
+        LastUpdatedDate = in.readString();
+    }
+
+    @Generated(hash = 513794503)
+    public ProductData(int ProductId, String ProductName, String ProductCode,
+                       float MR, double DealerPrice, double WholesalePrice, float CGST,
+                       float SGST, float IGST, boolean IsActive, int CreatedById,
+                       String CreatedDate, int LastUpdatedById, String LastUpdatedDate) {
+        this.ProductId = ProductId;
+        this.ProductName = ProductName;
+        this.ProductCode = ProductCode;
+        this.MR = MR;
+        this.DealerPrice = DealerPrice;
+        this.WholesalePrice = WholesalePrice;
+        this.CGST = CGST;
+        this.SGST = SGST;
+        this.IGST = IGST;
+        this.IsActive = IsActive;
+        this.CreatedById = CreatedById;
+        this.CreatedDate = CreatedDate;
+        this.LastUpdatedById = LastUpdatedById;
+        this.LastUpdatedDate = LastUpdatedDate;
+    }
+    @Generated(hash = 1035286127)
+    public ProductData() {
+    }
+
+    public float getMR() {
+        return MR;
+    }
+
+    public void setMR(long MR) {
+        this.MR = MR;
+    }
+
+    public void setMR(float MR) {
+        this.MR = MR;
+    }
+
+    public double getDealerPrice() {
+        return DealerPrice;
+    }
+
+    public void setDealerPrice(long dealerPrice) {
+        DealerPrice = dealerPrice;
+    }
+
+    public void setDealerPrice(double dealerPrice) {
+        DealerPrice = dealerPrice;
+    }
+
+    public double getWholesalePrice() {
+        return WholesalePrice;
+    }
+
+    public void setWholesalePrice(double WholesalePrice) {
+        this.WholesalePrice = WholesalePrice;
+    }
+
+    public void setWholesalePrice(float wholesalePrice) {
+        WholesalePrice = wholesalePrice;
+    }
+
+    public float getCGST() {
+        return CGST;
+    }
+
+    public void setCGST(int CGST) {
+        this.CGST = CGST;
+    }
+
+    public void setCGST(float CGST) {
+        this.CGST = CGST;
+    }
+
+    public float getSGST() {
+        return SGST;
+    }
+
+    public void setSGST(int SGST) {
+        this.SGST = SGST;
+    }
+
+    public void setSGST(float SGST) {
+        this.SGST = SGST;
+    }
+
+    public float getIGST() {
+        return IGST;
+    }
+
+    public void setIGST(int IGST) {
+        this.IGST = IGST;
+    }
+
+    public void setIGST(float IGST) {
+        this.IGST = IGST;
+    }
 
     public int getProductId() {
         return ProductId;
@@ -53,52 +174,8 @@ public class ProductData implements Parcelable {
         ProductCode = productCode;
     }
 
-    public long getMR() {
-        return MR;
-    }
-
-    public void setMR(long MR) {
-        this.MR = MR;
-    }
-
-    public long getDealerPrice() {
-        return DealerPrice;
-    }
-
-    public void setDealerPrice(long dealerPrice) {
-        DealerPrice = dealerPrice;
-    }
-
-    public long getWholesalePrice() {
-        return WholesalePrice;
-    }
-
     public void setWholesalePrice(long wholesalePrice) {
         WholesalePrice = wholesalePrice;
-    }
-
-    public int getCGST() {
-        return CGST;
-    }
-
-    public void setCGST(int CGST) {
-        this.CGST = CGST;
-    }
-
-    public int getSGST() {
-        return SGST;
-    }
-
-    public void setSGST(int SGST) {
-        this.SGST = SGST;
-    }
-
-    public int getIGST() {
-        return IGST;
-    }
-
-    public void setIGST(int IGST) {
-        this.IGST = IGST;
     }
 
     public boolean isActive() {
@@ -141,62 +218,11 @@ public class ProductData implements Parcelable {
         LastUpdatedDate = lastUpdatedDate;
     }
 
-
-
-
-    protected ProductData(Parcel in) {
-        ProductId = in.readInt();
-        ProductName = in.readString();
-        ProductCode = in.readString();
-        MR = in.readLong();
-        DealerPrice = in.readLong();
-        WholesalePrice = in.readLong();
-        CGST = in.readInt();
-        SGST = in.readInt();
-        IGST = in.readInt();
-        IsActive = in.readByte() != 0;
-        CreatedById = in.readInt();
-        CreatedDate = in.readString();
-        LastUpdatedById = in.readInt();
-        LastUpdatedDate = in.readString();
-    }
-
-    @Generated(hash = 642403405)
-    public ProductData(int ProductId, String ProductName, String ProductCode,
-            long MR, long DealerPrice, long WholesalePrice, int CGST, int SGST,
-            int IGST, boolean IsActive, int CreatedById, String CreatedDate,
-            int LastUpdatedById, String LastUpdatedDate) {
-        this.ProductId = ProductId;
-        this.ProductName = ProductName;
-        this.ProductCode = ProductCode;
-        this.MR = MR;
-        this.DealerPrice = DealerPrice;
-        this.WholesalePrice = WholesalePrice;
-        this.CGST = CGST;
-        this.SGST = SGST;
-        this.IGST = IGST;
-        this.IsActive = IsActive;
-        this.CreatedById = CreatedById;
-        this.CreatedDate = CreatedDate;
-        this.LastUpdatedById = LastUpdatedById;
-        this.LastUpdatedDate = LastUpdatedDate;
-    }
-
-    @Generated(hash = 1035286127)
-    public ProductData() {
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(ProductId);
         dest.writeString(ProductName);
         dest.writeString(ProductCode);
-        dest.writeLong(MR);
-        dest.writeLong(DealerPrice);
-        dest.writeLong(WholesalePrice);
-        dest.writeInt(CGST);
-        dest.writeInt(SGST);
-        dest.writeInt(IGST);
         dest.writeByte((byte) (IsActive ? 1 : 0));
         dest.writeInt(CreatedById);
         dest.writeString(CreatedDate);
@@ -208,18 +234,6 @@ public class ProductData implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<ProductData> CREATOR = new Creator<ProductData>() {
-        @Override
-        public ProductData createFromParcel(Parcel in) {
-            return new ProductData(in);
-        }
-
-        @Override
-        public ProductData[] newArray(int size) {
-            return new ProductData[size];
-        }
-    };
 
     @Override
     public String toString() {

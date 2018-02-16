@@ -1,17 +1,32 @@
-
 package com.example.ranad.nodalsystems.model;
 
-import java.io.Serializable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 
-public class GroupTypeList implements Serializable, Parcelable
-{
 
+public class GroupTypeList implements Serializable, Parcelable {
+
+    public final static Creator<GroupTypeList> CREATOR = new Creator<GroupTypeList>() {
+
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public GroupTypeList createFromParcel(Parcel in) {
+            return new GroupTypeList(in);
+        }
+
+        public GroupTypeList[] newArray(int size) {
+            return (new GroupTypeList[size]);
+        }
+
+    };
+    private final static long serialVersionUID = -4482006838912701421L;
     @SerializedName("Id")
     @Expose
     private int id;
@@ -36,23 +51,6 @@ public class GroupTypeList implements Serializable, Parcelable
     @SerializedName("LastUpdatedDate")
     @Expose
     private String lastUpdatedDate;
-    public final static Creator<GroupTypeList> CREATOR = new Creator<GroupTypeList>() {
-
-
-        @SuppressWarnings({
-            "unchecked"
-        })
-        public GroupTypeList createFromParcel(Parcel in) {
-            return new GroupTypeList(in);
-        }
-
-        public GroupTypeList[] newArray(int size) {
-            return (new GroupTypeList[size]);
-        }
-
-    }
-    ;
-    private final static long serialVersionUID = -4482006838912701421L;
 
     protected GroupTypeList(Parcel in) {
         this.id = ((int) in.readValue((int.class.getClassLoader())));
@@ -67,13 +65,11 @@ public class GroupTypeList implements Serializable, Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public GroupTypeList() {
     }
 
     /**
-     * 
      * @param isActive
      * @param id
      * @param groupName
@@ -160,7 +156,6 @@ public class GroupTypeList implements Serializable, Parcelable
     }
 
 
-
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(id);
         dest.writeValue(groupCode);
@@ -173,7 +168,7 @@ public class GroupTypeList implements Serializable, Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

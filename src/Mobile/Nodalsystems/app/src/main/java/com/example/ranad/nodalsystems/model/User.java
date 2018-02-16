@@ -1,8 +1,4 @@
-
 package com.example.ranad.nodalsystems.model;
-
-import java.io.Serializable;
-import java.util.Date;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -10,9 +6,26 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class User implements Serializable, Parcelable
-{
+import java.io.Serializable;
 
+public class User implements Serializable, Parcelable {
+
+    public final static Parcelable.Creator<User> CREATOR = new Creator<User>() {
+
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        public User[] newArray(int size) {
+            return (new User[size]);
+        }
+
+    };
+    private final static long serialVersionUID = 3230713795213591702L;
     @SerializedName("UserId")
     @Expose
     private int userId;
@@ -82,23 +95,6 @@ public class User implements Serializable, Parcelable
     @SerializedName("LastUpdatedDate")
     @Expose
     private String lastUpdatedDate;
-    public final static Parcelable.Creator<User> CREATOR = new Creator<User>() {
-
-
-        @SuppressWarnings({
-            "unchecked"
-        })
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        public User[] newArray(int size) {
-            return (new User[size]);
-        }
-
-    }
-    ;
-    private final static long serialVersionUID = 3230713795213591702L;
 
     protected User(Parcel in) {
         this.userId = ((int) in.readValue((int.class.getClassLoader())));
@@ -128,7 +124,6 @@ public class User implements Serializable, Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public User() {
     }
@@ -370,7 +365,6 @@ public class User implements Serializable, Parcelable
     }
 
 
-
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(userId);
         dest.writeValue(username);
@@ -398,7 +392,7 @@ public class User implements Serializable, Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

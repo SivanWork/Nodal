@@ -21,21 +21,6 @@ import java.util.Date;
 
 public class OrderDetailDB {
 
-    @Id(autoincrement = true)
-    Long id;
-    private int productId;
-    private int orderId;
-    private int quantity;
-    private float cGST;
-    private float sGST;
-    private float iGST;
-    private float discount;
-    private float netPrice;
-    private int createdById;
-    private Date createdDate;
-    private int lastUpdatedById;
-    private Date lastUpdatedDate;
-    private boolean status;
     public final static Parcelable.Creator<OrderDetailDB> CREATOR = new Creator<OrderDetailDB>() {
 
 
@@ -51,6 +36,21 @@ public class OrderDetailDB {
         }
 
     };
+    @Id(autoincrement = true)
+    Long id;
+    private int productId;
+    private int orderId;
+    private int quantity;
+    private float cGST;
+    private float sGST;
+    private float iGST;
+    private float discount;
+    private float netPrice;
+    private int createdById;
+    private Date createdDate;
+    private int lastUpdatedById;
+    private Date lastUpdatedDate;
+    private boolean status;
 
     protected OrderDetailDB(Parcel in) {
         this.productId = ((int) in.readValue((int.class.getClassLoader())));
@@ -68,27 +68,9 @@ public class OrderDetailDB {
         this.status = ((boolean) in.readValue((boolean.class.getClassLoader())));
     }
 
-    /**
-     * No args constructor for use in serialization
-     */
     public OrderDetailDB() {
     }
 
-    /**
-     * @param lastUpdatedDate
-     * @param iGST
-     * @param status
-     * @param createdById
-     * @param netPrice
-     * @param productId
-     * @param discount
-     * @param quantity
-     * @param cGST
-     * @param createdDate
-     * @param orderId
-     * @param sGST
-     * @param lastUpdatedById
-     */
     public OrderDetailDB(int productId, int orderId, int quantity, float cGST, float sGST, float iGST, float discount, float netPrice, int createdById, String createdDate, int lastUpdatedById, String lastUpdatedDate, boolean status) {
         super();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
@@ -232,32 +214,6 @@ public class OrderDetailDB {
         return status;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-   /* @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("productId", productId).append("orderId", orderId).append("quantity", quantity).append("cGST", cGST).append("sGST", sGST).append("iGST", iGST).append("discount", discount).append("netPrice", netPrice).append("createdById", createdById).append("createdDate", createdDate).append("lastUpdatedById", lastUpdatedById).append("lastUpdatedDate", lastUpdatedDate).append("status", status).toString();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(lastUpdatedDate).append(iGST).append(status).append(createdById).append(netPrice).append(discount).append(productId).append(quantity).append(cGST).append(createdDate).append(lastUpdatedById).append(sGST).append(orderId).toHashCode();
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof OrderDetailDB) == false) {
-            return false;
-        }
-        OrderDetailDB rhs = ((OrderDetailDB) other);
-        return new EqualsBuilder().append(lastUpdatedDate, rhs.lastUpdatedDate).append(iGST, rhs.iGST).append(status, rhs.status).append(createdById, rhs.createdById).append(netPrice, rhs.netPrice).append(discount, rhs.discount).append(productId, rhs.productId).append(quantity, rhs.quantity).append(cGST, rhs.cGST).append(createdDate, rhs.createdDate).append(lastUpdatedById, rhs.lastUpdatedById).append(sGST, rhs.sGST).append(orderId, rhs.orderId).isEquals();
-    }*/
-
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(productId);
         dest.writeValue(orderId);
@@ -296,6 +252,10 @@ public class OrderDetailDB {
 
     public boolean getStatus() {
         return this.status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
 }

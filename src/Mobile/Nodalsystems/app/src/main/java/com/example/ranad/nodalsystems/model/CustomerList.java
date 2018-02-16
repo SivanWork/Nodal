@@ -1,16 +1,31 @@
-
 package com.example.ranad.nodalsystems.model;
 
-import java.io.Serializable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class CustomerList implements Serializable, Parcelable
-{
+import java.io.Serializable;
 
+public class CustomerList implements Serializable, Parcelable {
+
+    public final static Creator<CustomerList> CREATOR = new Creator<CustomerList>() {
+
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public CustomerList createFromParcel(Parcel in) {
+            return new CustomerList(in);
+        }
+
+        public CustomerList[] newArray(int size) {
+            return (new CustomerList[size]);
+        }
+
+    };
+    private final static long serialVersionUID = -458868858691459863L;
     @SerializedName("CustomerId")
     @Expose
     private int customerId;
@@ -68,23 +83,6 @@ public class CustomerList implements Serializable, Parcelable
     @SerializedName("LastUpdatedDate")
     @Expose
     private String lastUpdatedDate;
-    public final static Creator<CustomerList> CREATOR = new Creator<CustomerList>() {
-
-
-        @SuppressWarnings({
-            "unchecked"
-        })
-        public CustomerList createFromParcel(Parcel in) {
-            return new CustomerList(in);
-        }
-
-        public CustomerList[] newArray(int size) {
-            return (new CustomerList[size]);
-        }
-
-    }
-    ;
-    private final static long serialVersionUID = -458868858691459863L;
 
     protected CustomerList(Parcel in) {
         this.customerId = ((int) in.readValue((int.class.getClassLoader())));
@@ -110,13 +108,11 @@ public class CustomerList implements Serializable, Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public CustomerList() {
     }
 
     /**
-     * 
      * @param middleName
      * @param lastName
      * @param createdById
@@ -336,7 +332,7 @@ public class CustomerList implements Serializable, Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

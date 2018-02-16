@@ -8,36 +8,42 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class OrderDetail implements Serializable, Parcelable {
+public class Product implements Serializable, Parcelable {
 
-    public final static Creator<OrderDetail> CREATOR = new Creator<OrderDetail>() {
+    public final static Creator<Product> CREATOR = new Creator<Product>() {
 
 
         @SuppressWarnings({
                 "unchecked"
         })
-        public OrderDetail createFromParcel(Parcel in) {
-            return new OrderDetail(in);
+        public Product createFromParcel(Parcel in) {
+            return new Product(in);
         }
 
-        public OrderDetail[] newArray(int size) {
-            return (new OrderDetail[size]);
+        public Product[] newArray(int size) {
+            return (new Product[size]);
         }
 
     };
-    private final static long serialVersionUID = 1504361261285731827L;
-    @SerializedName("Id")
-    @Expose
-    private int id;
-    @SerializedName("OrderId")
-    @Expose
-    private int orderId;
+    private final static long serialVersionUID = -6172841939854632462L;
     @SerializedName("ProductId")
     @Expose
     private int productId;
-    @SerializedName("Quantity")
+    @SerializedName("ProductName")
     @Expose
-    private int quantity;
+    private String productName;
+    @SerializedName("ProductCode")
+    @Expose
+    private String productCode;
+    @SerializedName("MRP")
+    @Expose
+    private double mRP;
+    @SerializedName("DealerPrice")
+    @Expose
+    private double dealerPrice;
+    @SerializedName("WholesalePrice")
+    @Expose
+    private double wholesalePrice;
     @SerializedName("CGST")
     @Expose
     private double cGST;
@@ -47,12 +53,9 @@ public class OrderDetail implements Serializable, Parcelable {
     @SerializedName("IGST")
     @Expose
     private double iGST;
-    @SerializedName("Discount")
+    @SerializedName("IsActive")
     @Expose
-    private double discount;
-    @SerializedName("NetPrice")
-    @Expose
-    private double netPrice;
+    private boolean isActive;
     @SerializedName("CreatedById")
     @Expose
     private int createdById;
@@ -66,16 +69,17 @@ public class OrderDetail implements Serializable, Parcelable {
     @Expose
     private String lastUpdatedDate;
 
-    protected OrderDetail(Parcel in) {
-        this.id = ((int) in.readValue((int.class.getClassLoader())));
-        this.orderId = ((int) in.readValue((int.class.getClassLoader())));
+    protected Product(Parcel in) {
         this.productId = ((int) in.readValue((int.class.getClassLoader())));
-        this.quantity = ((int) in.readValue((int.class.getClassLoader())));
+        this.productName = ((String) in.readValue((String.class.getClassLoader())));
+        this.productCode = ((String) in.readValue((String.class.getClassLoader())));
+        this.mRP = ((double) in.readValue((double.class.getClassLoader())));
+        this.dealerPrice = ((double) in.readValue((double.class.getClassLoader())));
+        this.wholesalePrice = ((double) in.readValue((double.class.getClassLoader())));
         this.cGST = ((double) in.readValue((double.class.getClassLoader())));
         this.sGST = ((double) in.readValue((double.class.getClassLoader())));
         this.iGST = ((double) in.readValue((double.class.getClassLoader())));
-        this.discount = ((double) in.readValue((double.class.getClassLoader())));
-        this.netPrice = ((double) in.readValue((double.class.getClassLoader())));
+        this.isActive = ((boolean) in.readValue((boolean.class.getClassLoader())));
         this.createdById = ((int) in.readValue((int.class.getClassLoader())));
         this.createdDate = ((String) in.readValue((String.class.getClassLoader())));
         this.lastUpdatedById = ((int) in.readValue((int.class.getClassLoader())));
@@ -85,55 +89,41 @@ public class OrderDetail implements Serializable, Parcelable {
     /**
      * No args constructor for use in serialization
      */
-    public OrderDetail() {
+    public Product() {
     }
 
     /**
+     * @param mRP
+     * @param wholesalePrice
      * @param iGST
+     * @param productCode
      * @param createdById
-     * @param netPrice
+     * @param dealerPrice
      * @param productId
-     * @param discount
-     * @param id
+     * @param isActive
      * @param lastUpdatedDate
-     * @param quantity
      * @param cGST
+     * @param productName
      * @param createdDate
-     * @param orderId
-     * @param sGST
      * @param lastUpdatedById
+     * @param sGST
      */
-    public OrderDetail(int id, int orderId, int productId, int quantity, double cGST, double sGST, double iGST, double discount, double netPrice, int createdById, String createdDate, int lastUpdatedById, String lastUpdatedDate) {
+    public Product(int productId, String productName, String productCode, double mRP, double dealerPrice, double wholesalePrice, double cGST, double sGST, double iGST, boolean isActive, int createdById, String createdDate, int lastUpdatedById, String lastUpdatedDate) {
         super();
-        this.id = id;
-        this.orderId = orderId;
         this.productId = productId;
-        this.quantity = quantity;
+        this.productName = productName;
+        this.productCode = productCode;
+        this.mRP = mRP;
+        this.dealerPrice = dealerPrice;
+        this.wholesalePrice = wholesalePrice;
         this.cGST = cGST;
         this.sGST = sGST;
         this.iGST = iGST;
-        this.discount = discount;
-        this.netPrice = netPrice;
+        this.isActive = isActive;
         this.createdById = createdById;
         this.createdDate = createdDate;
         this.lastUpdatedById = lastUpdatedById;
         this.lastUpdatedDate = lastUpdatedDate;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
     }
 
     public int getProductId() {
@@ -144,12 +134,44 @@ public class OrderDetail implements Serializable, Parcelable {
         this.productId = productId;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public double getMRP() {
+        return mRP;
+    }
+
+    public void setMRP(double mRP) {
+        this.mRP = mRP;
+    }
+
+    public double getDealerPrice() {
+        return dealerPrice;
+    }
+
+    public void setDealerPrice(double dealerPrice) {
+        this.dealerPrice = dealerPrice;
+    }
+
+    public double getWholesalePrice() {
+        return wholesalePrice;
+    }
+
+    public void setWholesalePrice(double wholesalePrice) {
+        this.wholesalePrice = wholesalePrice;
     }
 
     public double getCGST() {
@@ -176,20 +198,12 @@ public class OrderDetail implements Serializable, Parcelable {
         this.iGST = iGST;
     }
 
-    public double getDiscount() {
-        return discount;
+    public boolean isIsActive() {
+        return isActive;
     }
 
-    public void setDiscount(double discount) {
-        this.discount = discount;
-    }
-
-    public double getNetPrice() {
-        return netPrice;
-    }
-
-    public void setNetPrice(double netPrice) {
-        this.netPrice = netPrice;
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     public int getCreatedById() {
@@ -224,17 +238,17 @@ public class OrderDetail implements Serializable, Parcelable {
         this.lastUpdatedDate = lastUpdatedDate;
     }
 
-
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(id);
-        dest.writeValue(orderId);
         dest.writeValue(productId);
-        dest.writeValue(quantity);
+        dest.writeValue(productName);
+        dest.writeValue(productCode);
+        dest.writeValue(mRP);
+        dest.writeValue(dealerPrice);
+        dest.writeValue(wholesalePrice);
         dest.writeValue(cGST);
         dest.writeValue(sGST);
         dest.writeValue(iGST);
-        dest.writeValue(discount);
-        dest.writeValue(netPrice);
+        dest.writeValue(isActive);
         dest.writeValue(createdById);
         dest.writeValue(createdDate);
         dest.writeValue(lastUpdatedById);

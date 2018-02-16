@@ -5,9 +5,6 @@ import com.example.ranad.nodalsystems.model.User;
 
 import java.util.ArrayList;
 
-/**
- * Created by Rana D on 2/3/2018.
- */
 
 public interface UserAction {
     public void readUser(int userId);
@@ -22,7 +19,6 @@ public interface UserAction {
     public User getUser();
 
     public void createUser(User user);
-
 
 
     public void updateUser(User user);

@@ -1,18 +1,9 @@
 package com.example.ranad.nodalsystems.database;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.greenrobot.greendao.annotation.Generated;
-
-/**
- * Created by Rana D on 2/3/2018.
- */
 @Entity(
         // Define indexes spanning multiple columns here.
         indexes = {
@@ -21,7 +12,7 @@ import org.greenrobot.greendao.annotation.Generated;
 
 
 public class Products {
-    @Id(autoincrement = true)
+    @Id
     Long id;
 
     private String productName;
@@ -75,7 +66,7 @@ public class Products {
 
     @Generated(hash = 885777213)
     public Products(Long id, String productName, float mRP, float dealerPrice, float wholesalePrice, float cGST, float sGST, float iGST, boolean isActive, int createdById, String createdDate, int lastUpdatedById,
-            String lastUpdatedDate) {
+                    String lastUpdatedDate) {
         this.id = id;
         this.productName = productName;
         this.mRP = mRP;
@@ -90,7 +81,6 @@ public class Products {
         this.lastUpdatedById = lastUpdatedById;
         this.lastUpdatedDate = lastUpdatedDate;
     }
-
 
     public String getProductName() {
         return productName;
@@ -152,10 +142,6 @@ public class Products {
         return isActive;
     }
 
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
-    }
-
     public int getCreatedById() {
         return createdById;
     }
@@ -164,9 +150,12 @@ public class Products {
         this.createdById = createdById;
     }
 
-
     public int getLastUpdatedById() {
         return lastUpdatedById;
+    }
+
+    public void setLastUpdatedById(int lastUpdatedById) {
+        this.lastUpdatedById = lastUpdatedById;
     }
 
     public String getCreatedDate() {
@@ -185,11 +174,6 @@ public class Products {
         this.lastUpdatedDate = lastUpdatedDate;
     }
 
-    public void setLastUpdatedById(int lastUpdatedById) {
-        this.lastUpdatedById = lastUpdatedById;
-    }
-
-
     public Long getId() {
         return this.id;
     }
@@ -200,6 +184,10 @@ public class Products {
 
     public boolean getIsActive() {
         return this.isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
 

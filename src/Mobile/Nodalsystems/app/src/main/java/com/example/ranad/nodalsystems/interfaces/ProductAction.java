@@ -1,26 +1,36 @@
 package com.example.ranad.nodalsystems.interfaces;
 
-import com.example.ranad.nodalsystems.database.Products;
+import com.example.ranad.nodalsystems.data_holder.ProductData;
+import com.example.ranad.nodalsystems.model.Product;
 
 import java.util.ArrayList;
 
-/**
- * Created by Rana D on 2/3/2018.
- */
+
 
 public interface ProductAction {
     public void delete(int pos);
+
     public void saveProductInfo();
+
     public void updateProductInfo();
-    public Products getProducts();
+    // public Products getProducts();
+
+    public Product getProduct();
+
     public void switchToEditProduct(int product);
+
     public void readProduct(int productId);
 
-    public void creatProduct(Products products);
-    public ArrayList<Products> readAllproducts();
-    public void updateProduct(Products products);
+    public void createProduct(Product product);
 
-    public void fetchProduct(Products products);
+    public ArrayList<ProductData> readAllProducts();
+
+    public void updateProduct(Product product);
+
+    public void deleteProduct(Product product);
+
+
+    public void fetchProduct(Product product);
 
 
 }

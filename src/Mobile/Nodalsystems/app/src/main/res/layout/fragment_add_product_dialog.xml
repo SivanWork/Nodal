@@ -1,8 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/rounded_dialog"
     android:padding="10dp"
     tools:context="com.example.ranad.nodalsystems.fragment.AddProductDialog">
@@ -25,18 +25,59 @@
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
-        <Spinner
-            android:id="@+id/prod_spinner"
+        <AutoCompleteTextView
+            android:id="@+id/product_autocompleter"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="20dp"></Spinner>
+            android:layout_height="35dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/dialogborder"
+            android:ems="1"
+            android:gravity="center"
+            android:hint="Search product here"
+            android:textColor="#000000"
+            android:textColorHint="#7F7F7F"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:textSize="14sp" />
 
-        <EditText
-            android:id="@+id/quantity"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:text="1" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Quantity"
+                android:textColor="@color/btn_bg"
+                android:textStyle="bold" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:hintTextAppearance="@style/floating_hint">
+
+                <EditText
+                    android:id="@+id/quantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="sans-serif-condensed"
+                    android:inputType="number"
+                    android:text="1"
+                    android:textSize="16sp"
+                    android:theme="@style/EdittextTheme" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/holo_orange_dark" />
+        </LinearLayout>
+
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/add"
@@ -48,6 +89,7 @@
             android:fontFamily="sans-serif-condensed"
             android:foreground="?attr/selectableItemBackground"
             android:text="Add Product"
+            android:textColor="#ffffff"
             android:textSize="18sp" />
 
     </LinearLayout>

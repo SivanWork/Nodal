@@ -1,7 +1,6 @@
 package com.example.ranad.nodalsystems.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -61,5 +60,9 @@ public class SchemeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         MainActivity.setAppTitle(R.string.scheme_title);
+        MainActivity activity = (MainActivity) getActivity();
+        if (activity != null) {
+            activity.showUpButton();
+        }
     }
 }

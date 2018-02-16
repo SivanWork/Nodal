@@ -16,16 +16,30 @@
             android:layout_margin="16dp"
             android:orientation="vertical">
 
-            <Spinner
-                android:id="@+id/cust_spinner"
+            <AutoCompleteTextView
+                android:id="@+id/customer_autocompleter"
                 android:layout_width="match_parent"
-                android:layout_height="48dp" />
+                android:layout_height="35dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/dialogborder"
+                android:ems="1"
+                android:gravity="center"
+                android:hint="search customer here"
+                android:inputType="textNoSuggestions"
+                android:textColorHint="#7F7F7F"
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:textSize="14sp" />
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@android:color/black" />
+            <!--  <Spinner
+                  android:id="@+id/cust_spinner"
+                  android:layout_width="match_parent"
+                  android:layout_height="48dp" />
 
+              <ImageView
+                  android:layout_width="match_parent"
+                  android:layout_height="0.5dp"
+                  android:background="@android:color/black" />
+  -->
             <Button
                 android:id="@+id/add_prod"
                 style="@style/AppTheme.RoundedCornerMaterialButton"
@@ -60,32 +74,34 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/save_prod"
-                style="@style/AppTheme.RoundedCornerMaterialButton"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:text="SUBMIT"
-                android:textColor="@android:color/white"
-                android:textSize="18sp" />
-            <Button
-                android:id="@+id/viewOrders"
-                style="@style/AppTheme.RoundedCornerMaterialButton"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:text="View Orders"
-                android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                <Button
+                    android:id="@+id/save_prod"
+                    style="@style/AppTheme.RoundedCornerMaterialButton"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:text="SUBMIT"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/viewOrders"
+                    style="@style/AppTheme.RoundedCornerMaterialButton"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="8dp"
+                    android:text="View Orders"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

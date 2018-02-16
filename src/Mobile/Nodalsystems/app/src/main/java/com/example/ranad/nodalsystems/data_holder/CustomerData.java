@@ -3,19 +3,42 @@ package com.example.ranad.nodalsystems.data_holder;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Rana D on 1/29/2018.
- */
 
 public class CustomerData implements Parcelable {
 
-    public CustomerData(int userId,String name){
-        this.id=userId;
+    public static final Creator<CustomerData> CREATOR = new Creator<CustomerData>() {
+        @Override
+        public CustomerData createFromParcel(Parcel in) {
+            return new CustomerData(in);
+        }
+
+        @Override
+        public CustomerData[] newArray(int size) {
+            return new CustomerData[size];
+        }
+    };
+    String firstName;
+    String midName;
+    String lastName;
+    String customerCode;
+    String mobile;
+    String email;
+    String isActive;
+    int id;
+    float amountLimit;
+
+    public CustomerData(int userId, String name) {
+        this.id = userId;
 
     }
 
-    public CustomerData(){
+    public CustomerData() {
 
+    }
+
+    protected CustomerData(Parcel in) {
+        // name = in.readString();
+        id = in.readInt();
     }
 
     public int getId() {
@@ -25,9 +48,6 @@ public class CustomerData implements Parcelable {
     public void setId(int id) {
         this.id = id;
     }
-
-    String firstName;
-    String midName;
 
     public String getFirstName() {
         return firstName;
@@ -53,9 +73,6 @@ public class CustomerData implements Parcelable {
         this.lastName = lastName;
     }
 
-    String lastName;
-
-
     public String getCustomerCode() {
         return customerCode;
     }
@@ -80,8 +97,6 @@ public class CustomerData implements Parcelable {
         this.isActive = isActive;
     }
 
-    String customerCode;
-
     public String getMobile() {
         return mobile;
     }
@@ -90,30 +105,13 @@ public class CustomerData implements Parcelable {
         this.mobile = mobile;
     }
 
-    String mobile;
-    String email;
-    String isActive;
-    int id;
-
-
-
-
-    protected CustomerData(Parcel in) {
-       // name = in.readString();
-        id = in.readInt();
+    public float getAmountLimit() {
+        return amountLimit;
     }
 
-    public static final Creator<CustomerData> CREATOR = new Creator<CustomerData>() {
-        @Override
-        public CustomerData createFromParcel(Parcel in) {
-            return new CustomerData(in);
-        }
-
-        @Override
-        public CustomerData[] newArray(int size) {
-            return new CustomerData[size];
-        }
-    };
+    public void setAmountLimit(float amountLimit) {
+        this.amountLimit = amountLimit;
+    }
 
     @Override
     public int describeContents() {
@@ -122,7 +120,7 @@ public class CustomerData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-       // parcel.writeString(name);
+        // parcel.writeString(name);
         parcel.writeInt(id);
     }
 }

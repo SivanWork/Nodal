@@ -1,16 +1,31 @@
-
 package com.example.ranad.nodalsystems.model;
 
-import java.io.Serializable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserList implements Serializable, Parcelable
-{
+import java.io.Serializable;
 
+public class UserList implements Serializable, Parcelable {
+
+    public final static Creator<UserList> CREATOR = new Creator<UserList>() {
+
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public UserList createFromParcel(Parcel in) {
+            return new UserList(in);
+        }
+
+        public UserList[] newArray(int size) {
+            return (new UserList[size]);
+        }
+
+    };
+    private final static long serialVersionUID = 2244345351911964412L;
     @SerializedName("UserId")
     @Expose
     private int userId;
@@ -80,23 +95,6 @@ public class UserList implements Serializable, Parcelable
     @SerializedName("LastUpdatedDate")
     @Expose
     private String lastUpdatedDate;
-    public final static Creator<UserList> CREATOR = new Creator<UserList>() {
-
-
-        @SuppressWarnings({
-            "unchecked"
-        })
-        public UserList createFromParcel(Parcel in) {
-            return new UserList(in);
-        }
-
-        public UserList[] newArray(int size) {
-            return (new UserList[size]);
-        }
-
-    }
-    ;
-    private final static long serialVersionUID = 2244345351911964412L;
 
     protected UserList(Parcel in) {
         this.userId = ((int) in.readValue((int.class.getClassLoader())));
@@ -126,13 +124,11 @@ public class UserList implements Serializable, Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public UserList() {
     }
 
     /**
-     * 
      * @param middleName
      * @param lastName
      * @param userGroupType
@@ -369,7 +365,6 @@ public class UserList implements Serializable, Parcelable
     }
 
 
-
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(userId);
         dest.writeValue(username);
@@ -397,7 +392,7 @@ public class UserList implements Serializable, Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

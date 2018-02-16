@@ -1,16 +1,31 @@
-
 package com.example.ranad.nodalsystems.model;
 
-import java.io.Serializable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class GroupElementCodeList implements Serializable, Parcelable
-{
+import java.io.Serializable;
 
+public class GroupElementCodeList implements Serializable, Parcelable {
+
+    public final static Creator<GroupElementCodeList> CREATOR = new Creator<GroupElementCodeList>() {
+
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public GroupElementCodeList createFromParcel(Parcel in) {
+            return new GroupElementCodeList(in);
+        }
+
+        public GroupElementCodeList[] newArray(int size) {
+            return (new GroupElementCodeList[size]);
+        }
+
+    };
+    private final static long serialVersionUID = 746273590590027314L;
     @SerializedName("Id")
     @Expose
     private int id;
@@ -38,23 +53,6 @@ public class GroupElementCodeList implements Serializable, Parcelable
     @SerializedName("LastUpdatedDate")
     @Expose
     private String lastUpdatedDate;
-    public final static Creator<GroupElementCodeList> CREATOR = new Creator<GroupElementCodeList>() {
-
-
-        @SuppressWarnings({
-            "unchecked"
-        })
-        public GroupElementCodeList createFromParcel(Parcel in) {
-            return new GroupElementCodeList(in);
-        }
-
-        public GroupElementCodeList[] newArray(int size) {
-            return (new GroupElementCodeList[size]);
-        }
-
-    }
-    ;
-    private final static long serialVersionUID = 746273590590027314L;
 
     protected GroupElementCodeList(Parcel in) {
         this.id = ((int) in.readValue((int.class.getClassLoader())));
@@ -70,13 +68,11 @@ public class GroupElementCodeList implements Serializable, Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public GroupElementCodeList() {
     }
 
     /**
-     * 
      * @param isActive
      * @param groupType
      * @param id
@@ -186,7 +182,7 @@ public class GroupElementCodeList implements Serializable, Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

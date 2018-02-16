@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- Search / will display always -->
-    <item android:id="@+id/sync"
+    <item
+        android:id="@+id/sync"
         android:icon="@drawable/sync2"
         android:title="Sync Server"
         app:showAsAction="always" />
 
-<!--
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/homepage"
+        android:title=""
+        app:showAsAction="always" />
+    <!--
     &lt;!&ndash; Location Found &ndash;&gt;
     <item android:id="@+id/action_location_found"
         android:icon="@drawable/ic_action_location_found"

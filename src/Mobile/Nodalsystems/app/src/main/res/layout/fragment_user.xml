@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        
+
         <TextView
             android:id="@+id/noOfUsers"
             android:layout_width="match_parent"
@@ -36,6 +36,7 @@
                 android:background="@drawable/customborder3"
                 android:hint="search user here"
                 android:textAlignment="center"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -537,9 +538,9 @@
                     android:id="@+id/radioActive"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/radio_active"
+                    android:buttonTint="@color/btn_bg"
                     android:checked="true"
-                    android:buttonTint="@color/btn_bg"/>
+                    android:text="@string/radio_active" />
 
                 <RadioButton
                     android:id="@+id/radioPassive"
@@ -576,12 +577,9 @@
                         android:layout_width="125dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:background="@drawable/button_ripple"
-                        android:backgroundTint="@android:color/transparent"
                         android:fontFamily="sans-serif-condensed"
                         android:foreground="?attr/selectableItemBackground"
                         android:text="CANCEL"
-                        android:textColor="@color/btn_bg"
                         android:textSize="18sp" />
                 </LinearLayout>
 
@@ -597,7 +595,6 @@
                         android:layout_width="125dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:background="@drawable/button_ripple"
                         android:fontFamily="sans-serif-condensed"
                         android:foreground="?attr/selectableItemBackground"
                         android:text="ADD"

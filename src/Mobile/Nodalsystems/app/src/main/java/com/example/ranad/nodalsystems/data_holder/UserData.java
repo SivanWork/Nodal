@@ -3,21 +3,55 @@ package com.example.ranad.nodalsystems.data_holder;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Kavya V on 07-02-2018.
- */
-
 public class UserData implements Parcelable {
 
-    public UserData(int userId,String userName) {
+    public static final Creator<UserData> CREATOR = new Creator<UserData>() {
+        @Override
+        public UserData createFromParcel(Parcel in) {
+            return new UserData(in);
+        }
+
+        @Override
+        public UserData[] newArray(int size) {
+            return new UserData[size];
+        }
+    };
+    int id;
+    String userName;
+    // private int userId;
+    // private String username;
+    // private String password;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String mobile;
+    private String email;
+    private String address1;
+    private String address2;
+    private String city;
+    private String state;
+    private String country;
+    private String pin;
+    private String userGroupType;
+    private String userElementCode;
+    private String activeFrom;
+    private String activeTo;
+    private boolean isActive;
+    private int createdById;
+    private String createdDate;
+    private int lastUpdatedById;
+    private String lastUpdatedDate;
+    public UserData(int userId, String userName) {
         this.userName = userName;
         this.id = userId;
     }
+    public UserData() {
 
-   // private int userId;
-   // private String username;
-   // private String password;
-    private String firstName;
+    }
+    public UserData(Parcel in) {
+        id = in.readInt();
+        userName = in.readString();
+    }
 
     public String getFirstName() {
         return firstName;
@@ -75,28 +109,6 @@ public class UserData implements Parcelable {
         isActive = active;
     }
 
-    private String middleName;
-    private String lastName;
-    private String mobile;
-    private String email;
-    private String address1;
-    private String address2;
-    private String city;
-    private String state;
-    private String country;
-    private String pin;
-    private String userGroupType;
-    private String userElementCode;
-    private String activeFrom;
-    private String activeTo;
-    private boolean isActive;
-    private int createdById;
-    private String createdDate;
-    private int lastUpdatedById;
-    private String lastUpdatedDate;
-
-
-
     public int getId() {
         return id;
     }
@@ -109,35 +121,9 @@ public class UserData implements Parcelable {
         return userName;
     }
 
-    public void setUserName(String userName)
-    {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
-
-    int id;
-    String userName;
-
-    public UserData()
-    {
-
-    }
-
-    public UserData(Parcel in) {
-        id = in.readInt();
-        userName = in.readString();
-    }
-
-    public static final Creator<UserData> CREATOR = new Creator<UserData>() {
-        @Override
-        public UserData createFromParcel(Parcel in) {
-            return new UserData(in);
-        }
-
-        @Override
-        public UserData[] newArray(int size) {
-            return new UserData[size];
-        }
-    };
 
     @Override
     public int describeContents() {

@@ -3,29 +3,35 @@ package com.example.ranad.nodalsystems.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.ranad.nodalsystems.database.Products;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by Kavya V on 13-02-2018.
- */
 
 public class ProductInfo implements Serializable, Parcelable {
 
+    public static final Creator<ProductInfo> CREATOR = new Creator<ProductInfo>() {
+        @Override
+        public ProductInfo createFromParcel(Parcel in) {
+            return new ProductInfo(in);
+        }
+
+        @Override
+        public ProductInfo[] newArray(int size) {
+            return new ProductInfo[size];
+        }
+    };
     @SerializedName("product")
     @Expose
-    Products product;
-
+    Product product;
 
     public ProductInfo() {
     }
 
-    public ProductInfo(Products products) {
+    public ProductInfo(Product product) {
         super();
-        this.product = products;
+        this.product = product;
     }
 
     protected ProductInfo(Parcel in) {
@@ -39,16 +45,4 @@ public class ProductInfo implements Serializable, Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<ProductInfo> CREATOR = new Creator<ProductInfo>() {
-        @Override
-        public ProductInfo createFromParcel(Parcel in) {
-            return new ProductInfo(in);
-        }
-
-        @Override
-        public ProductInfo[] newArray(int size) {
-            return new ProductInfo[size];
-        }
-    };
 }

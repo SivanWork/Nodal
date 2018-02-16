@@ -9,30 +9,30 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-public class USERGETALL implements Serializable, Parcelable {
+public class ProductGetAll implements Serializable, Parcelable {
 
-    public final static Creator<USERGETALL> CREATOR = new Creator<USERGETALL>() {
+    public final static Creator<ProductGetAll> CREATOR = new Creator<ProductGetAll>() {
 
 
         @SuppressWarnings({
                 "unchecked"
         })
-        public USERGETALL createFromParcel(Parcel in) {
-            return new USERGETALL(in);
+        public ProductGetAll createFromParcel(Parcel in) {
+            return new ProductGetAll(in);
         }
 
-        public USERGETALL[] newArray(int size) {
-            return (new USERGETALL[size]);
+        public ProductGetAll[] newArray(int size) {
+            return (new ProductGetAll[size]);
         }
 
     };
-    private final static long serialVersionUID = 4776569414759924945L;
-    @SerializedName("user")
+    private final static long serialVersionUID = -4087283041282759513L;
+    @SerializedName("product")
     @Expose
-    private User user;
-    @SerializedName("userList")
+    private Product product;
+    @SerializedName("productList")
     @Expose
-    private List<UserList> userList = null;
+    private List<ProductList> productList = null;
     @SerializedName("Success")
     @Expose
     private boolean success;
@@ -46,9 +46,9 @@ public class USERGETALL implements Serializable, Parcelable {
     @Expose
     private String stackTrace;
 
-    protected USERGETALL(Parcel in) {
-        this.user = ((User) in.readValue((User.class.getClassLoader())));
-        in.readList(this.userList, (com.example.ranad.nodalsystems.model.UserList.class.getClassLoader()));
+    protected ProductGetAll(Parcel in) {
+        this.product = ((Product) in.readValue((Product.class.getClassLoader())));
+        in.readList(this.productList, (ProductList.class.getClassLoader()));
         this.success = ((boolean) in.readValue((boolean.class.getClassLoader())));
         this.isWarning = ((boolean) in.readValue((boolean.class.getClassLoader())));
         this.message = ((String) in.readValue((String.class.getClassLoader())));
@@ -58,41 +58,41 @@ public class USERGETALL implements Serializable, Parcelable {
     /**
      * No args constructor for use in serialization
      */
-    public USERGETALL() {
+    public ProductGetAll() {
     }
 
     /**
      * @param message
+     * @param product
+     * @param productList
      * @param isWarning
-     * @param userList
      * @param success
-     * @param user
      * @param stackTrace
      */
-    public USERGETALL(User user, List<UserList> userList, boolean success, boolean isWarning, String message, String stackTrace) {
+    public ProductGetAll(Product product, List<ProductList> productList, boolean success, boolean isWarning, String message, String stackTrace) {
         super();
-        this.user = user;
-        this.userList = userList;
+        this.product = product;
+        this.productList = productList;
         this.success = success;
         this.isWarning = isWarning;
         this.message = message;
         this.stackTrace = stackTrace;
     }
 
-    public User getUser() {
-        return user;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public List<UserList> getUserList() {
-        return userList;
+    public List<ProductList> getProductList() {
+        return productList;
     }
 
-    public void setUserList(List<UserList> userList) {
-        this.userList = userList;
+    public void setProductList(List<ProductList> productList) {
+        this.productList = productList;
     }
 
     public boolean isSuccess() {
@@ -127,10 +127,9 @@ public class USERGETALL implements Serializable, Parcelable {
         this.stackTrace = stackTrace;
     }
 
-
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(user);
-        dest.writeList(userList);
+        dest.writeValue(product);
+        dest.writeList(productList);
         dest.writeValue(success);
         dest.writeValue(isWarning);
         dest.writeValue(message);

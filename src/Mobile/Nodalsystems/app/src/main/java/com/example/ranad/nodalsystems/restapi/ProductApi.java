@@ -1,33 +1,31 @@
 package com.example.ranad.nodalsystems.restapi;
 
 import com.example.ranad.nodalsystems.Api;
-import com.example.ranad.nodalsystems.database.Products;
-import com.example.ranad.nodalsystems.model.CustomerGetAll;
+import com.example.ranad.nodalsystems.model.ProductGetAll;
 import com.example.ranad.nodalsystems.model.ProductInfo;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Url;
 
-/**
- * Created by Kavya V on 12-02-2018.
- */
+
 
 public interface ProductApi {
 
     @GET(Api.GET_ALL_PRODUCT)
-    Call<CustomerGetAll> getAllCustomersAPI();
+    Call<ProductGetAll> getAllProductsAPI();
 
-    @POST(Api.ADD_PRODUCT)
-    Call<ProductInfo> addProduct(@Body Products products);
+    @POST(Api.CREATE_PRODUCT)
+    Call<ProductInfo> createProduct(@Body ProductInfo product);
 
     @POST(Api.UPDATE_PRODUCT)
-    Call<Products> updateProduct(@Body Products products);
+    Call<ProductInfo> updateProduct(@Body ProductInfo product);
 
-   /* @POST(Api.DELETE_PRODUCT)
-    Call<ProductData> deleteProduct(@Body ProductData productData);*/
 
+    @GET
+    public Call<ProductGetAll> getProductAPI(@Url String url);
 
 
 }

@@ -1,7 +1,6 @@
 package com.example.ranad.nodalsystems.adapter;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +13,6 @@ import com.example.ranad.nodalsystems.data_holder.HomeGridElement;
 
 import java.util.ArrayList;
 
-/**
- * Created by Rana D on 1/20/2018.
- */
 
 public class HomeGridAdapter extends BaseAdapter {
     ArrayList<HomeGridElement> homeGridElements;

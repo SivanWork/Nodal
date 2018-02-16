@@ -24,7 +24,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -47,6 +46,7 @@ import com.example.ranad.nodalsystems.model.UserList;
 import com.example.ranad.nodalsystems.restapi.ApiClient;
 import com.example.ranad.nodalsystems.restapi.GroupTypeApi;
 import com.example.ranad.nodalsystems.restapi.UserApi;
+import com.example.ranad.nodalsystems.usage.FragmentSwitch;
 import com.example.ranad.nodalsystems.usage.NetworkChecker;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -96,14 +96,12 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
     List<UserList> userList = new ArrayList<UserList>();
     ProgressDialog progressDialog = null;
     Spinner userType_spinner, userElement_spinner;
-    private RadioGroup radioStatusGroup;
     TextView noOfUsers;
-    private EditText searchBox;
     List<UserData> userDataList;
-
     GetAllGroupTypes gtAll;
-
     GetAllGroupTypes groupTypeLists;
+    private RadioGroup radioStatusGroup;
+    private EditText searchBox;
 
     public UserFragment() {
         // Required empty public constructor
@@ -134,12 +132,6 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         // Inflate the layout for this fragment
         progressDialog = new ProgressDialog(getContext());
         view = inflater.inflate(R.layout.fragment_user, container, false);
-//Log.i("CURR",""+getCurrentDate());
-        //      Log.i("DataERR", "CCC"+getUTCDate("Feb 9, 2018 10:41:11 PM"));
-
-
-        // Log.i("STRRD",""+getUTCDate(new Date()));
-
         validator = new Validator(this);
         validator.setValidationListener(this);
 
@@ -173,7 +165,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         btncancel.setOnClickListener(this);
         activeTo.setOnClickListener(this);
         activeFrom.setOnClickListener(this);
-         userDataList = readAllUsers();
+        userDataList = readAllUsers();
 
         user_list = (RecyclerView) view.findViewById(R.id.user_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -181,10 +173,10 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         usersAdapter = new UsersAdapter(userDataList, getContext(), this);
         user_list.setAdapter(usersAdapter);
         usersAdapter.notifyDataSetChanged();
-        noOfUsers = (TextView) view.findViewById(R.id.noOfUsers) ;
+        noOfUsers = (TextView) view.findViewById(R.id.noOfUsers);
 
         radioStatusGroup = (RadioGroup) view.findViewById(R.id.radioStatus);
-        searchBox = (EditText)view.findViewById(R.id.search_box);
+        searchBox = (EditText) view.findViewById(R.id.search_box);
 
         searchBox.addTextChangedListener(new TextWatcher() {
             @Override
@@ -197,18 +189,18 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
             @Override
             public void afterTextChanged(Editable s) {
-                filter(s.toString());            }
+                filter(s.toString());
+            }
         });
-
-
 
 
         return view;
     }
-    void filter(String text){
+
+    void filter(String text) {
         List<UserData> temp = new ArrayList();
-        for(UserData d: userDataList){
-            if(d.getUserName().contains(text)){
+        for (UserData d : userDataList) {
+            if (d.getUserName().toString().toLowerCase().contains(text.toString().toLowerCase())) {
                 temp.add(d);
             }
         }
@@ -219,6 +211,10 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
     public void onResume() {
         super.onResume();
         MainActivity.setAppTitle(R.string.user_title);
+        MainActivity activity = (MainActivity) getActivity();
+        if (activity != null) {
+            activity.showUpButton();
+        }
 
     }
 
@@ -255,8 +251,8 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
                 List<String> list2 = new ArrayList<String>();
 
-                list2.add(0,"Admin");
-                list2.add(1,"Agent");
+                list2.add(0, "Admin");
+                list2.add(1, "Agent");
                 ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list2);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 userElement_spinner.setAdapter(dataAdapter2);
@@ -270,22 +266,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
                 break;
             case R.id.btnCancel:
-/*
-                add_user.setVisibility(View.GONE);
-                ivAdd.setVisibility(View.VISIBLE);
-                outer_layout.setVisibility(View.VISIBLE);
-                MainActivity.setAppTitle(R.string.user_title);
-*/
-
-                Fragment fragment = new UserFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.content, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
-                MainActivity.setAppTitle(R.string.user_title);
-
+                FragmentSwitch.switchTo(getActivity(), new UserFragment(), R.string.user_title);
 
                 break;
             case R.id.activeFrom:
@@ -324,7 +305,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
     public void readUser(int userId) {
 
-        showProgress("User Inactivation.","In Progress... ",2);
+        showProgress("User Inactivation.", "In Progress... ", 2);
         UserApi userApi =
                 ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
         Call<USERGETALL> call = userApi.getUserAPI("http://cellordering.com/api/User/GetUser?userId=" + userId);
@@ -337,7 +318,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
                 user = response.body().getUser();
                 deleteUser(user);
                 dismissProgress();
-                showAlert("User Inactivation.","Inactivated successfully",2);
+                showAlert("User Inactivation.", "Inactivated successfully", 2);
                 Fragment fragment = new UserFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -380,6 +361,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         fragmentTransaction.commit();
 
     }
+
     public void delete(int pos) {
 
       /*  List<CartItem> deleteList = cartItemDao.queryBuilder().where(CartItemDao.Properties.Id.eq(cart.get(pos).getId())).list();
@@ -437,8 +419,8 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
             });
             Log.i("responseNNN", userData + "");
         }
-            return userData;
-        }
+        return userData;
+    }
 
     @Override
     public User getUser() {
@@ -500,7 +482,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
                 Log.i("CREATERES", "RESPONSE" + response.body().toString());
                 dismissProgress();
                 showAlert("User Creation.", "Success!", 1);
-
+                FragmentSwitch.switchTo(getActivity(), new UserFragment(), R.string.user_title);
 //                userAdapter.notifyDataSetChanged();
             }
 
@@ -527,7 +509,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         user.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
 
 
-        UserInfo userInfo=new UserInfo(user);
+        UserInfo userInfo = new UserInfo(user);
         UserApi userApi =
                 ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
         Call<UserInfo> call = userApi.updateUserAPI(userInfo);
@@ -689,22 +671,6 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
     public void onValidationSucceeded() {
         validated = true;
         createUser(getUser());
-        /*add_user.setVisibility(View.GONE);
-        ivAdd.setVisibility(View.VISIBLE);
-        outer_layout.setVisibility(View.VISIBLE);
-        MainActivity.setAppTitle(R.string.user_title);*/
-
-        Fragment fragment = new UserFragment();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.content, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-
-        MainActivity.setAppTitle(R.string.user_title);
-
-
-        // readAllUsers();
     }
 
     @Override

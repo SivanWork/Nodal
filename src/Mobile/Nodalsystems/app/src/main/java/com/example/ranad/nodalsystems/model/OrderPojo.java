@@ -1,24 +1,20 @@
-
 package com.example.ranad.nodalsystems.model;
 
-import java.io.Serializable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class OrderPojo implements Serializable, Parcelable
-{
+import java.io.Serializable;
 
-    @SerializedName("order")
-    @Expose
-    private Order order;
+public class OrderPojo implements Serializable, Parcelable {
+
     public final static Creator<OrderPojo> CREATOR = new Creator<OrderPojo>() {
 
 
         @SuppressWarnings({
-            "unchecked"
+                "unchecked"
         })
         public OrderPojo createFromParcel(Parcel in) {
             return new OrderPojo(in);
@@ -28,9 +24,11 @@ public class OrderPojo implements Serializable, Parcelable
             return (new OrderPojo[size]);
         }
 
-    }
-    ;
+    };
     private final static long serialVersionUID = 5226242992404228261L;
+    @SerializedName("order")
+    @Expose
+    private Order order;
 
     protected OrderPojo(Parcel in) {
         this.order = ((Order) in.readValue((Order.class.getClassLoader())));
@@ -38,13 +36,11 @@ public class OrderPojo implements Serializable, Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public OrderPojo() {
     }
 
     /**
-     * 
      * @param order
      */
     public OrderPojo(Order order) {
@@ -61,13 +57,12 @@ public class OrderPojo implements Serializable, Parcelable
     }
 
 
-
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(order);
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

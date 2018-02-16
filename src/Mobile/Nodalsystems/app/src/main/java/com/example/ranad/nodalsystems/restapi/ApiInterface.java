@@ -9,19 +9,11 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.PUT;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-/**
- * Created by Rana D on 1/30/2018.
- */
 
 public interface ApiInterface {
 
-   /* @FormUrlEncoded
-    @POST(Api.LOGIN_API)
-    Call<String> Login();*/
 
     @GET(Api.LOGIN_API)
     Call<Login> basicLogin();

@@ -1,16 +1,31 @@
-
 package com.example.ranad.nodalsystems.model;
 
-import java.io.Serializable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class GroupElementCode implements Serializable, Parcelable
-{
+import java.io.Serializable;
 
+public class GroupElementCode implements Serializable, Parcelable {
+
+    public final static Creator<GroupElementCode> CREATOR = new Creator<GroupElementCode>() {
+
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public GroupElementCode createFromParcel(Parcel in) {
+            return new GroupElementCode(in);
+        }
+
+        public GroupElementCode[] newArray(int size) {
+            return (new GroupElementCode[size]);
+        }
+
+    };
+    private final static long serialVersionUID = 7833489902078647161L;
     @SerializedName("Id")
     @Expose
     private int id;
@@ -38,23 +53,6 @@ public class GroupElementCode implements Serializable, Parcelable
     @SerializedName("LastUpdatedDate")
     @Expose
     private String lastUpdatedDate;
-    public final static Creator<GroupElementCode> CREATOR = new Creator<GroupElementCode>() {
-
-
-        @SuppressWarnings({
-            "unchecked"
-        })
-        public GroupElementCode createFromParcel(Parcel in) {
-            return new GroupElementCode(in);
-        }
-
-        public GroupElementCode[] newArray(int size) {
-            return (new GroupElementCode[size]);
-        }
-
-    }
-    ;
-    private final static long serialVersionUID = 7833489902078647161L;
 
     protected GroupElementCode(Parcel in) {
         this.id = ((int) in.readValue((int.class.getClassLoader())));
@@ -70,13 +68,11 @@ public class GroupElementCode implements Serializable, Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public GroupElementCode() {
     }
 
     /**
-     * 
      * @param isActive
      * @param groupType
      * @param id
@@ -186,7 +182,7 @@ public class GroupElementCode implements Serializable, Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }
