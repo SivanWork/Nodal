@@ -26,6 +26,7 @@ import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.adapter.ProductAdapter;
 import com.example.ranad.nodalsystems.data_holder.ProductData;
+import com.example.ranad.nodalsystems.data_holder.ResponseData;
 import com.example.ranad.nodalsystems.database.Products;
 import com.example.ranad.nodalsystems.database.ProductsDao;
 import com.example.ranad.nodalsystems.interfaces.ProductAction;
@@ -361,20 +362,22 @@ public class ProductEditFragment extends Fragment implements View.OnClickListene
             ProductApi productApi =
                     ApiClient.createService(ProductApi.class, Login.getInstance(getContext()).getAuthToken());
 
-            Call<ProductInfo> call = productApi.updateProduct(productInfo);
-            call.enqueue(new Callback<ProductInfo>() {
+            Call<ResponseData> call = productApi.updateProduct(productInfo);
+            call.enqueue(new Callback<ResponseData>() {
 
                 @Override
-                public void onResponse(Call<ProductInfo> call, Response<ProductInfo> response) {
+                public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
                     DialogUtils.dismissProgress(progressDialog);
-                    DialogUtils.alertDialog(getContext(), "Product Updation.", "Success", 2);
-
-                    FragmentSwitch.switchTo(getActivity(), new ProductFragment(), R.string.product_title);
+                    if (response.body().isSuccess())
+                        DialogUtils.alertDialog(getContext(), "Product Updation.", "Success", 2);
+                    else
+                        DialogUtils.alertDialog(getContext(), "Product Updation.", "Fail", 2);
+                        FragmentSwitch.switchTo(getActivity(), new ProductFragment(), R.string.product_title);
                 }
 
 
                 @Override
-                public void onFailure(Call<ProductInfo> call, Throwable t) {
+                public void onFailure(Call<ResponseData> call, Throwable t) {
 
                 }
             });

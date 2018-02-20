@@ -1,13 +1,21 @@
 package com.example.ranad.nodalsystems;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +28,7 @@ import com.example.ranad.nodalsystems.database.CustomersDao;
 import com.example.ranad.nodalsystems.database.Products;
 import com.example.ranad.nodalsystems.database.ProductsDao;
 import com.example.ranad.nodalsystems.fragment.BillingFragment;
+import com.example.ranad.nodalsystems.fragment.ChangePassword;
 import com.example.ranad.nodalsystems.fragment.CustomerFragment;
 import com.example.ranad.nodalsystems.fragment.DiscountFragment;
 import com.example.ranad.nodalsystems.fragment.HomeFragment;
@@ -33,11 +42,13 @@ import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
 import com.example.ranad.nodalsystems.interfaces.SyncServer;
 import com.example.ranad.nodalsystems.model.CustomerGetAll;
 import com.example.ranad.nodalsystems.model.Login;
+import com.example.ranad.nodalsystems.model.Logout;
 import com.example.ranad.nodalsystems.model.ProductGetAll;
 import com.example.ranad.nodalsystems.restapi.ApiClient;
 import com.example.ranad.nodalsystems.restapi.CustomerApi;
 import com.example.ranad.nodalsystems.restapi.ProductApi;
 import com.example.ranad.nodalsystems.usage.DialogUtils;
+import com.example.ranad.nodalsystems.usage.FragmentSwitch;
 import com.example.ranad.nodalsystems.usage.NetworkChecker;
 import com.example.ranad.nodalsystems.usage.ServerDataLoader;
 
@@ -84,11 +95,22 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.action_bar_menu, menu);
+
+    //    menu.add(0, 4, 4, menuIconWithText(getResources().getDrawable(R.mipmap.logout), "Logout"));
+
+         inflater.inflate(R.menu.action_bar_menu, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
+    private CharSequence menuIconWithText(Drawable r, String title) {
 
+        r.setBounds(0, 0, r.getIntrinsicWidth(), r.getIntrinsicHeight());
+        SpannableString sb = new SpannableString("    " + title);
+        ImageSpan imageSpan = new ImageSpan(r, ImageSpan.ALIGN_BOTTOM);
+        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return sb;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Take appropriate action for each action item click
@@ -105,6 +127,33 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
                 fragmentTransaction.commit();
                 return true;
 
+            case R.id.passwordchange:
+                FragmentSwitch.switchTo(this,new ChangePassword(),R.string.user_title);
+                return true;
+            case R.id.logout:
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_DayNight_Dialog);
+                builder.setTitle("Confirmation");
+                builder.setMessage("Are you sure! Do you want to Logout..");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Logout.logout(MainActivity.this);
+                        dialog.dismiss();
+                    }
+
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+
+                return true;
 
             default:
                 onBackPressed();
@@ -122,14 +171,69 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
             toolbar.setTitle("HOME PAGE");
         }
 
+
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        if (Login.getInstance(this).getUser().getUserTypeCode().equals("Agent")) {
+
+                navigation.getMenu().removeItem(R.id.navigation_product);
+                navigation.getMenu().removeItem(R.id.navigation_customer);
+                navigation.getMenu().removeItem(R.id.navigation_user);
+            }
+
+
+                navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
+
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
         int target = intent.getIntExtra("target", 0);
 
         switchToFragment(target);
-        loadDefaultData();
+        // loadDefaultData();
 
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment fragment;
+            switch (item.getItemId()) {
+                case R.id.navigation_user:
+                    fragment = new UserFragment();
+                    loadFragment(fragment);
+                    toolbar.setTitle("User");
+                    return true;
+                case R.id.navigation_customer:
+                    fragment = new CustomerFragment();
+                    loadFragment(fragment);
+                    toolbar.setTitle("Customer");
+                    return true;
+                case R.id.navigation_product:
+                    fragment = new ProductFragment();
+                    loadFragment(fragment);
+                    toolbar.setTitle("Product");
+                    return true;
+                case R.id.navigation_order:
+                    fragment = new OrderFragment();
+                    loadFragment(fragment);
+                    toolbar.setTitle("Order");
+                    return true;
+            }
+            return false;
+        }
+        private void loadFragment(Fragment fragment) {
+            // load fragment
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.content, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+    };
+
 
     public void showUpButton() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -139,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
-    public void loadDefaultData() {
+    /*public void loadDefaultData() {
         CustomersDao customersDao = App.getDaoSession().getCustomersDao();
         Customers customers = null;
         String customerNames[] = {"pattabhi", "siva", "rajesh", "kavya", "lavanya"};
@@ -168,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
         }
 
     }
-
+*/
     @Override
     protected void onResume() {
         super.onResume();
@@ -281,26 +385,27 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
                         if (response.body().getCustomerList() != null) {
                             for (int i = 0; i < response.body().getCustomerList().size(); i++) {
 
-                                customerData1 = new CustomerData();
-                                Log.i("responseNames", response.body().getCustomerList().get(i).getFirstName() + "");
-                                Log.i("responseIDS", response.body().getCustomerList().get(i).getCustomerId() + "");
+                                if(response.body().getCustomerList().get(i).isIsActive()) {
+                                    customerData1 = new CustomerData();
+                                    Log.i("responseNames", response.body().getCustomerList().get(i).getFirstName() + "");
+                                    Log.i("responseIDS", response.body().getCustomerList().get(i).getCustomerId() + "");
 
-                                customerData1.setFirstName(response.body().getCustomerList().get(i).getFirstName());
-                                customerData1.setLastName(response.body().getCustomerList().get(i).getLastName());
+                                    customerData1.setFirstName(response.body().getCustomerList().get(i).getFirstName());
+                                    customerData1.setLastName(response.body().getCustomerList().get(i).getLastName());
 
-                                customerData1.setAmountLimit(response.body().getCustomerList().get(i).getAmountLimit());
-                                customerData1.setCustomerCode(response.body().getCustomerList().get(i).getCustomerCode());
-                                customerData1.setEmail(response.body().getCustomerList().get(i).getEmail());
-                                customerData1.setId(response.body().getCustomerList().get(i).getCustomerId());
-                                if (response.body().getCustomerList().get(i).isIsActive())
-                                    customerData1.setIsActive("Active");
-                                else customerData1.setIsActive("Passive");
-                                // customerData1.setName(response.body().getCustomerList().get(i).getFirstName() + " " + response.body().getCustomerList().get(i).getLastName());
-                                customerData1.setMobile(response.body().getCustomerList().get(i).getMobile());
-                                //customerData.add(new CustomerData(response.body().getCustomerList().get(i).getCustomerId(), response.body().getCustomerList().get(i).getFirstName()));
+                                    customerData1.setAmountLimit(response.body().getCustomerList().get(i).getAmountLimit());
+                                    customerData1.setCustomerCode(response.body().getCustomerList().get(i).getCustomerCode());
+                                    customerData1.setEmail(response.body().getCustomerList().get(i).getEmail());
+                                    customerData1.setId(response.body().getCustomerList().get(i).getCustomerId());
+                                    if (response.body().getCustomerList().get(i).isIsActive())
+                                        customerData1.setIsActive("Active");
+                                    else customerData1.setIsActive("Passive");
+                                    // customerData1.setName(response.body().getCustomerList().get(i).getFirstName() + " " + response.body().getCustomerList().get(i).getLastName());
+                                    customerData1.setMobile(response.body().getCustomerList().get(i).getMobile());
+                                    //customerData.add(new CustomerData(response.body().getCustomerList().get(i).getCustomerId(), response.body().getCustomerList().get(i).getFirstName()));
 
-                                customerData.add(customerData1);
-
+                                    customerData.add(customerData1);
+                                }
                             }
                         }
                     }
@@ -350,14 +455,15 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
                         if (response.body().getProductList() != null) {
                             for (int i = 0; i < response.body().getProductList().size(); i++) {
 
-                                productData1 = new ProductData();
-                                productData1.setProductCode(response.body().getProductList().get(i).getProductCode());
+                                if(response.body().getProductList().get(i).isIsActive()) {
+                                    productData1 = new ProductData();
+                                    productData1.setProductCode(response.body().getProductList().get(i).getProductCode());
 
-                                productData1.setProductId(response.body().getProductList().get(i).getProductId());
-                                productData1.setProductName(response.body().getProductList().get(i).getProductName());
-                                productData1.setDealerPrice(response.body().getProductList().get(i).getDealerPrice());
-                                productData.add(productData1);
-
+                                    productData1.setProductId(response.body().getProductList().get(i).getProductId());
+                                    productData1.setProductName(response.body().getProductList().get(i).getProductName());
+                                    productData1.setDealerPrice(response.body().getProductList().get(i).getDealerPrice());
+                                    productData.add(productData1);
+                                }
                             }
                             // noOfproducts.setText("Customers:" + response.body().getCustomerList().size());
                         }

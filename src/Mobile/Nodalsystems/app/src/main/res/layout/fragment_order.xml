@@ -53,7 +53,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/order_list"
                 android:layout_width="match_parent"
-                android:layout_height="300dp" />
+                android:layout_height="250dp" />
 
 
             <LinearLayout
@@ -86,9 +86,9 @@
                     android:layout_width="125dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:foreground="?attr/selectableItemBackground"
                     android:text="SUBMIT"
-                    android:textColor="@android:color/white"
                     android:textSize="18sp" />
 
                 <Button
@@ -98,13 +98,14 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:foreground="?attr/selectableItemBackground"
                     android:text="View Orders"
-                    android:textColor="@android:color/white"
                     android:textSize="18sp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+<!--
 
     <LinearLayout
         android:id="@+id/lvAddOrder"
@@ -322,6 +323,7 @@
         </LinearLayout>
 
     </LinearLayout>
+-->
 
     <ImageView
         android:id="@+id/btnAddOrder"

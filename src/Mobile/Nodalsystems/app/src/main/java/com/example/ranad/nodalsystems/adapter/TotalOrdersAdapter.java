@@ -77,11 +77,11 @@ public class TotalOrdersAdapter extends RecyclerView.Adapter<TotalOrdersAdapter.
             List<Customers> customersList = customersDao.queryBuilder().where(CustomersDao.Properties.Id.eq(orderData.getCustomerId())).list();
             OrderDetailDBDao orderDetailDBDao = App.getDaoSession().getOrderDetailDBDao();
             List<OrderDetailDB> orderDetailDBList = orderDetailDBDao.queryBuilder().where(OrderDetailDBDao.Properties.OrderId.eq(orderData.getId())).list();
-            customerName.setText(customersList.get(position).getFirstName());
-            code.setText("CD00" + customersList.get(position).getId());
+            customerName.setText(customersList.get(0).getFirstName());
+            code.setText("ORD_00" + orderData.getId());
             amount.setText(orderData.getTotalOrderAmount() + "");
             dateview.setText(orderData.getCreatedDate() + "");
-            items.setText(orderDetailDBList.size() + "");
+            items.setText(orderDetailDBList.size()+"");
         }
 
 

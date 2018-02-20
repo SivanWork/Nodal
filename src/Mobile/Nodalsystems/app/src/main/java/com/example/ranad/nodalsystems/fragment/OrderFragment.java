@@ -123,24 +123,24 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
 
         progressDialog = new ProgressDialog(getContext());
         view = inflater.inflate(R.layout.fragment_order, container, false);
-        cName = (AutoCompleteTextView) view.findViewById(R.id.cName);
+      //  cName = (AutoCompleteTextView) view.findViewById(R.id.cName);
         total = (TextView) view.findViewById(R.id.total_price);
-        lvAddOrder = (LinearLayout) view.findViewById(R.id.lvAddOrder);
-        cNumber = (AutoCompleteTextView) view.findViewById(R.id.cNumber);
+       // lvAddOrder = (LinearLayout) view.findViewById(R.id.lvAddOrder);
+       // cNumber = (AutoCompleteTextView) view.findViewById(R.id.cNumber);
         quantity = (EditText) view.findViewById(R.id.quantity);
-        discount = (EditText) view.findViewById(R.id.order_discount);
-        material = (Spinner) view.findViewById(R.id.material);
-        order_tax = (EditText) view.findViewById(R.id.order_tax);
-        price = (EditText) view.findViewById(R.id.order_price);
-        submit = (Button) view.findViewById(R.id.submit);
-        submit.setOnClickListener(this);
+        //discount = (EditText) view.findViewById(R.id.order_discount);
+        //material = (Spinner) view.findViewById(R.id.material);
+      //  order_tax = (EditText) view.findViewById(R.id.order_tax);
+       // price = (EditText) view.findViewById(R.id.order_price);
+      //  submit = (Button) view.findViewById(R.id.submit);
+        //submit.setOnClickListener(this);
         viewOrders = (Button) view.findViewById(R.id.viewOrders);
         viewOrders.setOnClickListener(this);
         btnAddOrder = (ImageView) view.findViewById(R.id.btnAddOrder);
         btnAddOrder.setOnClickListener(this);
         lists = (ScrollView) view.findViewById(R.id.list);
-        cancel = (Button) view.findViewById(R.id.cancel_add);
-        cancel.setOnClickListener(this);
+        //cancel = (Button) view.findViewById(R.id.cancel_add);
+        //cancel.setOnClickListener(this);
         add_prod = (Button) view.findViewById(R.id.add_prod);
         add_prod.setOnClickListener(this);
         order_list = (RecyclerView) view.findViewById(R.id.order_list);
@@ -159,7 +159,7 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
         final List<Customers> customersList = customersDao.queryBuilder().list();
         Log.i("CCC", "customersList" + customersList.size());
         for (int i = 0; i < customersList.size(); i++) {
-            customer.add(customersList.get(i).getFirstName());
+            customer.add(customersList.get(i).getFirstName()+"("+customersList.get(i).getCustomerCode()+")");
             customerAdapter = new ArrayAdapter(getActivity(), R.layout.dropdown, customer);
             customerAutoCompleterView.setAdapter(customerAdapter);
             customerAutoCompleterView.setThreshold(1);
@@ -221,12 +221,12 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
                 btnAddOrder.setVisibility(View.GONE);
                 lists.setVisibility(View.GONE);
                 break;
-            case R.id.cancel_add:
+           /* case R.id.cancel_add:
                 lvAddOrder.setVisibility(View.GONE);
                 MainActivity.setAppTitle(R.string.order_title);
                 btnAddOrder.setVisibility(View.VISIBLE);
                 lists.setVisibility(View.VISIBLE);
-                break;
+                break;*/
             case R.id.viewOrders:
                 FragmentSwitch.switchTo(getActivity(),new OrderViewFragment(),R.string.order_title);
                 break;
@@ -320,6 +320,12 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
         Date currentDate = new Date();
+/*
+        Date date=null;
+        String dateTime = format.format(currentDate);
+        System.out.println("Current Date Time : " + dateTime);
+            date = new Date(dateTime);
+*/
         orders = new Orders();
 
         orders.setCreatedDate(currentDate);

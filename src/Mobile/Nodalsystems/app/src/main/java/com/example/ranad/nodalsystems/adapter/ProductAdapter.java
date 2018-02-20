@@ -1,12 +1,17 @@
 package com.example.ranad.nodalsystems.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -14,6 +19,7 @@ import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.data_holder.ProductData;
 import com.example.ranad.nodalsystems.fragment.ProductFragment;
 import com.example.ranad.nodalsystems.interfaces.ProductAction;
+import com.example.ranad.nodalsystems.usage.DialogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +66,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         TextView productName, price;
 
         ImageView edit, delete;
+        String message;
+        LinearLayout linearLayout;
 
 
         public ProductViewHolder(final Context context, View itemView) {
@@ -69,17 +77,49 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             price = (TextView) itemView.findViewById(R.id.product_price);
             edit = (ImageView) itemView.findViewById(R.id.edit);
             delete = (ImageView) itemView.findViewById(R.id.delete);
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayout);
 
         }
 
         public void bindData(final ProductData productData, final int position) {
             productName.setText(productData.getProductName());
             price.setText(productData.getDealerPrice() + "");
-
+            if (productData.getIsActive()) {
+                linearLayout.setBackgroundColor(Color.parseColor("#ffffff"));
+            } else {
+                linearLayout.setBackgroundColor(Color.parseColor("#A9A9A9"));
+            }
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    productAction.readProduct(productData.getProductId());
+                    if (productData.getIsActive()) {
+                        message = "Are you sure? Do you want to Deactivate Product.";
+                        // DialogUtils.alertDialog(context, "Confirmation", "Are you sure? Do you want to Deactivate User.", 1);
+                    } else {
+                        message = "Are you sure? Do you want to Activate Product.";
+                        //  DialogUtils.alertDialog(context, "Confirmation", "Are you sure? Do you want to Activate User.", 1);
+                    }
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.Theme_AppCompat_DayNight_Dialog);
+                    builder.setTitle("Confirmation");
+                    builder.setMessage(message);
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            productAction.readProduct(productData.getProductId());
+                            dialog.dismiss();
+                        }
+
+                    });
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
 
                 }
             });
@@ -87,7 +127,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 @Override
 
                 public void onClick(View view) {
-                    productAction.switchToEditProduct(productData.getProductId());
+                    if (productData.getIsActive()) {
+                        productAction.switchToEditProduct(productData.getProductId());
+                    } else {
+                        DialogUtils.alertDialog(context, "Intimation", "Can't change Inactive product information", 1);
+                    }
                 }
             });
         }

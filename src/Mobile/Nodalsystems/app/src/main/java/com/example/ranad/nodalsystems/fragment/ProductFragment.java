@@ -26,6 +26,7 @@ import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.adapter.ProductAdapter;
 import com.example.ranad.nodalsystems.data_holder.ProductData;
+import com.example.ranad.nodalsystems.data_holder.ResponseData;
 import com.example.ranad.nodalsystems.database.Products;
 import com.example.ranad.nodalsystems.database.ProductsDao;
 import com.example.ranad.nodalsystems.interfaces.ProductAction;
@@ -276,7 +277,7 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
                     DialogUtils.dismissProgress(progressDialog);
 
                     deleteProduct(response.body().getProduct());
-                    DialogUtils.alertDialog(getContext(), "Product Inactivation.", "Inactivated successfully", 2);
+                  //  DialogUtils.alertDialog(getContext(), "Product Inactivation.", "Inactivated successfully", 2);
                     FragmentSwitch.switchTo(getActivity(), new ProductFragment(), R.string.product_title);
 
 
@@ -297,24 +298,33 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
     @Override
     public void deleteProduct(Product product) {
 
-
-        //    Log.i("AAAAA", "SSSS" + position);
-
-        product.setIsActive(false);
+        if (product.isIsActive()) {
+            product.setIsActive(false);
+          //  DialogUtils.alertDialog(getContext(), "Product Inactivation.", "Inactivated successfully", 2);
+        } else {
+            product.setIsActive(true);
+          //  DialogUtils.alertDialog(getContext(), "Product Activation.", "Activated successfully", 2);
+        }
+       // product.setIsActive(false);
         product.setLastUpdatedDate(getCurrentDate());
         product.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
         ProductInfo productInfo = new ProductInfo(product);
         ProductApi productApi =
                 ApiClient.createService(ProductApi.class, Login.getInstance(getContext()).getAuthToken());
-        Call<ProductInfo> call = productApi.updateProduct(productInfo);
-        call.enqueue(new Callback<ProductInfo>() {
+        Call<ResponseData> call = productApi.updateProduct(productInfo);
+        call.enqueue(new Callback<ResponseData>() {
             @Override
-            public void onResponse(Call<ProductInfo> call, Response<ProductInfo> response) {
+            public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
+                if(response.body().isSuccess())
+
+                    DialogUtils.alertDialog(getActivity(),"Intimation","Success!",2);
+                else
+                    DialogUtils.alertDialog(getActivity(),"Intimation","Fail.",2);
 
             }
 
             @Override
-            public void onFailure(Call<ProductInfo> call, Throwable t) {
+            public void onFailure(Call<ResponseData> call, Throwable t) {
 
             }
         });
@@ -391,6 +401,10 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
                         productData1.setProductId(response.body().getProductList().get(i).getProductId());
                         productData1.setProductName(response.body().getProductList().get(i).getProductName());
                         productData1.setDealerPrice(response.body().getProductList().get(i).getDealerPrice());
+                        if (response.body().getProductList().get(i).isIsActive())
+
+                            productData1.setIsActive(true);
+                        else productData1.setIsActive(false);
                         productData.add(productData1);
 
                     }

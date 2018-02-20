@@ -12,16 +12,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/noOfCustomers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:textColor="#000000"
-            android:textSize="16dp"
-            android:textStyle="bold" />
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,18 +23,27 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/customborder3"
+                android:background="@drawable/searchborder"
+                android:layout_marginTop="10dp"
                 android:hint="search customer here"
                 android:textAlignment="center"
                 android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="16sp" />
         </LinearLayout>
+        <TextView
+            android:id="@+id/noOfCustomers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="#000000"
+            android:textSize="16dp"
+            android:textStyle="bold" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/customer_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp" />
+            />
 
     </LinearLayout>
 

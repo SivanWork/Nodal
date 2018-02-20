@@ -1,6 +1,7 @@
 package com.example.ranad.nodalsystems.restapi;
 
 import com.example.ranad.nodalsystems.Api;
+import com.example.ranad.nodalsystems.data_holder.ResponseData;
 import com.example.ranad.nodalsystems.model.CustomerGetAll;
 import com.example.ranad.nodalsystems.model.CustomerInfo;
 
@@ -24,6 +25,7 @@ public interface CustomerApi {
     Call<CustomerInfo> createCustomerAPI(@Body CustomerInfo customerInfo);
 
     @POST(Api.CUSTOMER_UPDATE)
+    Call<ResponseData> updateCustomerAPI(@Body CustomerInfo customerInfo);
 
     @GET
     public Call<CustomerGetAll> getCustomerAPI(@Url String url);

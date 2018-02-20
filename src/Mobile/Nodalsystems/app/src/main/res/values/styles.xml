@@ -8,6 +8,7 @@
         <item name="colorAccent">@android:color/white</item>
         <item name="android:buttonStyle">@style/AppTheme.Button</item>
         <item name="android:editTextStyle">@style/EdittextTheme</item>
+        <item name="android:itemBackground">@color/btn_bg</item>
     </style>
 
 

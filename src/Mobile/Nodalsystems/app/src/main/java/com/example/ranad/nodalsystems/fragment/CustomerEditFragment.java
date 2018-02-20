@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.data_holder.CustomerData;
+import com.example.ranad.nodalsystems.data_holder.ResponseData;
 import com.example.ranad.nodalsystems.interfaces.CustomerAction;
 import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
 import com.example.ranad.nodalsystems.model.Customer;
@@ -236,18 +237,22 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
             CustomerApi customerApi =
                     ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
 
-            Call<CustomerInfo> call = customerApi.updateCustomerAPI(customerInfo);
-            call.enqueue(new Callback<CustomerInfo>() {
+            Call<ResponseData> call = customerApi.updateCustomerAPI(customerInfo);
+            call.enqueue(new Callback<ResponseData>() {
 
                 @Override
-                public void onResponse(Call<CustomerInfo> call, Response<CustomerInfo> response) {
+                public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
                     DialogUtils.dismissProgress(progressDialog);
+                    if(response.body().isSuccess())
                     DialogUtils.alertDialog(getContext(), "Customer Updation..", "Success!", 2);
+                    else
+                        DialogUtils.alertDialog(getContext(), "Customer Updation..", "Fail!", 2);
+
                     FragmentSwitch.switchTo(getActivity(), new CustomerFragment(), R.string.customer_title);
                 }
 
                 @Override
-                public void onFailure(Call<CustomerInfo> call, Throwable t) {
+                public void onFailure(Call<ResponseData> call, Throwable t) {
 
                 }
             });

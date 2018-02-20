@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- Search / will display always -->
     <item
+
         android:id="@+id/sync"
-        android:icon="@drawable/sync2"
+        android:name="Sync Server"
         android:title="Sync Server"
+        android:icon="@drawable/sync2"
         app:showAsAction="always" />
 
     <item
@@ -13,6 +15,18 @@
         android:icon="@drawable/homepage"
         android:title=""
         app:showAsAction="always" />
+
+    <item android:id="@+id/passwordchange"
+        android:icon="@mipmap/changepassword"
+        android:title="Change Password"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/logout"
+        android:icon="@mipmap/logout"
+        android:title="Logout"
+        app:showAsAction="never" />
+
+
     <!--
     &lt;!&ndash; Location Found &ndash;&gt;
     <item android:id="@+id/action_location_found"
