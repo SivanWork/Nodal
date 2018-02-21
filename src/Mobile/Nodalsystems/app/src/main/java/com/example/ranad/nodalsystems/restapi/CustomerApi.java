@@ -14,9 +14,6 @@ import retrofit2.http.Url;
 
 public interface CustomerApi {
 
-
-
-
     @GET(Api.CUSTOMER_GETALL)
     Call<CustomerGetAll> getAllCustomersAPI();
 
@@ -24,6 +21,7 @@ public interface CustomerApi {
     Call<CustomerInfo> createCustomerAPI(@Body CustomerInfo customerInfo);
 
     @POST(Api.CUSTOMER_UPDATE)
+    Call<CustomerInfo> updateCustomerAPI(@Body CustomerInfo customerInfo);
 
     @GET
     public Call<CustomerGetAll> getCustomerAPI(@Url String url);

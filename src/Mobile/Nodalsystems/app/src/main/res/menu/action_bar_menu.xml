@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Search / will display always -->
-    <item
-        android:id="@+id/sync"
-        android:icon="@drawable/sync2"
-        android:title="Sync Server"
-        app:showAsAction="always" />
+   <group android:checkableBehavior="single">
 
     <item
         android:id="@+id/home"
         android:icon="@drawable/homepage"
-        android:title=""
-        app:showAsAction="always" />
+        android:checked="true"
+        android:title="Home" />
+    <item
+        android:id="@+id/sync"
+        android:icon="@drawable/sync"
+        android:title="Sync Server"/>
+
+    <item
+        android:id="@+id/change_pwd"
+        android:icon="@drawable/change"
+        android:title="Change password"/>
     <!--
     &lt;!&ndash; Location Found &ndash;&gt;
     <item android:id="@+id/action_location_found"
@@ -38,4 +42,5 @@
         android:title="@string/action_check_updates"
         android:showAsAction="never" />
 -->
+   </group>
 </menu>

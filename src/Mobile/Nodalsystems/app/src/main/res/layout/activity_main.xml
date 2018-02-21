@@ -3,12 +3,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     tools:context="com.example.ranad.nodalsystems.MainActivity">
 
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        tools:openDrawer="start"
+        android:layout_height="match_parent">
+
     <include
         layout="@layout/tool_bar"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"></include>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+        <android.support.design.widget.NavigationView
+            android:layout_marginTop="?android:attr/actionBarSize"
+            android:id="@+id/navigation_vew"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:itemTextColor="@android:color/black"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:menu="@menu/action_bar_menu"/>
+
+
+    </android.support.v4.widget.DrawerLayout>
 
 </RelativeLayout>

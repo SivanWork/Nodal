@@ -4,14 +4,20 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toolbar;
 
 import com.example.ranad.nodalsystems.data_holder.CustomerData;
 import com.example.ranad.nodalsystems.data_holder.ProductData;
@@ -20,6 +26,7 @@ import com.example.ranad.nodalsystems.database.CustomersDao;
 import com.example.ranad.nodalsystems.database.Products;
 import com.example.ranad.nodalsystems.database.ProductsDao;
 import com.example.ranad.nodalsystems.fragment.BillingFragment;
+import com.example.ranad.nodalsystems.fragment.ChangePassword;
 import com.example.ranad.nodalsystems.fragment.CustomerFragment;
 import com.example.ranad.nodalsystems.fragment.DiscountFragment;
 import com.example.ranad.nodalsystems.fragment.HomeFragment;
@@ -49,6 +56,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_BILLING;
+import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_CHANGE_PASSWORD;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_CUSTOMER;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_DISCOUNT;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_HOME;
@@ -60,11 +68,13 @@ import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_RETURN;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_SCHEME;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_USER;
 
-public class MainActivity extends AppCompatActivity implements SwitchFragment, SyncServer {
+public class MainActivity extends AppCompatActivity implements SwitchFragment, SyncServer, NavigationView.OnNavigationItemSelectedListener {
 
 
     public static SwitchFragment switchFragment;
     private static android.support.v7.widget.Toolbar toolbar;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
 
     List<Customers> customersList = new ArrayList<>();
 
@@ -122,6 +132,15 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
             toolbar.setTitle("HOME PAGE");
         }
 
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        android.support.v7.app.ActionBarDrawerToggle toggle = getActionBarDrawerToggle(toolbar, drawerLayout);
+        drawerLayout.setDrawerListener(toggle);
+        navigationView = (NavigationView) findViewById(R.id.navigation_vew);
+        navigationView.setItemIconTintList(null);
+        navigationView.setNavigationItemSelectedListener(this);
+        toolbar.setNavigationIcon(R.drawable.menu1);
+
+
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
         int target = intent.getIntExtra("target", 0);
@@ -129,6 +148,23 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
         switchToFragment(target);
         loadDefaultData();
 
+    }
+
+    private android.support.v7.app.ActionBarDrawerToggle getActionBarDrawerToggle(final android.support.v7.widget.Toolbar toolbar, DrawerLayout drawerLayout){
+        return new android.support.v7.app.ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav){
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                toolbar.setNavigationIcon(R.drawable.menu1);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                toolbar.setNavigationIcon(R.drawable.menu1);
+            }
+        };
     }
 
     public void showUpButton() {
@@ -212,12 +248,17 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
             case FRAGMENT_REPORT:
                 fragment = new ReportFragment();
                 break;
+            /*case FRAGMENT_CHANGE_PASSWORD:
+                fragment = ChangePassword.newInstance(switchFragment);
+                break;*/
             case FRAGMENT_SCHEME:
                 fragment = new SchemeFragment();
                 break;
             case FRAGMENT_PRODUCT_EDIT:
                 fragment = new SchemeFragment();
                 break;
+
+
             default:
                 fragment = null;
                 break;
@@ -377,5 +418,34 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
             });
         }            //    Log.i("responseNNN", userData + "");
 
+    }
+
+    public static int item = -1;
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        int id = menuItem.getItemId();
+        boolean set = false;
+        if (item != id){
+            switch (id){
+                case R.id.home:
+                    switchFragment.switchToFragment(FRAGMENT_HOME);
+                    break;
+                case R.id.sync:
+                    break;
+                case R.id.change_pwd:
+                   switchFragment.switchToFragment(FRAGMENT_CHANGE_PASSWORD);
+                    break;
+            }
+        }else {
+
+        }
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout.closeDrawer(GravityCompat.START);
+        if (set){
+            return false;
+        }else {
+            item = id;
+        }
+        return true;
     }
 }
