@@ -1,6 +1,7 @@
 package com.example.ranad.nodalsystems.restapi;
 
 import com.example.ranad.nodalsystems.Api;
+import com.example.ranad.nodalsystems.data_holder.ResponseData;
 import com.example.ranad.nodalsystems.model.ProductGetAll;
 import com.example.ranad.nodalsystems.model.ProductInfo;
 
@@ -21,7 +22,7 @@ public interface ProductApi {
     Call<ProductInfo> createProduct(@Body ProductInfo product);
 
     @POST(Api.UPDATE_PRODUCT)
-    Call<ProductInfo> updateProduct(@Body ProductInfo product);
+    Call<ResponseData> updateProduct(@Body ProductInfo product);
 
 
     @GET

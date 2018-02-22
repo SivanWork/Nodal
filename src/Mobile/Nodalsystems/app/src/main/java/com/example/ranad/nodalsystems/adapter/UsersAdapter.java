@@ -1,6 +1,9 @@
 package com.example.ranad.nodalsystems.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,13 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.data_holder.UserData;
 import com.example.ranad.nodalsystems.fragment.UserFragment;
 import com.example.ranad.nodalsystems.interfaces.UserAction;
+import com.example.ranad.nodalsystems.usage.DialogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +64,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         View itemView;
         TextView userName, name, mobile, isActive, userElementCode;
 
-        ImageView edit, delete;
-
+        ImageView edit, delete,usericon;
+        String message;
+        LinearLayout linearLayout;
 
         public UserViewHolder(final Context context, View itemView) {
             super(itemView);
@@ -70,23 +77,31 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             mobile = (TextView) itemView.findViewById(R.id.mobile);
             isActive = (TextView) itemView.findViewById(R.id.isActive);
             userElementCode = (TextView) itemView.findViewById(R.id.elementCode);
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayout);
 
             edit = (ImageView) itemView.findViewById(R.id.edit);
             delete = (ImageView) itemView.findViewById(R.id.delete);
+            usericon = (ImageView) itemView.findViewById(R.id.usericon);
         }
 
         public void bindData(final ArrayList<UserData> userData, final int position) {
-            Log.i("dFGFH", "PPPP" + userData.get(position).getId());
+            //  Log.e("dFGFH", "PPPP" + userData.size());
             userName.setText(userData.get(position).getUserName());
 
 
             name.setText(userData.get(position).getFirstName() + " " + userData.get(position).getLastName());
-            mobile.setText(userData.get(position).getMobile().toString());
-
-            if (userData.get(position).isActive())
+            mobile.setText(userData.get(position).getMobile());
+            if (userData.get(position).isActive()) {
                 isActive.setText("Active");
-            else
-                isActive.setText("Passive");
+                usericon.setImageResource(R.drawable.activeuser);
+               // linearLayout.setBackgroundColor(Color.parseColor("#ffffff"));
+
+            } else {
+                isActive.setText("InActive");
+                usericon.setImageResource(R.drawable.inactiveuser);
+               // linearLayout.setBackgroundColor(Color.parseColor("#A9A9A9"));
+
+            }
 
             userElementCode.setText(userData.get(position).getUserElementCode());
 
@@ -94,39 +109,52 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Toast.makeText(context, "unable to delete", Toast.LENGTH_SHORT).show();
-                /*    User user=new User();
-                    user.setUserId(userData.get(position).getId());
-*/
-                    userAction.readUser(userData.get(position).getId());
+                    if (userData.get(position).isActive()) {
+                        message = "Are you sure? Do you want to Deactivate User.";
+                        // DialogUtils.alertDialog(context, "Confirmation", "Are you sure? Do you want to Deactivate User.", 1);
+                    } else {
+                        message = "Are you sure? Do you want to Activate User.";
+                        //  DialogUtils.alertDialog(context, "Confirmation", "Are you sure? Do you want to Activate User.", 1);
+                    }
 
-//                    userAction.getUser();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.Theme_AppCompat_DayNight_Dialog);
+                    builder.setTitle("Confirmation");
+                    builder.setMessage(message);
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            userAction.readUser(userData.get(position).getId());
+                            dialog.dismiss();
+                        }
+
+                    });
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
                 }
             });
+
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
 
                 public void onClick(View view) {
-
-
-                    // Toast.makeText(context, "unable to delete", Toast.LENGTH_SHORT).show();
-                  /*  FragmentTransaction transection=getFragmentManager().beginTransaction();
-
-                    UserEditFragment userEditFragment=new UserEditFragment();
-
-                    Bundle bundle=new Bundle();
-                    bundle.putInt("userId",userData.get(position).getId());
-                    userEditFragment.setArguments(bundle); //data being send to SecondFragment
-                    transection.replace(R.id.main_fragment, mfragment);
-                    transection.commit();
-*/
-
-
-                    userAction.switchToEditUser(position);
+                    if (userData.get(position).isActive()) {
+                        userAction.switchToEditUser(position);
+                    } else {
+                        DialogUtils.alertDialog(context, "Intimation", "Can't change Inactive user information", 1);
+                    }
                 }
             });
-        }
 
+
+        }
 
         @Override
         public View makeView() {

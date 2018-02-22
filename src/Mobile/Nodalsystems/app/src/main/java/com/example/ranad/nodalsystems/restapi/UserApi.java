@@ -1,6 +1,7 @@
 package com.example.ranad.nodalsystems.restapi;
 
 import com.example.ranad.nodalsystems.Api;
+import com.example.ranad.nodalsystems.data_holder.ResponseData;
 import com.example.ranad.nodalsystems.model.USERGETALL;
 import com.example.ranad.nodalsystems.model.User;
 import com.example.ranad.nodalsystems.model.UserInfo;
@@ -20,10 +21,10 @@ public interface UserApi {
     Call<USERGETALL> getAllUsersAPI();
 
     @POST(Api.USER_CREATE)
-    Call<UserInfo> createUserAPI(@Body UserInfo user);
+    Call<ResponseData> createUserAPI(@Body UserInfo user);
 
     @POST(Api.USER_UPDATE)
-    Call<UserInfo> updateUserAPI(@Body UserInfo user);
+    Call<ResponseData> updateUserAPI(@Body UserInfo user);
 
     @POST(Api.USER_DELETE)
     Call<User> deleteteUserAPI(@Body User user);

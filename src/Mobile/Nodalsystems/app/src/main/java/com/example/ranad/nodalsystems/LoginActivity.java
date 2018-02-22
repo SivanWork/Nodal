@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         validator = new Validator(this);
         validator.setValidationListener(this);
-
+//
 
         userName = (EditText) findViewById(R.id.user_name);
         pwd = (EditText) findViewById(R.id.password);

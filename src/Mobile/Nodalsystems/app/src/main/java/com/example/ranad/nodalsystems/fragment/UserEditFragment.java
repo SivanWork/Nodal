@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
+import com.example.ranad.nodalsystems.data_holder.ResponseData;
 import com.example.ranad.nodalsystems.data_holder.UserData;
 import com.example.ranad.nodalsystems.interfaces.GroupElementTypeAction;
 import com.example.ranad.nodalsystems.interfaces.GroupTypeAction;
@@ -400,18 +401,21 @@ public class UserEditFragment extends Fragment implements View.OnClickListener, 
         UserApi userApi =
                 ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
 
-        Call<UserInfo> call = userApi.updateUserAPI(userInfo);
-        call.enqueue(new Callback<UserInfo>() {
+        Call<ResponseData> call = userApi.updateUserAPI(userInfo);
+        call.enqueue(new Callback<ResponseData>() {
             @Override
-            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+            public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
                 dismissProgress();
+                if(response.body().isSuccess())
                 showAlert("User Update Status", "Success", 2);
+                else
+                    showAlert("User Update Status", "Fail", 2);
                 FragmentSwitch.switchTo(getActivity(), new UserFragment(), R.string.user_title);
             }
 
 
             @Override
-            public void onFailure(Call<UserInfo> call, Throwable t) {
+            public void onFailure(Call<ResponseData> call, Throwable t) {
 
             }
         });

@@ -28,6 +28,7 @@ import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.adapter.CustomerListAdapter;
 import com.example.ranad.nodalsystems.data_holder.CustomerData;
+import com.example.ranad.nodalsystems.data_holder.ResponseData;
 import com.example.ranad.nodalsystems.database.Customers;
 import com.example.ranad.nodalsystems.database.CustomersDao;
 import com.example.ranad.nodalsystems.interfaces.CustomerAction;
@@ -276,7 +277,6 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
                     ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
 
             Call<CustomerGetAll> call = customerApi.getCustomerAPI("http://cellordering.com/api/Customer/GetCustomer?customerId=" + customerId);
-            ;
             call.enqueue(new Callback<CustomerGetAll>() {
                 @Override
                 public void onResponse(Call<CustomerGetAll> call, Response<CustomerGetAll> response) {
@@ -300,23 +300,35 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void deleteCustomer(Customer customer) {
-        customer.setIsActive(false);
+        if (customer.isIsActive()) {
+            customer.setIsActive(false);
+        } else {
+            customer.setIsActive(true);
+        }
+
         customer.setLastUpdatedDate(getCurrentDate());
         customer.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
         CustomerInfo customerInfo = new CustomerInfo(customer);
         CustomerApi customerApi =
                 ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
-        Call<CustomerInfo> call = customerApi.updateCustomerAPI(customerInfo);
-        call.enqueue(new Callback<CustomerInfo>() {
+        Call<ResponseData> call = customerApi.updateCustomerAPI(customerInfo);
+        call.enqueue(new Callback<ResponseData>() {
             @Override
-            public void onResponse(Call<CustomerInfo> call, Response<CustomerInfo> response) {
-                showAlert("Customer Inactivation.", "Inactivated successfully", 2);
+            public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
+
+                if(response.body().isSuccess())
+
+                    showAlert("Intimation.", "success..", 2);
+                else
+                    showAlert("Intimation.", "Fail", 2);
+
+            //    showAlert("Customer Inactivation.", "Inactivated successfully", 2);
                 FragmentSwitch.switchTo(getActivity(), new CustomerFragment(), R.string.customer_title);
 
             }
 
             @Override
-            public void onFailure(Call<CustomerInfo> call, Throwable t) {
+            public void onFailure(Call<ResponseData> call, Throwable t) {
 
             }
         });
@@ -434,7 +446,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
                         if (response.body().getCustomerList().get(i).isIsActive())
 
                             customerData1.setIsActive("Active");
-                        else customerData1.setIsActive("Passive");
+                        else customerData1.setIsActive("InActive");
 
                         customerData1.setFirstName(response.body().getCustomerList().get(i).getFirstName());
                         customerData1.setLastName(response.body().getCustomerList().get(i).getLastName());

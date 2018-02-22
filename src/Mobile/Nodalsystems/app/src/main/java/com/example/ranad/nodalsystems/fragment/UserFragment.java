@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -31,6 +32,7 @@ import android.widget.TextView;
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.adapter.UsersAdapter;
+import com.example.ranad.nodalsystems.data_holder.ResponseData;
 import com.example.ranad.nodalsystems.data_holder.UserData;
 import com.example.ranad.nodalsystems.interfaces.GroupElementTypeAction;
 import com.example.ranad.nodalsystems.interfaces.GroupTypeAction;
@@ -44,8 +46,10 @@ import com.example.ranad.nodalsystems.model.User;
 import com.example.ranad.nodalsystems.model.UserInfo;
 import com.example.ranad.nodalsystems.model.UserList;
 import com.example.ranad.nodalsystems.restapi.ApiClient;
+import com.example.ranad.nodalsystems.restapi.GroupElementTypeApi;
 import com.example.ranad.nodalsystems.restapi.GroupTypeApi;
 import com.example.ranad.nodalsystems.restapi.UserApi;
+import com.example.ranad.nodalsystems.usage.DialogUtils;
 import com.example.ranad.nodalsystems.usage.FragmentSwitch;
 import com.example.ranad.nodalsystems.usage.NetworkChecker;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -210,11 +214,26 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
     @Override
     public void onResume() {
         super.onResume();
+
+        // DialogUtils.alertDialog(getContext(),"Hi","hi",2);
         MainActivity.setAppTitle(R.string.user_title);
         MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             activity.showUpButton();
+
         }
+        getAllElementTypes();
+      //  NavUtils.navigateUpFromSameTask(this.getActivity());
+      //  FragmentSwitch.switchTo(getActivity(), new UserFragment(), R.string.user_title);
+        /*userDataList = readAllUsers();
+
+        user_list = (RecyclerView) view.findViewById(R.id.user_list);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        user_list.setLayoutManager(linearLayoutManager);
+        usersAdapter = new UsersAdapter(userDataList, getContext(), this);
+        user_list.setAdapter(usersAdapter);*/
+
+        //usersAdapter.notifyDataSetChanged();
 
     }
 
@@ -249,19 +268,19 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
                 userType_spinner.setAdapter(dataAdapter);
 
 
-                List<String> list2 = new ArrayList<String>();
+              /*  List<String> list2 = new ArrayList<String>();
 
                 list2.add(0, "Admin");
                 list2.add(1, "Agent");
                 ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list2);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 userElement_spinner.setAdapter(dataAdapter2);
-
+*/
                 break;
             case R.id.add:
 
                 validator.validate();
-                Log.i("ADDCLICKED", "CLICKED");
+            //    Log.i("ADDCLICKED", "CLICKED");
 
 
                 break;
@@ -305,7 +324,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
     public void readUser(int userId) {
 
-        showProgress("User Inactivation.", "In Progress... ", 2);
+        showProgress("User Status Change.", "In Progress... ", 2);
         UserApi userApi =
                 ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
         Call<USERGETALL> call = userApi.getUserAPI("http://cellordering.com/api/User/GetUser?userId=" + userId);
@@ -317,16 +336,6 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
                 User user = new User();
                 user = response.body().getUser();
                 deleteUser(user);
-                dismissProgress();
-                showAlert("User Inactivation.", "Inactivated successfully", 2);
-                Fragment fragment = new UserFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.content, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
-                MainActivity.setAppTitle(R.string.user_title);
 
 
             }
@@ -379,9 +388,11 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
             NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2);
         } else {
 
-            showProgress("User Data Feteching.", "Loading...", 2);
+            showProgress("User Data Fetching.", "Loading...", 2);
             UserApi userApi =
                     ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
+
+
             Call<USERGETALL> call = userApi.getAllUsersAPI();
             call.enqueue(new Callback<USERGETALL>() {
                 @Override
@@ -389,25 +400,28 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
                     //         Log.i("responseDB", response.body().getUserList() + "");
                     dismissProgress();
                     UserData userData1;
-                    noOfUsers.setText("Users:" + response.body().getUserList().size());
-                    for (int i = 0; i < response.body().getUserList().size(); i++) {
-                        userData1 = new UserData();
-
-                        userData1.setId(response.body().getUserList().get(i).getUserId());
-                        userData1.setFirstName(response.body().getUserList().get(i).getFirstName());
-                        userData1.setLastName(response.body().getUserList().get(i).getLastName());
-
-                        userData1.setUserName(response.body().getUserList().get(i).getUsername());
-                        userData1.setMobile(response.body().getUserList().get(i).getMobile());
-                        userData1.setUserElementCode(response.body().getUserList().get(i).getUserElementCode());
-                        userData1.setActive(response.body().getUserList().get(i).isIsActive());
+                    if(response!=null) {
+                        noOfUsers.setText("Users:" + response.body().getUserList().size());
 
 
-                        userData.add(userData1);
+                        for (int i = 0; i < response.body().getUserList().size(); i++) {
+                            userData1 = new UserData();
 
+                            userData1.setId(response.body().getUserList().get(i).getUserId());
+                            userData1.setFirstName(response.body().getUserList().get(i).getFirstName());
+                            userData1.setLastName(response.body().getUserList().get(i).getLastName());
+
+                            userData1.setUserName(response.body().getUserList().get(i).getUsername());
+                            userData1.setMobile(response.body().getUserList().get(i).getMobile());
+                            userData1.setUserElementCode(response.body().getUserList().get(i).getUserElementCode());
+                            userData1.setActive(response.body().getUserList().get(i).isIsActive());
+
+
+                            userData.add(userData1);
+
+                        }
+                        usersAdapter.notifyDataSetChanged();
                     }
-                    usersAdapter.notifyDataSetChanged();
-
 
                 }
 
@@ -474,21 +488,29 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         UserApi userApi =
                 ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
 
-        Call<UserInfo> call = userApi.createUserAPI(userInfo);
-        call.enqueue(new Callback<UserInfo>() {
+        Call<ResponseData> call = userApi.createUserAPI(userInfo);
+        call.enqueue(new Callback<ResponseData>() {
             @Override
-            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+            public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
 
-                Log.i("CREATERES", "RESPONSE" + response.body().toString());
+                //Log.i("CREATERES", "RESPONSE" + response.body().toString());
                 dismissProgress();
-                showAlert("User Creation.", "Success!", 1);
-                FragmentSwitch.switchTo(getActivity(), new UserFragment(), R.string.user_title);
+
+                if(response.body().isSuccess())
+                {
+                    showAlert("User Creation.", "Success!", 1);
+                    FragmentSwitch.switchTo(getActivity(), new UserFragment(), R.string.user_title);
+
+                }
+                else {
+                    showAlert("User Creation.", "Failed! User Already existed.Try with another username..", 1);
+                }
 //                userAdapter.notifyDataSetChanged();
             }
 
 
             @Override
-            public void onFailure(Call<UserInfo> call, Throwable t) {
+            public void onFailure(Call<ResponseData> call, Throwable t) {
 
             }
         });
@@ -502,9 +524,13 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
     @Override
     public void deleteUser(User user) {
-        //    Log.i("AAAAA", "SSSS" + position);
-
-        user.setIsActive(false);
+        if (user.isIsActive()) {
+            user.setIsActive(false);
+//            showAlert("User Inactivation.", "Inactivated successfully", 2);
+        } else {
+            user.setIsActive(true);
+  //          showAlert("User Activation.", "Activated successfully", 2);
+        }
         user.setLastUpdatedDate(getCurrentDate());
         user.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
 
@@ -512,17 +538,25 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         UserInfo userInfo = new UserInfo(user);
         UserApi userApi =
                 ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
-        Call<UserInfo> call = userApi.updateUserAPI(userInfo);
-        call.enqueue(new Callback<UserInfo>() {
+        Call<ResponseData> call = userApi.updateUserAPI(userInfo);
+        call.enqueue(new Callback<ResponseData>() {
             @Override
-            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+            public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
 
+                dismissProgress();
+                if(response.body().isSuccess())
 
+                    showAlert("Intimation.", "success..", 2);
+                else
+                    showAlert("Intimation.", "Fail", 2);
+
+                //  showAlert("User Inactivation.", "Inactivated successfully", 2);
+                FragmentSwitch.switchTo(getActivity(), new UserFragment(), R.string.user_title);
             }
 
 
             @Override
-            public void onFailure(Call<UserInfo> call, Throwable t) {
+            public void onFailure(Call<ResponseData> call, Throwable t) {
 
             }
         });
@@ -625,7 +659,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
     @Override
     public GetAllElementTypes getAllElementTypes() {
-        /*GroupElementTypeApi groupElementTypeApi = ApiClient.createService(GroupElementTypeApi.class, Login.getInstance(getContext()).getAuthToken());
+        GroupElementTypeApi groupElementTypeApi = ApiClient.createService(GroupElementTypeApi.class, Login.getInstance(getContext()).getAuthToken());
         Call<GetAllElementTypes> call = groupElementTypeApi.getAllElementTypesAPI();
 
         call.enqueue(new Callback<GetAllElementTypes>() {
@@ -663,7 +697,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
         });
 
-*/
+
         return null;
     }
 
@@ -682,7 +716,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
             String message = error.getCollatedErrorMessage(getContext());
 
 
-            // Display error messages
+            // Display error messag
             if (view instanceof Spinner) {
                 Spinner sp = (Spinner) view;
                 view = ((LinearLayout) sp.getSelectedView()).getChildAt(0);        // we are actually interested in the text view spinner has

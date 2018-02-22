@@ -31,6 +31,11 @@
 
 
 <string name="radio_active">Active</string>
-<string name="radio_passive">Passive</string>
+<string name="radio_passive">InActive</string>
 
+
+    <string name="title_user">User</string>
+    <string name="title_customer">Customer</string>
+    <string name="title_product">Product</string>
+    <string name="title_order">Order</string>
 </resources>
