@@ -457,7 +457,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
 
                     }
                     customerAdapter.notifyDataSetChanged();
-                    noOfCustomers.setText("Customers:" + response.body().getCustomerList().size());
+                    noOfCustomers.setText("Customers : " + response.body().getCustomerList().size());
 
 
                 }

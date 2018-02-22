@@ -191,7 +191,8 @@ public class ChangePassword extends DialogFragment implements View.OnClickListen
 
                     @Override
                     public void onFailure(Call<ChangePasswordData> call, Throwable t) {
-
+                            t.printStackTrace();
+                            Toast.makeText(getContext(), "Please try again later", Toast.LENGTH_SHORT).show();
                     }
                 });
 

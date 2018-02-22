@@ -8,6 +8,7 @@
 
     <LinearLayout
         android:id="@+id/outer"
+        android:layout_margin="16dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -100,7 +101,7 @@
             android:id="@+id/product_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="0dp" />
+            android:layout_marginTop="5dp" />
 
 
     </LinearLayout>
