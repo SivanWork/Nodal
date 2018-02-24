@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -25,7 +26,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toolbar;
+import android.widget.TextView;
 
 import com.example.ranad.nodalsystems.data_holder.CustomerData;
 import com.example.ranad.nodalsystems.data_holder.ProductData;
@@ -57,6 +58,7 @@ import com.example.ranad.nodalsystems.usage.DialogUtils;
 import com.example.ranad.nodalsystems.usage.FragmentSwitch;
 import com.example.ranad.nodalsystems.usage.NetworkChecker;
 import com.example.ranad.nodalsystems.usage.ServerDataLoader;
+import com.example.ranad.nodalsystems.usage.TransparentProgressDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +82,7 @@ import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_USER;
 
 public class MainActivity extends AppCompatActivity implements SwitchFragment, SyncServer, NavigationView.OnNavigationItemSelectedListener {
 
-
+    TransparentProgressDialog tp = null;
     public static SwitchFragment switchFragment;
     private static android.support.v7.widget.Toolbar toolbar;
     DrawerLayout drawerLayout;
@@ -207,12 +209,26 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
             }
 
 
-               navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
+
+        setSupportActionBar(toolbar);
+
+
+        if(NetworkChecker.isConnected(this))
+            syncCustomer();
+
+
+
 
         Intent intent = getIntent();
         int target = intent.getIntExtra("target", 0);
 
         switchToFragment(target);
+     /*   TextView adminName = (TextView) findViewById(R.id.adminName);
+        adminName.setText(Login.getInstance(this).getUser().getFirstName());
+*/
         // loadDefaultData();
 
     }
@@ -224,6 +240,11 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment fragment;
             switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    fragment = new HomeFragment();
+                    loadFragment(fragment);
+                    toolbar.setTitle("Home");
+                    return true;
                 case R.id.navigation_user:
                     fragment = new UserFragment();
                     loadFragment(fragment);
@@ -257,13 +278,13 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
     };
 
 
-    public void showUpButton() {
+   /* public void showUpButton() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void hideUpButton() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-    }
+    }*/
 
     /*public void loadDefaultData() {
         CustomersDao customersDao = App.getDaoSession().getCustomersDao();
@@ -339,17 +360,12 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
             case FRAGMENT_REPORT:
                 fragment = new ReportFragment();
                 break;
-            /*case FRAGMENT_CHANGE_PASSWORD:
-                fragment = ChangePassword.newInstance(switchFragment);
-                break;*/
             case FRAGMENT_SCHEME:
                 fragment = new SchemeFragment();
                 break;
             case FRAGMENT_PRODUCT_EDIT:
                 fragment = new SchemeFragment();
                 break;
-
-
             default:
                 fragment = null;
                 break;
@@ -376,27 +392,31 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
     public void onBackPressed() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
         Log.d("count", count + "");
-       if (count == 1) {
+        if (count == 1) {
             finish();
-        } /*else  if (drawerLayout.isDrawerOpen(GravityCompat.START)){
-           drawerLayout.closeDrawer(GravityCompat.START);
-       }*/else {
+        } else {
             super.onBackPressed();
         }
+
+
     }
 
 
     @Override
     public void syncCustomer() {
 
+
+         tp=DialogUtils.progressWheel(this);
+
+
         if (NetworkChecker.isConnected(this) == false)
             NetworkChecker.noNetworkDialog(this, MainActivity.this, 2);
         else {
 
 
-            final ProgressDialog progressDialog = DialogUtils.progressDialog(this, "Customer Data fetching.", "Loading...");
+            /*final ProgressDialog progressDialog = DialogUtils.progressDialog(this, "Customer Data fetching.", "Loading...");
             progressDialog.show();
-            final CustomerApi customerApi =
+            */final CustomerApi customerApi =
                     ApiClient.createService(CustomerApi.class, Login.getInstance(this).getAuthToken());
 
             Call<CustomerGetAll> call = customerApi.getAllCustomersAPI();
@@ -405,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
                 public void onResponse(Call<CustomerGetAll> call, Response<CustomerGetAll> response) {
                     // Log.i("responseDB", response.body().getCustomerList() + "");
 
-                    DialogUtils.dismissProgress(progressDialog);
+              //      DialogUtils.dismissProgress(progressDialog);
                     CustomerData customerData1 = null;
 
                     ArrayList<CustomerData> customerData = new ArrayList<CustomerData>();
@@ -438,7 +458,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
                         }
                     }
                     ServerDataLoader.loadCustomerData(customerData);
-                    DialogUtils.alertDialog(MainActivity.this, "Customers Data", "Loaded locally", 2);
+                //    DialogUtils.alertDialog(MainActivity.this, "Customers Data", "Loaded locally", 2);
                     syncProduct();
 
                 }
@@ -466,8 +486,10 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
 
             final ArrayList<ProductData> productData = new ArrayList<ProductData>();
 
+/*
             final ProgressDialog progressDialog = DialogUtils.progressDialog(this, "Product Data fetching.", "Loading...");
             progressDialog.show();
+*/
             ProductApi productApi =
                     ApiClient.createService(ProductApi.class, Login.getInstance(this).getAuthToken());
 
@@ -477,7 +499,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
                 public void onResponse(Call<ProductGetAll> call, Response<ProductGetAll> response) {
                     // Log.i("responseDB", response.body().getProductList() + "");
 
-                    DialogUtils.dismissProgress(progressDialog);
+//                    DialogUtils.dismissProgress(progressDialog);
                     ProductData productData1 = null;
                     if (response != null) {
                         if (response.body().getProductList() != null) {
@@ -497,9 +519,11 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
                         }
                     }
                     ServerDataLoader.loadProductData(productData);
-                    DialogUtils.alertDialog(MainActivity.this, "Products Data", "Loaded locally", 2);
+                    //DialogUtils.alertDialog(MainActivity.this, "Products Data", "Loaded locally", 2);
 
                     ServerDataLoader.viewProductsCustomers();
+
+                    DialogUtils.dismissProgressWheel(tp);
 
                 }
 

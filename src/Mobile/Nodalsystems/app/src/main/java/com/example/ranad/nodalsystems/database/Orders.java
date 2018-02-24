@@ -36,6 +36,24 @@ public class Orders implements Parcelable {
     float totalOrderAmount;
     boolean status;
 
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerCode() {
+        return customerCode;
+    }
+
+    public void setCustomerCode(String customerCode) {
+        this.customerCode = customerCode;
+    }
+
+    String customerName, customerCode;
+
     public Orders() {
 
     }
@@ -79,9 +97,9 @@ public class Orders implements Parcelable {
 
     }
 
-    @Generated(hash = 1289599219)
-    public Orders(Long id, int orderId, int customerId, int orderStatusGroup, int orderStatusElementCode, int createdById, int lastUpdatedById, Date lastUpdatedDate, Date createdDate, float totalOrderAmount,
-                  boolean status) {
+    @Generated(hash = 769575720)
+    public Orders(Long id, int orderId, int customerId, int orderStatusGroup, int orderStatusElementCode, int createdById, int lastUpdatedById, Date lastUpdatedDate, Date createdDate, float totalOrderAmount, boolean status, String customerName,
+            String customerCode) {
         this.id = id;
         this.orderId = orderId;
         this.customerId = customerId;
@@ -93,6 +111,8 @@ public class Orders implements Parcelable {
         this.createdDate = createdDate;
         this.totalOrderAmount = totalOrderAmount;
         this.status = status;
+        this.customerName = customerName;
+        this.customerCode = customerCode;
     }
 
     public static Creator<Orders> getCREATOR() {

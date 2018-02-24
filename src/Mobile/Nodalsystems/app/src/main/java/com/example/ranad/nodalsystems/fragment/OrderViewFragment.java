@@ -25,14 +25,18 @@ import com.example.ranad.nodalsystems.database.Orders;
 import com.example.ranad.nodalsystems.database.OrdersDao;
 import com.example.ranad.nodalsystems.interfaces.OrderAction;
 import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
+import com.example.ranad.nodalsystems.model.BulkOrderResponse;
 import com.example.ranad.nodalsystems.model.Login;
 import com.example.ranad.nodalsystems.model.Order;
 import com.example.ranad.nodalsystems.model.OrderDetail;
 import com.example.ranad.nodalsystems.model.OrderPojo;
 import com.example.ranad.nodalsystems.restapi.ApiClient;
 import com.example.ranad.nodalsystems.restapi.OrderApi;
+import com.example.ranad.nodalsystems.usage.NetworkChecker;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -74,10 +78,10 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
 
         MainActivity.setAppTitle(R.string.order_title);
 
-        MainActivity activity = (MainActivity) getActivity();
+       /* MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             activity.showUpButton();
-        }
+        }*/
         //cart.clear();
 
        /* currentItem = customers.getSelectedItemPosition();
@@ -112,11 +116,15 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
             public void onClick(View v) {
 
                 OrdersDao ordersDao = App.getDaoSession().getOrdersDao();
-                if (ordersDao.queryBuilder().list().size() > 0)
-                    syncOrderToServer();
-                else
-                    showAlert("Orders Status", "Already Uptodate..", 2);
+                if(NetworkChecker.isConnected(getContext())) {
 
+                    if (ordersDao.queryBuilder().list().size() > 0)
+                        syncOrderToServer();
+
+                    else
+                        showAlert("Orders Status", "Already Uptodate..", 2);
+                }
+                else    NetworkChecker.noNetworkDialog(getContext(),getActivity(),2);
 
             }
         });
@@ -127,7 +135,6 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void syncOrderToServer() {
-
 
         OrdersDao ordersDao = App.getDaoSession().getOrdersDao();
         OrderDetailDBDao orderDetailDBDao = App.getDaoSession().getOrderDetailDBDao();
@@ -152,13 +159,13 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
             order.setOrderStatusElementCode(0);
             order.setOrderStatusGroup(0);
 
-            order.setCreatedById(0);
-            order.setCreatedDate("2018-02-07T12:31:39.4566652-07:00");
-            order.setLastUpdatedById(0);
-            order.setLastUpdatedDate("2018-02-07T12:31:39.4566652-07:00");
+            order.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
+            order.setCreatedDate(getCurrentDate());
+            order.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
+            order.setLastUpdatedDate(getCurrentDate());
 
             List<OrderDetailDB> orderDetailDBList = orderDetailDBDao.queryBuilder().where(OrderDetailDBDao.Properties.OrderId.eq(orderId)).list();
-            orderDetailList = new ArrayList<OrderDetail>();
+            orderDetailList = new ArrayList<>();
             for (int j = 0; j < orderDetailDBList.size(); j++) {
                 orderDetail = new OrderDetail();
                 orderDetail.setId(0);
@@ -171,10 +178,10 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
                 orderDetail.setOrderId(orderId);
                 orderDetail.setDiscount(0.0);
 
-                orderDetail.setCreatedById(0);
-                orderDetail.setCreatedDate("2018-02-07T12:31:39.4566652-07:00");
-                orderDetail.setLastUpdatedById(0);
-                orderDetail.setLastUpdatedDate("2018-02-07T12:31:39.4566652-07:00");
+                orderDetail.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
+                orderDetail.setCreatedDate(getCurrentDate());
+                orderDetail.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
+                orderDetail.setLastUpdatedDate(getCurrentDate());
 
 
                 orderDetailList.add(orderDetail);
@@ -189,6 +196,17 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
         }
         makeOrder(bulkOrder);
 
+
+    }
+
+    public String getCurrentDate() {
+
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
+
+    }
+
+    public String getUTCDate(String strDate) {
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(strDate));
     }
 
     public void showAlert(String title, String msg, int theme) {
@@ -265,18 +283,18 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
     public void makeOrder(List<OrderPojo> bulkOrder) {
         OrderApi orderService =
                 ApiClient.createService(OrderApi.class, Login.getInstance(getContext()).getAuthToken());
-     Call<OrderPojo> call = orderService.createBulkOrderAPI(bulkOrder);
+     Call<List<BulkOrderResponse>> call = orderService.createBulkOrderAPI(bulkOrder);
 
 
-        call.enqueue(new Callback<OrderPojo>() {
+        call.enqueue(new Callback<List<BulkOrderResponse>>() {
             @Override
-            public void onResponse(Call<OrderPojo> call, Response<OrderPojo> response) {
+            public void onResponse(Call<List<BulkOrderResponse>> call, Response<List<BulkOrderResponse>> response) {
                 Log.i("response", response.body().toString());
             }
 
 
             @Override
-            public void onFailure(Call<OrderPojo> call, Throwable t) {
+            public void onFailure(Call<List<BulkOrderResponse>> call, Throwable t) {
 
             }
         });

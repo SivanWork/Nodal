@@ -58,9 +58,9 @@ public class DiscountFragment extends Fragment {
     public void onResume() {
         super.onResume();
         MainActivity.setAppTitle(R.string.discount_title);
-        MainActivity activity = (MainActivity) getActivity();
+       /* MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             activity.showUpButton();
-        }
+        }*/
     }
 }

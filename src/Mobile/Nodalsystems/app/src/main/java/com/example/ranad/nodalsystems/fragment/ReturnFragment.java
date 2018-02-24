@@ -33,10 +33,10 @@ public class ReturnFragment extends Fragment {
     public void onResume() {
         super.onResume();
         MainActivity.setAppTitle(R.string.return_title);
-        MainActivity activity = (MainActivity) getActivity();
+       /* MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             activity.showUpButton();
-        }
+        }*/
     }
 
     @Override

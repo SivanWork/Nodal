@@ -109,10 +109,10 @@ public class HomeFragment extends Fragment {
         super.onResume();
 
         super.onResume();
-        MainActivity activity = (MainActivity) getActivity();
+       /* MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             activity.hideUpButton();
-        }
+        }*/
 
         MainActivity.setAppTitle(R.string.home_title);
     }

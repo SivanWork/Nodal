@@ -114,10 +114,10 @@ public class ChangePassword extends DialogFragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
-        MainActivity activity = (MainActivity) getActivity();
+       /* MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             activity.showUpButton();
-        }
+        }*/
     }
 
     @Override
@@ -191,8 +191,7 @@ public class ChangePassword extends DialogFragment implements View.OnClickListen
 
                     @Override
                     public void onFailure(Call<ChangePasswordData> call, Throwable t) {
-                            t.printStackTrace();
-                            Toast.makeText(getContext(), "Please try again later", Toast.LENGTH_SHORT).show();
+
                     }
                 });
 

@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -30,6 +28,8 @@ import com.example.ranad.nodalsystems.App;
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.adapter.OrderAdapter;
+import com.example.ranad.nodalsystems.data_holder.CustomerData;
+import com.example.ranad.nodalsystems.data_holder.ProductData;
 import com.example.ranad.nodalsystems.database.CartItem;
 import com.example.ranad.nodalsystems.database.CartItemDao;
 import com.example.ranad.nodalsystems.database.Customers;
@@ -38,18 +38,34 @@ import com.example.ranad.nodalsystems.database.OrderDetailDB;
 import com.example.ranad.nodalsystems.database.OrderDetailDBDao;
 import com.example.ranad.nodalsystems.database.Orders;
 import com.example.ranad.nodalsystems.database.OrdersDao;
+import com.example.ranad.nodalsystems.interfaces.CustomerAction;
 import com.example.ranad.nodalsystems.interfaces.OrderAction;
 import com.example.ranad.nodalsystems.interfaces.SwitchFragment;
+import com.example.ranad.nodalsystems.model.BulkOrderResponse;
+import com.example.ranad.nodalsystems.model.Customer;
+import com.example.ranad.nodalsystems.model.CustomerGetAll;
+import com.example.ranad.nodalsystems.model.Login;
+import com.example.ranad.nodalsystems.model.Order;
+import com.example.ranad.nodalsystems.model.OrderDetail;
+import com.example.ranad.nodalsystems.model.OrderPojo;
+import com.example.ranad.nodalsystems.restapi.ApiClient;
+import com.example.ranad.nodalsystems.restapi.CustomerApi;
+import com.example.ranad.nodalsystems.restapi.OrderApi;
 import com.example.ranad.nodalsystems.usage.DialogUtils;
 import com.example.ranad.nodalsystems.usage.FragmentSwitch;
+import com.example.ranad.nodalsystems.usage.NetworkChecker;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class OrderFragment extends Fragment implements View.OnClickListener, OrderAction {
+
+public class OrderFragment extends Fragment implements View.OnClickListener, OrderAction, CustomerAction {
     View view;
 
     AutoCompleteTextView cName, cNumber;
@@ -67,6 +83,16 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
     AutoCompleteTextView customerAutoCompleterView;
     ArrayAdapter customerAdapter;
     List<String> customer;
+
+    List<Customers> customersList;
+
+
+    ArrayList<ProductData> productData;
+
+    ArrayList<CustomerData> customerData = new ArrayList<>();
+
+    List<CustomerData> customerDataList;
+
 
     ProgressDialog progressDialog = null;
 
@@ -101,16 +127,16 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
         super.onResume();
 
         MainActivity.setAppTitle(R.string.order_title);
-        // cart.clear();
+       //  cart.clear();
 
       /*  currentItem = customers.getSelectedItemPosition();
         List<CartItem> tempCart = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(customerId)).list();
         cart.addAll(tempCart);
 */
-        MainActivity activity = (MainActivity) getActivity();
+       /* MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             activity.showUpButton();
-        }
+        }*/
 
         refreshTotal();
         orderAdapter.notifyDataSetChanged();
@@ -123,16 +149,16 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
 
         progressDialog = new ProgressDialog(getContext());
         view = inflater.inflate(R.layout.fragment_order, container, false);
-      //  cName = (AutoCompleteTextView) view.findViewById(R.id.cName);
+        //  cName = (AutoCompleteTextView) view.findViewById(R.id.cName);
         total = (TextView) view.findViewById(R.id.total_price);
-       // lvAddOrder = (LinearLayout) view.findViewById(R.id.lvAddOrder);
-       // cNumber = (AutoCompleteTextView) view.findViewById(R.id.cNumber);
+        // lvAddOrder = (LinearLayout) view.findViewById(R.id.lvAddOrder);
+        // cNumber = (AutoCompleteTextView) view.findViewById(R.id.cNumber);
         quantity = (EditText) view.findViewById(R.id.quantity);
         //discount = (EditText) view.findViewById(R.id.order_discount);
         //material = (Spinner) view.findViewById(R.id.material);
-      //  order_tax = (EditText) view.findViewById(R.id.order_tax);
-       // price = (EditText) view.findViewById(R.id.order_price);
-      //  submit = (Button) view.findViewById(R.id.submit);
+        //  order_tax = (EditText) view.findViewById(R.id.order_tax);
+        // price = (EditText) view.findViewById(R.id.order_price);
+        //  submit = (Button) view.findViewById(R.id.submit);
         //submit.setOnClickListener(this);
         viewOrders = (Button) view.findViewById(R.id.viewOrders);
         viewOrders.setOnClickListener(this);
@@ -154,19 +180,32 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         material.setAdapter(dataAdapter);
 */
+
+
         customerAutoCompleterView = (AutoCompleteTextView) view.findViewById(R.id.customer_autocompleter);
         customer = new ArrayList<>();
-        final List<Customers> customersList = customersDao.queryBuilder().list();
-        Log.i("CCC", "customersList" + customersList.size());
-        for (int i = 0; i < customersList.size(); i++) {
-            customer.add(customersList.get(i).getFirstName()+"("+customersList.get(i).getCustomerCode()+")");
-            customerAdapter = new ArrayAdapter(getActivity(), R.layout.dropdown, customer);
-            customerAutoCompleterView.setAdapter(customerAdapter);
-            customerAutoCompleterView.setThreshold(1);
-        }
 
 
-        if (!customer.isEmpty())
+        if (NetworkChecker.isConnected(getContext())) {
+
+
+            Log.i("CCC", "WITH INTERNET");
+
+            readAllCustomers();
+
+
+        } else {
+            Log.i("DDD", "WITHOUT INTERNET");
+            customersList = customersDao.queryBuilder().list();
+            for (int i = 0; i < customersList.size(); i++) {
+                customer.add(customersList.get(i).getFirstName() + "(" + customersList.get(i).getCustomerCode() + ")");
+                customerAdapter = new ArrayAdapter(getActivity(), R.layout.dropdown, customer);
+                customerAutoCompleterView.setAdapter(customerAdapter);
+                customerAutoCompleterView.setThreshold(1);
+            }
+
+
+            //    if (!customer.isEmpty())
             // new GetServiceList().execute();
             customerAutoCompleterView.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View paramView, MotionEvent paramMotionEvent) {
@@ -180,7 +219,13 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             // selectedServiceId = serviceList.get(position).getServiceId();
                             //new SelectedServiceList().execute();
-                            customerId = Integer.parseInt(customersList.get(position).getId().toString());
+
+                            /*if (NetworkChecker.isConnected(getContext()))
+                                customerId = customerDataList.get(position).getId();
+
+                            else
+                            */    customerId = Integer.parseInt(customersList.get(position).getId().toString());
+
 
                             cart.clear();
                             List<CartItem> tempCart = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(customerId)).list();
@@ -195,6 +240,7 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
                     return false;
                 }
             });
+        }
         return view;
     }
 
@@ -204,6 +250,126 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
       /*  List<CartItem> deleteList = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(cust.get(currentItem))).list();
         cartItemDao.deleteInTx(deleteList);
         cartItemDao.insertOrReplaceInTx(cart);*/
+    }
+
+    @Override
+    public ArrayList<CustomerData> readAllCustomers() {
+
+
+        customerData.clear();
+        //    Log.i("ZZZZ", ""+NetworkChecker.isConnected(getContext()));
+/*
+        if (NetworkChecker.isConnected(getContext()) == false)
+            NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2);
+        else {
+
+
+            final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Customer Data fetching.", "Loading...");
+            progressDialog.show();
+*/
+        CustomerApi customerApi =
+                ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
+
+        Call<CustomerGetAll> call = customerApi.getAllCustomersAPI();
+        call.enqueue(new Callback<CustomerGetAll>() {
+            @Override
+            public void onResponse(Call<CustomerGetAll> call,final  Response<CustomerGetAll> response) {
+                Log.i("responseDB", response.body().getCustomerList() + "");
+
+                DialogUtils.dismissProgress(progressDialog);
+                CustomerData customerData1 = null;
+
+                for (int i = 0; i < response.body().getCustomerList().size(); i++) {
+
+                      customerData1 = new CustomerData();
+
+                        customerData1.setCustomerCode(response.body().getCustomerList().get(i).getCustomerCode());
+                        customerData1.setEmail(response.body().getCustomerList().get(i).getEmail());
+                        customerData1.setId(response.body().getCustomerList().get(i).getCustomerId());
+                        if (response.body().getCustomerList().get(i).isIsActive())
+
+                            customerData1.setIsActive("Active");
+                        else customerData1.setIsActive("InActive");
+
+                        customerData1.setFirstName(response.body().getCustomerList().get(i).getFirstName());
+                        customerData1.setLastName(response.body().getCustomerList().get(i).getLastName());
+                        customerData1.setMobile(response.body().getCustomerList().get(i).getMobile());
+                        //customerData.add(new CustomerData(response.body().getCustomerList().get(i).getCustomerId(), response.body().getCustomerList().get(i).getFirstName()));
+
+                        customerData.add(customerData1);
+
+                        Log.i("CHHH",Boolean.parseBoolean(customerData.get(i).getIsActive())+"");
+
+if(response.body().getCustomerList().get(i).isIsActive()) {
+    customer.add(customerData.get(i).getFirstName() + "(" + customerData.get(i).getCustomerCode() + ")");
+    customerAdapter = new ArrayAdapter(getActivity(), R.layout.dropdown, customer);
+    customerAutoCompleterView.setAdapter(customerAdapter);
+    customerAutoCompleterView.setThreshold(1);
+}
+
+                }
+//                    customerAdapter.notifyDataSetChanged();
+
+
+                customerAutoCompleterView.setOnTouchListener(new View.OnTouchListener() {
+                    public boolean onTouch(View paramView, MotionEvent paramMotionEvent) {
+                        if (customer.size() > 0) {
+                            if (!customerAutoCompleterView.getText().toString().equals(""))
+                                customerAdapter.getFilter().filter(null);
+                            customerAutoCompleterView.showDropDown();
+                        }
+                        customerAutoCompleterView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                // selectedServiceId = serviceList.get(position).getServiceId();
+                                //new SelectedServiceList().execute();
+
+                                    customerId = customerData.get(position).getId();
+
+
+                                cart.clear();
+                                List<CartItem> tempCart = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(customerId)).list();
+                                cart.addAll(tempCart);
+                                refreshTotal();
+                                orderAdapter.notifyDataSetChanged();
+                                currentItemPosition = position;
+
+                            }
+                        });
+
+                        return false;
+                    }
+                });
+
+
+
+            }
+
+
+            @Override
+            public void onFailure(Call<CustomerGetAll> call, Throwable t) {
+
+            }
+        });
+
+     /*   for (int i = 0; i < customerData.size(); i++) {
+            customer.add(customerData.get(i).getFirstName() + "(" + customerData.get(i).getCustomerCode() + ")");
+            customerAdapter = new ArrayAdapter(getActivity(), R.layout.dropdown, customer);
+            customerAutoCompleterView.setAdapter(customerAdapter);
+            customerAutoCompleterView.setThreshold(1);
+        }*/
+
+        return null;
+    }
+
+    @Override
+    public void updateCustomer(Customer customer) {
+
+    }
+
+    @Override
+    public void fetchCustomer(Customer customer) {
+
     }
 
     @Override
@@ -228,7 +394,7 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
                 lists.setVisibility(View.VISIBLE);
                 break;*/
             case R.id.viewOrders:
-                FragmentSwitch.switchTo(getActivity(),new OrderViewFragment(),R.string.order_title);
+                FragmentSwitch.switchTo(getActivity(), new OrderViewFragment(), R.string.order_title);
                 break;
             case R.id.add_prod:
                 if (customerId != 0) {
@@ -277,7 +443,7 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
                 if (cart.size() == 0) showAlert("Alert", "Cart Empty", 1);
                 else {
                     saveOrderOffline();
-                    showAlert("Order Status", "Success! Saved Locally..", 2);
+
                 }
 
 
@@ -306,8 +472,50 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
         orderAdapter.notifyDataSetChanged();
     }
 
+
+    @Override
+    public void saveCustomerInfo() {
+
+    }
+
+    @Override
+    public void updateCustomerInfo() {
+
+    }
+
+    @Override
+    public Customer getCustomer() {
+        return null;
+    }
+
+    @Override
+    public void switchToEditCustomer(int customer) {
+
+    }
+
+    @Override
+    public void readCustomer(int customerId) {
+
+    }
+
+    @Override
+    public void deleteCustomer(Customer customer) {
+
+    }
+
+    @Override
+    public void createCustomer(Customer customer) {
+
+    }
+
     @Override
     public void removeOrdersAfterSync() {
+        OrdersDao ordersDao = App.getDaoSession().getOrdersDao();
+
+        List<Orders> deleteList = ordersDao.queryBuilder().list();
+
+        ordersDao.deleteInTx(deleteList);
+
 
     }
 
@@ -316,19 +524,25 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
 
         List<CartItem> cartList = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(customerId)).list();
         OrdersDao ordersDao = App.getDaoSession().getOrdersDao();
-        Orders orders = null;
+        Orders orders = new Orders();
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
         Date currentDate = new Date();
-/*
-        Date date=null;
-        String dateTime = format.format(currentDate);
-        System.out.println("Current Date Time : " + dateTime);
-            date = new Date(dateTime);
-*/
-        orders = new Orders();
+
 
         orders.setCreatedDate(currentDate);
+
+        if(NetworkChecker.isConnected(getContext())) {
+            orders.setCustomerName(customerData.get(currentItemPosition).getFirstName());
+            orders.setCustomerCode(customerData.get(currentItemPosition).getCustomerCode());
+        }
+        else
+        {
+            orders.setCustomerName(customersList.get(currentItemPosition).getFirstName());
+            orders.setCustomerCode(customersList.get(currentItemPosition).getCustomerCode());
+
+
+        }
 
         orders.setCustomerId(customerId);
         orders.setTotalOrderAmount(calculateTotalCartAmount());
@@ -354,11 +568,84 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
 
         refreshTotal();
         orderAdapter.notifyDataSetChanged();
+        if (NetworkChecker.isConnected(getContext()))
+            syncOrderToServer();
+        else showAlert("Order Status", "Success! Saved Locally..", 2);
+    }
+
+    public String getCurrentDate() {
+
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
+
+    }
+
+    public String getUTCDate(String strDate) {
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(strDate));
     }
 
 
     @Override
     public void syncOrderToServer() {
+
+        OrdersDao ordersDao = App.getDaoSession().getOrdersDao();
+        OrderDetailDBDao orderDetailDBDao = App.getDaoSession().getOrderDetailDBDao();
+
+        List<Orders> ordersList = ordersDao.queryBuilder().list();
+        int orderId;
+        Order order = null;
+        OrderDetail orderDetail = null;
+        ArrayList<OrderDetail> orderDetailList = null;
+
+        OrderApi orderApi = null;
+        OrderPojo orderPojo = null;
+        List<OrderPojo> bulkOrder = new ArrayList<OrderPojo>();
+
+        int i;
+        for (i = 0; i < ordersList.size(); i++) {
+            order = new Order();
+            orderId = Integer.parseInt(String.valueOf(ordersList.get(i).getId()));
+            order.setOrderId(orderId);
+            order.setCustomerId(ordersList.get(i).getCustomerId());
+            order.setTotalOrderAmount(ordersList.get(i).getTotalOrderAmount());
+            order.setOrderStatusElementCode(0);
+            order.setOrderStatusGroup(0);
+
+            order.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
+            order.setCreatedDate(getCurrentDate());
+            order.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
+            order.setLastUpdatedDate(getCurrentDate());
+
+            List<OrderDetailDB> orderDetailDBList = orderDetailDBDao.queryBuilder().where(OrderDetailDBDao.Properties.OrderId.eq(orderId)).list();
+            orderDetailList = new ArrayList<>();
+            for (int j = 0; j < orderDetailDBList.size(); j++) {
+                orderDetail = new OrderDetail();
+                orderDetail.setId(0);
+                orderDetail.setProductId(orderDetailDBList.get(j).getProductId());
+                orderDetail.setQuantity(orderDetailDBList.get(j).getQuantity());
+                orderDetail.setNetPrice(orderDetailDBList.get(j).getNetPrice());
+                orderDetail.setCGST(0.0);
+                orderDetail.setSGST(0.0);
+                orderDetail.setIGST(0.0);
+                orderDetail.setOrderId(orderId);
+                orderDetail.setDiscount(0.0);
+
+                orderDetail.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
+                orderDetail.setCreatedDate(getCurrentDate());
+                orderDetail.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
+                orderDetail.setLastUpdatedDate(getCurrentDate());
+
+
+                orderDetailList.add(orderDetail);
+
+            }
+            order.setOrderDetails(orderDetailList);
+            orderPojo = new OrderPojo();
+            orderPojo.setOrder(order);
+            Log.i("MSG", "data" + Login.getInstance(getContext()).getAuthToken());
+            bulkOrder.add(orderPojo);
+
+        }
+        makeOrder(bulkOrder);
 
 
     }
@@ -412,5 +699,36 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
                 });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+    public void makeOrder(List<OrderPojo> bulkOrder) {
+        OrderApi orderService =
+                ApiClient.createService(OrderApi.class, Login.getInstance(getContext()).getAuthToken());
+        Call<List<BulkOrderResponse>> call = orderService.createBulkOrderAPI(bulkOrder);
+
+
+        call.enqueue(new Callback<List<BulkOrderResponse>>() {
+            @Override
+            public void onResponse(Call<List<BulkOrderResponse>> call, Response<List<BulkOrderResponse>> response) {
+
+                Log.i("responseBULKKK", response.body().toString());
+
+//if(response.body().) {
+    showAlert("Order Status", "Success! Saved in Server", 2);
+    removeOrdersAfterSync();
+
+//}
+
+
+            }
+
+
+            @Override
+            public void onFailure(Call<List<BulkOrderResponse>> call, Throwable t) {
+
+            }
+        });
+
+
     }
 }

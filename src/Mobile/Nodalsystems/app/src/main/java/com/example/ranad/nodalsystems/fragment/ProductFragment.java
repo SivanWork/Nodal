@@ -184,10 +184,10 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
     public void onResume() {
         super.onResume();
         MainActivity.setAppTitle(R.string.product_title);
-        MainActivity activity = (MainActivity) getActivity();
+       /* MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             activity.showUpButton();
-        }
+        }*/
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.ranad.nodalsystems.restapi;
 
 import com.example.ranad.nodalsystems.Api;
+import com.example.ranad.nodalsystems.model.BulkOrderResponse;
 import com.example.ranad.nodalsystems.model.OrderPojo;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface OrderApi {
     Call<OrderPojo> createOrderAPI(@Body OrderPojo o);
 
     @POST(Api.BULKORDER_CREATE)
-    Call<OrderPojo> createBulkOrderAPI(@Body List<OrderPojo> o);
+    Call<List<BulkOrderResponse>> createBulkOrderAPI(@Body List<OrderPojo> o);
 
 
 }

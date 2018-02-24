@@ -1,5 +1,6 @@
 package com.example.ranad.nodalsystems.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
@@ -21,16 +22,28 @@ import android.widget.Spinner;
 
 import com.example.ranad.nodalsystems.App;
 import com.example.ranad.nodalsystems.R;
+import com.example.ranad.nodalsystems.data_holder.ProductData;
 import com.example.ranad.nodalsystems.database.CartItem;
 import com.example.ranad.nodalsystems.database.Products;
 import com.example.ranad.nodalsystems.database.ProductsDao;
+import com.example.ranad.nodalsystems.interfaces.ProductAction;
+import com.example.ranad.nodalsystems.model.Login;
+import com.example.ranad.nodalsystems.model.Product;
+import com.example.ranad.nodalsystems.model.ProductGetAll;
+import com.example.ranad.nodalsystems.restapi.ApiClient;
+import com.example.ranad.nodalsystems.restapi.ProductApi;
 import com.example.ranad.nodalsystems.usage.DialogUtils;
+import com.example.ranad.nodalsystems.usage.NetworkChecker;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class AddProductDialog extends DialogFragment {
+
+public class AddProductDialog extends DialogFragment implements ProductAction {
     View view;
     Spinner prod_spinner;
     List<String> arrayList = new ArrayList<>();
@@ -40,13 +53,18 @@ public class AddProductDialog extends DialogFragment {
     int productId, currentItemPosition;
     AutoCompleteTextView productAutoCompleterView;
 
-    List<Products> productsList;
+    ArrayList<ProductData> productData = new ArrayList<>();
+
+
+    // ProductAdapter productAdapter;
+
+
+    List<Products> productsList=new ArrayList<>();
 
     List<String> product;
     ArrayAdapter productAdapter;
 
     public AddProductDialog() {
-
     }
 
     public void setOnProductAddListener(OnProductAddListener onProductAddListener) {
@@ -66,6 +84,7 @@ public class AddProductDialog extends DialogFragment {
     }
 
 
+    @SuppressLint("NewApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,38 +95,52 @@ public class AddProductDialog extends DialogFragment {
         product = new ArrayList<>();
         product.clear();
         final ProductsDao productsDao = App.getDaoSession().getProductsDao();
-        productsList = productsDao.queryBuilder().list();
-        for (int i = 0; i < productsList.size(); i++) {
-            product.add(productsList.get(i).getProductName());
-            productAdapter = new ArrayAdapter(getActivity(), R.layout.dropdown, product);
-            productAutoCompleterView.setAdapter(productAdapter);
-            productAutoCompleterView.setThreshold(1);
-        }
-
-        if (!product.isEmpty())
-            productAutoCompleterView.setOnTouchListener(new View.OnTouchListener() {
-                public boolean onTouch(View paramView, MotionEvent paramMotionEvent) {
-                    if (product.size() > 0) {
-                        if (!productAutoCompleterView.getText().toString().equals(""))
-                            productAdapter.getFilter().filter(null);
-                        productAutoCompleterView.showDropDown();
-                    }
-                    productAutoCompleterView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            // selectedServiceId = serviceList.get(position).getServiceId();
-                            //new SelectedServiceList().execute();
-                            productId = Integer.parseInt(productsList.get(position).getId().toString());
-
-                            currentItemPosition = position;
 
 
+        if (NetworkChecker.isConnected(getContext())) {
+
+            readAllProducts();
+
+        } else {
+
+
+            productsList = productsDao.queryBuilder().list();
+            for (int i = 0; i < productsList.size(); i++) {
+                product.add(productsList.get(i).getProductName());
+                productAdapter = new ArrayAdapter(getActivity(), R.layout.dropdown, product);
+                productAutoCompleterView.setAdapter(productAdapter);
+                productAutoCompleterView.setThreshold(1);
+            }
+
+            if (!product.isEmpty())
+                productAutoCompleterView.setOnTouchListener(new View.OnTouchListener() {
+                    public boolean onTouch(View paramView, MotionEvent paramMotionEvent) {
+                        if (product.size() > 0) {
+                            if (!productAutoCompleterView.getText().toString().equals(""))
+                                productAdapter.getFilter().filter(null);
+                            productAutoCompleterView.showDropDown();
                         }
-                    });
+                        productAutoCompleterView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                // selectedServiceId = serviceList.get(position).getServiceId();
+                                //new SelectedServiceList().execute();
+         /*                       if (NetworkChecker.isConnected(getContext()))
+                                    productId = productData.get(position).getProductId();
+                                else
+         */
+                                productId = Integer.parseInt(productsList.get(position).getId().toString());
 
-                    return false;
-                }
-            });
+                                currentItemPosition = position;
+
+
+                            }
+                        });
+
+                        return false;
+                    }
+                });
+        }
 
         add = (Button) view.findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
@@ -118,8 +151,15 @@ public class AddProductDialog extends DialogFragment {
                     CartItem cartItemItem = new CartItem();
                     cartItemItem.setProductId(productId);
                     cartItemItem.setQuantity(Integer.parseInt(quantity.getText().toString()));
-                    float netprice = Integer.parseInt(quantity.getText().toString()) * (float) productsList.get(currentItemPosition).getDealerPrice();
-                    cartItemItem.setProductName(productsList.get(currentItemPosition).getProductName());
+                    float netprice;
+                    if(!productsList.isEmpty()) {
+                        netprice = Integer.parseInt(quantity.getText().toString()) * (float) productsList.get(currentItemPosition).getDealerPrice();
+                        cartItemItem.setProductName(productsList.get(currentItemPosition).getProductName());
+                    }
+                    else {
+                        netprice = Integer.parseInt(quantity.getText().toString()) * (float) productData.get(currentItemPosition).getDealerPrice();
+                        cartItemItem.setProductName(productData.get(currentItemPosition).getProductName());
+                    }
                     cartItemItem.setNetPrice(netprice);
                     onProductAddListener.onProductAdd(cartItemItem);
 
@@ -139,10 +179,107 @@ public class AddProductDialog extends DialogFragment {
         super.onStart();
         Dialog dialog = getDialog();
         if (dialog != null) {
-            dialog.getWindow().setLayout(1000, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().setGravity(Gravity.CENTER);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
+    }
+
+    @SuppressLint("NewApi")
+    @Override
+    public ArrayList<ProductData> readAllProducts() {
+
+        productData.clear();
+      /*  //    Log.i("ZZZZ", ""+NetworkChecker.isConnected(getContext()));
+
+        if (NetworkChecker.isConnected(getContext()) == false)
+            NetworkChecker.noNetworkDialog(getContext(), (FragmentActivity) getActivity(), 2);
+        else {
+
+            final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Product Data fetching.", "Loading...");
+            progressDialog.show();
+      */
+        ProductApi productApi =
+                ApiClient.createService(ProductApi.class, Login.getInstance(getContext()).getAuthToken());
+
+        Call<ProductGetAll> call = productApi.getAllProductsAPI();
+        call.enqueue(new Callback<ProductGetAll>() {
+            @Override
+            public void onResponse(Call<ProductGetAll> call, final Response<ProductGetAll> response) {
+                // Log.i("responseDB", response.body().getProductList() + "");
+
+                //            DialogUtils.dismissProgress(progressDialog);
+                ProductData productData1 = null;
+
+                for (int i = 0; i < response.body().getProductList().size(); i++) {
+
+                    if (response.body().getProductList().get(i).isIsActive()) {
+                        productData1 = new ProductData();
+
+                        productData1.setProductCode(response.body().getProductList().get(i).getProductCode());
+                        productData1.setProductId(response.body().getProductList().get(i).getProductId());
+                        productData1.setProductName(response.body().getProductList().get(i).getProductName());
+                        productData1.setDealerPrice(response.body().getProductList().get(i).getDealerPrice());
+                        if (response.body().getProductList().get(i).isIsActive())
+
+                            productData1.setIsActive(true);
+                        else productData1.setIsActive(false);
+                        productData.add(productData1);
+
+
+                        product.add(response.body().getProductList().get(i).getProductName());
+                        productAdapter = new ArrayAdapter(getActivity(), R.layout.dropdown, product);
+                        productAutoCompleterView.setAdapter(productAdapter);
+                        productAutoCompleterView.setThreshold(1);
+                    }
+
+
+                }
+
+                if (!product.isEmpty())
+                    productAutoCompleterView.setOnTouchListener(new View.OnTouchListener() {
+                        public boolean onTouch(View paramView, MotionEvent paramMotionEvent) {
+                            if (product.size() > 0) {
+                                if (!productAutoCompleterView.getText().toString().equals(""))
+                                    productAdapter.getFilter().filter(null);
+                                productAutoCompleterView.showDropDown();
+                            }
+                            productAutoCompleterView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    // selectedServiceId = serviceList.get(position).getServiceId();
+                                    //new SelectedServiceList().execute();
+                                    productId = productData.get(position).getProductId();
+
+                                    currentItemPosition = position;
+
+
+                                }
+                            });
+
+                            return false;
+                        }
+                    });
+
+
+//                    productAdapter.notifyDataSetChanged();
+//                    noOfProducts.setText("Products:" + response.body().getProductList().size());
+
+
+            }
+
+
+            @Override
+            public void onFailure(Call<ProductGetAll> call, Throwable t) {
+
+            }
+        });
+        //}            //    Log.i("responseNNN", userData + "");
+        return productData;
+
+
+        //return null;
+
     }
 
     @Override
@@ -161,6 +298,56 @@ public class AddProductDialog extends DialogFragment {
         super.onDetach();
     }
 
+    @Override
+    public void delete(int pos) {
+
+    }
+
+    @Override
+    public void saveProductInfo() {
+
+    }
+
+    @Override
+    public void updateProductInfo() {
+
+    }
+
+    @Override
+    public Product getProduct() {
+        return null;
+    }
+
+    @Override
+    public void switchToEditProduct(int product) {
+
+    }
+
+    @Override
+    public void readProduct(int productId) {
+
+    }
+
+    @Override
+    public void createProduct(Product product) {
+
+    }
+
+
+    @Override
+    public void updateProduct(Product product) {
+
+    }
+
+    @Override
+    public void deleteProduct(Product product) {
+
+    }
+
+    @Override
+    public void fetchProduct(Product product) {
+
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

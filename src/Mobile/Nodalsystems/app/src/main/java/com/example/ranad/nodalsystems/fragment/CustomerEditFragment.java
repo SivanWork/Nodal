@@ -128,10 +128,10 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
     public void onResume() {
         super.onResume();
         MainActivity.setAppTitle(R.string.edit_customer);
-        MainActivity activity = (MainActivity) getActivity();
+        /*MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             activity.showUpButton();
-        }
+        }*/
     }
 
 

@@ -143,10 +143,10 @@ public class ProductEditFragment extends Fragment implements View.OnClickListene
     public void onResume() {
         super.onResume();
         MainActivity.setAppTitle(R.string.product_title);
-        MainActivity activity = (MainActivity) getActivity();
+       /* MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             activity.showUpButton();
-        }
+        }*/
     }
 
 

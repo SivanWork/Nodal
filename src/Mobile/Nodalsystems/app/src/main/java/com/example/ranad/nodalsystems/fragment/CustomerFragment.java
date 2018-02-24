@@ -170,7 +170,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
     void filter(String text) {
         List<CustomerData> temp = new ArrayList();
         for (CustomerData d : customerDataList) {
-            if (d.getFirstName().toString().toLowerCase().contains(text.toString().toLowerCase())) {
+            if (d.getFirstName().toString().toLowerCase().contains(text.toString().toLowerCase()) || d.getCustomerCode().toString().toLowerCase().contains(text.toString().toLowerCase())) {
                 temp.add(d);
             }
         }
@@ -181,10 +181,10 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
     public void onResume() {
         super.onResume();
         MainActivity.setAppTitle(R.string.customer_title);
-        MainActivity activity = (MainActivity) getActivity();
+       /* MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             activity.showUpButton();
-        }
+        }*/
     }
 
 
@@ -457,7 +457,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
 
                     }
                     customerAdapter.notifyDataSetChanged();
-                    noOfCustomers.setText("Customers : " + response.body().getCustomerList().size());
+                    noOfCustomers.setText("Customers:" + response.body().getCustomerList().size());
 
 
                 }

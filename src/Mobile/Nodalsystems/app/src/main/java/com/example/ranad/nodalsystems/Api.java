@@ -7,7 +7,7 @@ public class Api {
 
     public final static String LOGIN_API = HOST + "/api/User/Login";
     public final static String ORDER_CREATE = HOST + "/api/Order/Create";
-    public final static String BULKORDER_CREATE = HOST + "/api/Order/Create";
+    public final static String BULKORDER_CREATE = HOST + "/api/Order/CreateBulkOrder";
     public final static String USER_CREATE = HOST + "/api/User/CreateUser";
     public final static String USER_UPDATE = HOST + "/api/User/UpdateUser";
     public final static String USER_GETALL = HOST + "/api/User/GetAllUsers";

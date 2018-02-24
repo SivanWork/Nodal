@@ -3,12 +3,16 @@ package com.example.ranad.nodalsystems.usage;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
 
 import com.example.ranad.nodalsystems.R;
 
 
 
 public class DialogUtils {
+    private static TransparentProgressDialog pd;
+    private static Handler h;
+    private static Runnable r;
 
 
     public static ProgressDialog progressDialog = null;
@@ -54,6 +58,31 @@ public class DialogUtils {
     public static void dismissProgress(ProgressDialog progressDialog) {
         progressDialog.dismiss();
     }
+
+    public static TransparentProgressDialog progressWheel(Context c ) {
+        h = new Handler();
+        pd = new TransparentProgressDialog(c, R.drawable.progresswheel4);
+        r =new Runnable() {
+            @Override
+            public void run() {
+                if (pd.isShowing()) {
+                    //  pd.dismiss();
+                }
+            }
+        };
+
+        pd.show();
+        h.post(r);
+
+        return  pd;
+
+    }
+
+    public static void dismissProgressWheel(TransparentProgressDialog tp ) {
+       tp.dismiss();
+
+    }
+
 
 
 }

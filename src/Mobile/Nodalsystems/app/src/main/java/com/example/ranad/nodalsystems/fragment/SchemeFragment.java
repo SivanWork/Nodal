@@ -60,9 +60,9 @@ public class SchemeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         MainActivity.setAppTitle(R.string.scheme_title);
-        MainActivity activity = (MainActivity) getActivity();
+       /* MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             activity.showUpButton();
-        }
+        }*/
     }
 }

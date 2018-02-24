@@ -217,11 +217,11 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
         // DialogUtils.alertDialog(getContext(),"Hi","hi",2);
         MainActivity.setAppTitle(R.string.user_title);
-        MainActivity activity = (MainActivity) getActivity();
+       /* MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             activity.showUpButton();
 
-        }
+        }*/
         getAllElementTypes();
       //  NavUtils.navigateUpFromSameTask(this.getActivity());
       //  FragmentSwitch.switchTo(getActivity(), new UserFragment(), R.string.user_title);

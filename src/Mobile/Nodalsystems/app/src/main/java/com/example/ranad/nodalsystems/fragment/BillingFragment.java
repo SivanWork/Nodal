@@ -39,10 +39,10 @@ public class BillingFragment extends Fragment {
     public void onResume() {
         super.onResume();
         MainActivity.setAppTitle(R.string.billing_title);
-        MainActivity activity = (MainActivity) getActivity();
+       /* MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             activity.showUpButton();
-        }
+        }*/
     }
 
     @Override
