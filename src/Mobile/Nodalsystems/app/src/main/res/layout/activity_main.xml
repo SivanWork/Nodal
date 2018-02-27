@@ -14,15 +14,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-        <android.support.design.widget.NavigationView
-            android:layout_marginTop="?android:attr/actionBarSize"
-            android:id="@+id/navigation_vew"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            app:itemTextColor="@android:color/black"
-            android:layout_gravity="start"
-            app:itemIconTint="@android:color/black"
-            android:fitsSystemWindows="true"
-            app:menu="@menu/action_bar_menu"/>
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_vew"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_home"
+        app:menu="@menu/action_bar_menu" />
 </android.support.v4.widget.DrawerLayout>

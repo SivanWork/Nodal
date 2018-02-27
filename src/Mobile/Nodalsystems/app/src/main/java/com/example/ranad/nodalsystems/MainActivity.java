@@ -1,16 +1,13 @@
 package com.example.ranad.nodalsystems;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -22,8 +19,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -31,9 +26,6 @@ import android.widget.TextView;
 import com.example.ranad.nodalsystems.data_holder.CustomerData;
 import com.example.ranad.nodalsystems.data_holder.ProductData;
 import com.example.ranad.nodalsystems.database.Customers;
-import com.example.ranad.nodalsystems.database.CustomersDao;
-import com.example.ranad.nodalsystems.database.Products;
-import com.example.ranad.nodalsystems.database.ProductsDao;
 import com.example.ranad.nodalsystems.fragment.BillingFragment;
 import com.example.ranad.nodalsystems.fragment.ChangePassword;
 import com.example.ranad.nodalsystems.fragment.CustomerFragment;
@@ -68,7 +60,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_BILLING;
-import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_CHANGE_PASSWORD;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_CUSTOMER;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_DISCOUNT;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_HOME;
@@ -103,16 +94,16 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
         // toolbar.setNavigationIcon(R.drawable.homepage);
     }
 
-   /* @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+    /* @Override
+     public boolean onCreateOptionsMenu(Menu menu) {
+         MenuInflater inflater = getMenuInflater();
 
-    //    menu.add(0, 4, 4, menuIconWithText(getResources().getDrawable(R.mipmap.logout), "Logout"));
+     //    menu.add(0, 4, 4, menuIconWithText(getResources().getDrawable(R.mipmap.logout), "Logout"));
 
-         inflater.inflate(R.menu.action_bar_menu, menu);
+          inflater.inflate(R.menu.action_bar_menu, menu);
 
-        return super.onCreateOptionsMenu(menu);
-    }*/
+         return super.onCreateOptionsMenu(menu);
+     }*/
     private CharSequence menuIconWithText(Drawable r, String title) {
 
         r.setBounds(0, 0, r.getIntrinsicWidth(), r.getIntrinsicHeight());
@@ -122,57 +113,20 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
 
         return sb;
     }
-  /*  @Override
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Take appropriate action for each action item click
         switch (item.getItemId()) {
-            case R.id.sync:
-                syncCustomer();
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
                 return true;
-            case R.id.home:
-                Fragment fragment = new HomeFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.content, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                return true;
-
-            case R.id.change_pwd:
-                FragmentSwitch.switchTo(this,new ChangePassword(),R.string.user_title);
-                return true;
-            case R.id.logout:
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_DayNight_Dialog);
-                builder.setTitle("Confirmation");
-                builder.setMessage("Are you sure! Do you want to Logout..");
-                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        Logout.logout(MainActivity.this);
-                        dialog.dismiss();
-                    }
-
-                });
-                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog alert = builder.create();
-                alert.show();
-
-                return true;
-
-            default:
-                onBackPressed();
-                return super.onOptionsItemSelected(item);
         }
-    }*/
+        return super.onOptionsItemSelected(item);
+    }
 
     View view;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,49 +140,44 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
         getSupportActionBar().setTitle("");
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        actionBarDrawerToggle = new android.support.v7.app.ActionBarDrawerToggle(this, drawerLayout, toolbar,R.string.open_nav, R.string.close_nav);
-        drawerLayout.setDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.getDrawerArrowDrawable();
-        actionBarDrawerToggle.syncState();
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         navigationView = (NavigationView) findViewById(R.id.navigation_vew);
         view = navigationView.getHeaderView(0);
         navigationView.setNavigationItemSelectedListener(this);
-        if (savedInstanceState == null){
+        TextView txtProfileName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.adminName);
+        txtProfileName.setText(Login.getInstance(this).getUser().getFirstName());
+
+        if (savedInstanceState == null) {
             navigationView.setCheckedItem(navigationView.getMenu().getItem(0).getItemId());
             onNavigationItemSelected(navigationView.getMenu().getItem(0));
         }
 
 
-
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         if (Login.getInstance(this).getUser().getUserTypeCode().equals("Agent")) {
 
-                navigation.getMenu().removeItem(R.id.navigation_product);
-                navigation.getMenu().removeItem(R.id.navigation_customer);
-                navigation.getMenu().removeItem(R.id.navigation_user);
-            }
+            navigation.getMenu().removeItem(R.id.navigation_product);
+            navigation.getMenu().removeItem(R.id.navigation_customer);
+            navigation.getMenu().removeItem(R.id.navigation_user);
+        }
 
 
-                navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
         setSupportActionBar(toolbar);
 
 
-        if(NetworkChecker.isConnected(this))
+        if (NetworkChecker.isConnected(this))
             syncCustomer();
-
-
 
 
         Intent intent = getIntent();
         int target = intent.getIntExtra("target", 0);
 
         switchToFragment(target);
-     /*   TextView adminName = (TextView) findViewById(R.id.adminName);
-        adminName.setText(Login.getInstance(this).getUser().getFirstName());
-*/
+
         // loadDefaultData();
 
     }
@@ -268,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
             }
             return false;
         }
+
         private void loadFragment(Fragment fragment) {
             // load fragment
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -320,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
     protected void onResume() {
         super.onResume();
         toolbar.setTitle(R.string.home_title);
-        actionBarDrawerToggle.getDrawerArrowDrawable();
+//        actionBarDrawerToggle.getDrawerArrowDrawable();
     }
 
     @Override
@@ -406,7 +356,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
     public void syncCustomer() {
 
 
-         tp=DialogUtils.progressWheel(this);
+        tp = DialogUtils.progressWheel(this);
 
 
         if (NetworkChecker.isConnected(this) == false)
@@ -416,7 +366,8 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
 
             /*final ProgressDialog progressDialog = DialogUtils.progressDialog(this, "Customer Data fetching.", "Loading...");
             progressDialog.show();
-            */final CustomerApi customerApi =
+            */
+            final CustomerApi customerApi =
                     ApiClient.createService(CustomerApi.class, Login.getInstance(this).getAuthToken());
 
             Call<CustomerGetAll> call = customerApi.getAllCustomersAPI();
@@ -425,7 +376,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
                 public void onResponse(Call<CustomerGetAll> call, Response<CustomerGetAll> response) {
                     // Log.i("responseDB", response.body().getCustomerList() + "");
 
-              //      DialogUtils.dismissProgress(progressDialog);
+                    //      DialogUtils.dismissProgress(progressDialog);
                     CustomerData customerData1 = null;
 
                     ArrayList<CustomerData> customerData = new ArrayList<CustomerData>();
@@ -433,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
                         if (response.body().getCustomerList() != null) {
                             for (int i = 0; i < response.body().getCustomerList().size(); i++) {
 
-                                if(response.body().getCustomerList().get(i).isIsActive()) {
+                                if (response.body().getCustomerList().get(i).isIsActive()) {
                                     customerData1 = new CustomerData();
                                     Log.i("responseNames", response.body().getCustomerList().get(i).getFirstName() + "");
                                     Log.i("responseIDS", response.body().getCustomerList().get(i).getCustomerId() + "");
@@ -458,7 +409,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
                         }
                     }
                     ServerDataLoader.loadCustomerData(customerData);
-                //    DialogUtils.alertDialog(MainActivity.this, "Customers Data", "Loaded locally", 2);
+                    //    DialogUtils.alertDialog(MainActivity.this, "Customers Data", "Loaded locally", 2);
                     syncProduct();
 
                 }
@@ -505,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
                         if (response.body().getProductList() != null) {
                             for (int i = 0; i < response.body().getProductList().size(); i++) {
 
-                                if(response.body().getProductList().get(i).isIsActive()) {
+                                if (response.body().getProductList().get(i).isIsActive()) {
                                     productData1 = new ProductData();
                                     productData1.setProductCode(response.body().getProductList().get(i).getProductCode());
 
@@ -538,56 +489,58 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
     }
 
     public static int item = -1;
+
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         boolean set = false;
-            switch (menuItem.getItemId()){
-                case R.id.home:
+        switch (menuItem.getItemId()) {
+            case R.id.home:
                     /*Fragment fragment = new HomeFragment();
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.content, fragment);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();*/
-                    switchFragment.switchToFragment(FRAGMENT_HOME);
-                    break;
-                case R.id.sync:
-                    syncCustomer();
-                    break;
-                case R.id.change_pwd:
-                  FragmentSwitch.switchTo(this,new ChangePassword(),R.string.changepwd_title);
-                    break;
-                case R.id.logout:
+                switchFragment.switchToFragment(FRAGMENT_HOME);
+                break;
+            case R.id.sync:
+                syncCustomer();
+                break;
+            case R.id.change_pwd:
+                FragmentSwitch.switchTo(this, new ChangePassword(), R.string.changepwd_title);
+                break;
+            case R.id.logout:
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_DayNight_Dialog);
-                    builder.setTitle("Confirmation");
-                    builder.setMessage("Are you sure! Do you want to Logout..");
-                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_DayNight_Dialog);
+                builder.setTitle("Confirmation");
+                builder.setMessage("Are you sure! Do you want to Logout..");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
-                        public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int which) {
 
-                            Logout.logout(MainActivity.this);
-                            dialog.dismiss();
-                        }
+                        Logout.logout(MainActivity.this);
+                        dialog.dismiss();
+                    }
 
-                    });
-                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    AlertDialog alert = builder.create();
-                    alert.show();
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
 
-                    break;
+                break;
 
-            } drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
 
 
-        if (set){
+        if (set) {
             return false;
-        }else {
+        } else {
             item = menuItem.getItemId();
         }
         return true;

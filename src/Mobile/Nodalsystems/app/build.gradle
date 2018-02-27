@@ -30,6 +30,7 @@ dependencies {
     })
 
     compile 'com.mobsandgeeks:android-saripaar:2.0.3'
+    compile 'com.android.support:appcompat-v7:26.1.0'
 
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])

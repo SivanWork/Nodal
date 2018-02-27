@@ -68,6 +68,9 @@ import retrofit2.Response;
 public class OrderFragment extends Fragment implements View.OnClickListener, OrderAction, CustomerAction {
     View view;
 
+
+    ImageView imgView ;
+
     AutoCompleteTextView cName, cNumber;
     EditText quantity, discount, price, order_tax;
     Spinner material, customers;
@@ -138,6 +141,15 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
             activity.showUpButton();
         }*/
 
+        /*if(cart.isEmpty()) {
+            imgView.setVisibility(View.VISIBLE);
+            order_list.setVisibility(View.GONE);
+        }
+
+        else {
+            imgView.setVisibility(View.GONE);
+            order_list.setVisibility(View.VISIBLE);
+        }*/
         refreshTotal();
         orderAdapter.notifyDataSetChanged();
     }
@@ -181,7 +193,9 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
         material.setAdapter(dataAdapter);
 */
 
-
+/*
+imgView= (ImageView)view.findViewById(R.id.emptyCartImg);
+*/
         customerAutoCompleterView = (AutoCompleteTextView) view.findViewById(R.id.customer_autocompleter);
         customer = new ArrayList<>();
 
@@ -204,6 +218,16 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
                 customerAutoCompleterView.setThreshold(1);
             }
 
+
+     /*       if(cart.isEmpty()) {
+                imgView.setVisibility(View.VISIBLE);
+                order_list.setVisibility(View.GONE);
+            }
+
+            else {
+                imgView.setVisibility(View.GONE);
+                order_list.setVisibility(View.VISIBLE);
+            }*/
 
             //    if (!customer.isEmpty())
             // new GetServiceList().execute();
@@ -229,10 +253,11 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
 
                             cart.clear();
                             List<CartItem> tempCart = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(customerId)).list();
-                            cart.addAll(tempCart);
+
                             refreshTotal();
                             orderAdapter.notifyDataSetChanged();
                             currentItemPosition = position;
+
 
                         }
                     });
@@ -437,7 +462,16 @@ if(response.body().getCustomerList().get(i).isIsActive()) {
                     addProductDialog.show(getActivity().getFragmentManager(), "simple dialog");
                 } else
                     DialogUtils.alertDialog(getContext(), "Validation", "Choose customer", 2);
-                break;
+         /*       if(cart.isEmpty()) {
+                    imgView.setVisibility(View.VISIBLE);
+                    order_list.setVisibility(View.GONE);
+                }
+
+                else {
+                    imgView.setVisibility(View.GONE);
+                    order_list.setVisibility(View.VISIBLE);
+                }
+         */       break;
             case R.id.save_prod:
 
                 if (cart.size() == 0) showAlert("Alert", "Cart Empty", 1);
@@ -457,8 +491,17 @@ if(response.body().getCustomerList().get(i).isIsActive()) {
         List<CartItem> deleteList = cartItemDao.queryBuilder().where(CartItemDao.Properties.CustomerId.eq(customerId)).list();
         cartItemDao.deleteInTx(deleteList);
         cart.clear();
+      /*  if(cart.isEmpty()) {
+            imgView.setVisibility(View.VISIBLE);
+            order_list.setVisibility(View.GONE);
+        }
 
+        else {
+            imgView.setVisibility(View.GONE);
+            order_list.setVisibility(View.VISIBLE);
+        }*/
         orderAdapter.notifyDataSetChanged();
+
     }
 
 
@@ -469,6 +512,15 @@ if(response.body().getCustomerList().get(i).isIsActive()) {
         cartItemDao.deleteInTx(deleteList);
         cart.remove(pos);
         refreshTotal();
+     /*   if(cart.isEmpty()) {
+            imgView.setVisibility(View.VISIBLE);
+            order_list.setVisibility(View.GONE);
+        }
+
+        else {
+            imgView.setVisibility(View.GONE);
+            order_list.setVisibility(View.VISIBLE);
+        }*/
         orderAdapter.notifyDataSetChanged();
     }
 

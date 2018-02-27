@@ -9,5 +9,6 @@
     <color name="billing_background">#2208ce</color>
     <color name="return_background">#d12608</color>
     <color name="btn_bg">#ed7702</color>
+    <color name="colorPrimaryLight">#ff8000</color>
 
 </resources>

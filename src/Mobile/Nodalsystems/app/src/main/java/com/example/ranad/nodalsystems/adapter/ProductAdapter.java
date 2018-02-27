@@ -85,8 +85,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             productName.setText(productData.getProductName());
             price.setText(productData.getDealerPrice() + "");
             if (productData.getIsActive()) {
+                delete.setImageResource(R.drawable.delete);
                 linearLayout.setBackgroundColor(Color.parseColor("#ffffff"));
             } else {
+                delete.setImageResource(R.drawable.delete_undo);
                 linearLayout.setBackgroundColor(Color.parseColor("#A9A9A9"));
             }
             delete.setOnClickListener(new View.OnClickListener() {

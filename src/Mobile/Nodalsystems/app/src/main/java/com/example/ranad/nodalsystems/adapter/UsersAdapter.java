@@ -93,12 +93,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             mobile.setText(userData.get(position).getMobile());
             if (userData.get(position).isActive()) {
                 isActive.setText("Active");
-                usericon.setImageResource(R.drawable.activeuser);
+                delete.setImageResource(R.drawable.delete);
+                usericon.setImageResource(R.drawable.user_active);
                // linearLayout.setBackgroundColor(Color.parseColor("#ffffff"));
 
             } else {
                 isActive.setText("InActive");
-                usericon.setImageResource(R.drawable.inactiveuser);
+                delete.setImageResource(R.drawable.delete_undo);
+                usericon.setImageResource(R.drawable.user_inactive);
                // linearLayout.setBackgroundColor(Color.parseColor("#A9A9A9"));
 
             }

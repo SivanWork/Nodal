@@ -97,7 +97,7 @@ public class AddProductDialog extends DialogFragment implements ProductAction {
         final ProductsDao productsDao = App.getDaoSession().getProductsDao();
 
 
-        if (NetworkChecker.isConnected(getContext())) {
+        if (NetworkChecker.isConnected(view.getContext())) {
 
             readAllProducts();
 
@@ -200,7 +200,7 @@ public class AddProductDialog extends DialogFragment implements ProductAction {
             progressDialog.show();
       */
         ProductApi productApi =
-                ApiClient.createService(ProductApi.class, Login.getInstance(getContext()).getAuthToken());
+                ApiClient.createService(ProductApi.class, Login.getInstance(view.getContext()).getAuthToken());
 
         Call<ProductGetAll> call = productApi.getAllProductsAPI();
         call.enqueue(new Callback<ProductGetAll>() {

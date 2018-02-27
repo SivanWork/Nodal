@@ -1,54 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-   <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
 
 
-       <item
-           android:id="@+id/home"
-           android:icon="@drawable/homepage"
-           android:title="Home" />
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/homepage"
+            android:title="Home" />
 
-     <item
-        android:id="@+id/sync"
-        android:name="Sync Server"
-        android:title="Sync Server"
-        android:icon="@drawable/sync" />
+        <!--<item
+            android:id="@+id/sync"
+            android:name="Sync Server"
+            android:icon="@drawable/sync"
+            android:title="Sync Server" />
 
-
-    <item android:id="@+id/change_pwd"
-        android:icon="@drawable/change"
-        android:title="Change Password" />
-
-    <item android:id="@+id/logout"
-        android:icon="@drawable/logout"
-        android:title="Logout" />
-
-
-    <!--
-    &lt;!&ndash; Location Found &ndash;&gt;
-    <item android:id="@+id/action_location_found"
-        android:icon="@drawable/ic_action_location_found"
-        android:title="@string/action_location_found"
-        android:showAsAction="ifRoom" />
-
-    &lt;!&ndash; Refresh &ndash;&gt;
-    <item android:id="@+id/action_refresh"
-        android:icon="@drawable/ic_action_refresh"
-        android:title="@string/action_refresh"
-        android:showAsAction="ifRoom" />
-
-    &lt;!&ndash; Help &ndash;&gt;
-    <item android:id="@+id/action_help"
-        android:icon="@drawable/ic_action_help"
-        android:title="@string/action_help"
-        android:showAsAction="never"/>
-
-    &lt;!&ndash; Check updates &ndash;&gt;
-    <item android:id="@+id/action_check_updates"
-        android:icon="@drawable/ic_action_refresh"
-        android:title="@string/action_check_updates"
-        android:showAsAction="never" />
 -->
-   </group>
+        <item
+            android:id="@+id/change_pwd"
+            android:icon="@drawable/change"
+            android:title="Change Password" />
+
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/logout"
+            android:title="Logout" />
+
+
+        <!--
+        &lt;!&ndash; Location Found &ndash;&gt;
+        <item android:id="@+id/action_location_found"
+            android:icon="@drawable/ic_action_location_found"
+            android:title="@string/action_location_found"
+            android:showAsAction="ifRoom" />
+
+        &lt;!&ndash; Refresh &ndash;&gt;
+        <item android:id="@+id/action_refresh"
+            android:icon="@drawable/ic_action_refresh"
+            android:title="@string/action_refresh"
+            android:showAsAction="ifRoom" />
+
+        &lt;!&ndash; Help &ndash;&gt;
+        <item android:id="@+id/action_help"
+            android:icon="@drawable/ic_action_help"
+            android:title="@string/action_help"
+            android:showAsAction="never"/>
+
+        &lt;!&ndash; Check updates &ndash;&gt;
+        <item android:id="@+id/action_check_updates"
+            android:icon="@drawable/ic_action_refresh"
+            android:title="@string/action_check_updates"
+            android:showAsAction="never" />
+    -->
+    </group>
 </menu>

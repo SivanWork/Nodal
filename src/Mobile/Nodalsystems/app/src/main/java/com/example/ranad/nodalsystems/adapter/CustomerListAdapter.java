@@ -92,9 +92,12 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
             mobile.setText(customerData.getMobile());
             isActive.setText(customerData.getIsActive());
             if (customerData.getIsActive().equals("Active")) {
+
+                delete.setImageResource(R.drawable.delete);
                 customericon.setImageResource(R.drawable.activecustomer);
               //  linearLayout.setBackgroundColor(Color.parseColor("#ffffff"));
             } else {
+                delete.setImageResource(R.drawable.delete_undo);
                 customericon.setImageResource(R.drawable.inactivecustomer);
                 //linearLayout.setBackgroundColor(Color.parseColor("#A9A9A9"));
             }
