@@ -54,6 +54,7 @@ import com.example.ranad.nodalsystems.restapi.OrderApi;
 import com.example.ranad.nodalsystems.usage.DialogUtils;
 import com.example.ranad.nodalsystems.usage.FragmentSwitch;
 import com.example.ranad.nodalsystems.usage.NetworkChecker;
+import com.example.ranad.nodalsystems.usage.TransparentProgressDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -758,13 +759,13 @@ if(response.body().getCustomerList().get(i).isIsActive()) {
                 ApiClient.createService(OrderApi.class, Login.getInstance(getContext()).getAuthToken());
         Call<List<BulkOrderResponse>> call = orderService.createBulkOrderAPI(bulkOrder);
 
-
+final TransparentProgressDialog p=DialogUtils.progressWheel(getContext());
         call.enqueue(new Callback<List<BulkOrderResponse>>() {
             @Override
             public void onResponse(Call<List<BulkOrderResponse>> call, Response<List<BulkOrderResponse>> response) {
 
                 Log.i("responseBULKKK", response.body().toString());
-
+DialogUtils.dismissProgressWheel(p);
 //if(response.body().) {
     showAlert("Order Status", "Success! Saved in Server", 2);
     removeOrdersAfterSync();
