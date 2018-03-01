@@ -43,6 +43,7 @@ import com.example.ranad.nodalsystems.usage.NetworkChecker;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Pattern;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,8 +65,8 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
     SwitchFragment switchFragment;
 
     @NotEmpty
-    EditText name, mrp, dealerprice, wholesaleprice;
-    EditText cgst, sgst, igst;
+    @Pattern(regex = "^[^-\\s][a-zA-Z0-9_\\s-]+$", message = "Space Not Allowed as a First Charactor")
+    EditText name, mrp, dealerprice, wholesaleprice,cgst, sgst, igst;
 
     ArrayList<ProductData> productData;
     ProductAdapter productAdapter;

@@ -25,6 +25,7 @@ import com.example.ranad.nodalsystems.model.Login;
 import com.example.ranad.nodalsystems.restapi.ApiClient;
 import com.example.ranad.nodalsystems.restapi.ApiInterface;
 import com.google.gson.Gson;
+import com.mobsandgeeks.saripaar.annotation.Pattern;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +37,7 @@ import retrofit2.Response;
 
 public class ForgotPasswordDialog extends DialogFragment implements View.OnClickListener {
     View view;
+    @Pattern(regex = "^[^-\\s][a-zA-Z0-9_\\s-]+$", message = "Space Not Allowed as a First Charactor")
     EditText emailId;
     Button cancel, ok;
 

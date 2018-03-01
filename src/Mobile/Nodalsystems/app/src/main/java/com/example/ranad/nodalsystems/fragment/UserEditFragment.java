@@ -46,6 +46,7 @@ import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
+import com.mobsandgeeks.saripaar.annotation.Pattern;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -75,8 +76,9 @@ public class UserEditFragment extends Fragment implements View.OnClickListener, 
     EditText email;
     @Password
     EditText password;
-    @NotEmpty(message = "Data Requried")
 
+    @NotEmpty(message = "Data Requried")
+    @Pattern(regex = "^[^-\\s][a-zA-Z0-9_\\s-]+$", message = "Space Not Allowed as a First Charactor")
     EditText name, pin, addrs1, addrs2, state, country, city, ftName, lastName, activeFrom, activeTo, number;
     Button edit, btncancel;
     //    ImageView ivAdd;

@@ -11,11 +11,15 @@ import android.widget.EditText;
 
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Pattern;
 
 
 public class ReturnFragment extends Fragment {
     View view;
     AutoCompleteTextView id, cId, pId;
+    @NotEmpty
+    @Pattern(regex = "^[^-\\s][a-zA-Z0-9_\\s-]+$", message = "Space Not Allowed as a First Charactor")
     EditText quantity, discount, price, comments, tax;
     Button submit;
 

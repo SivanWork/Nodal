@@ -13,6 +13,7 @@ import android.widget.Spinner;
 
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
+import com.mobsandgeeks.saripaar.annotation.Pattern;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 public class BillingFragment extends Fragment {
     View view;
     AutoCompleteTextView customer_id, order_id;
+    @Pattern(regex = "^[^-\\s][a-zA-Z0-9_\\s-]+$", message = "Space Not Allowed as a First Charactor")
     EditText amount_paid, total;
     Spinner paid_through;
     List<String> list = new ArrayList<>();

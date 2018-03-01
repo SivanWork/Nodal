@@ -89,11 +89,10 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
     @NotEmpty(message = "Data Requried")
 
     @Pattern(regex = "^[^-\\s][a-zA-Z0-9_\\s-]+$", message = "Space Not Allowed as a First Charactor")
+    EditText name, pin, addrs1, addrs2, state, country, city, ftName, lastName, activeFrom, activeTo;
 
-    EditText name, pin, addrs1, addrs2, state, country, city, ftName, lastName, activeFrom, activeTo, mobile;
     @Pattern(regex = "[789][0-9]{9}", message = "Please enter valid Phone number")
-
-    EditText number;
+    EditText number,mobile;
     Button add, btncancel;
     ImageView ivAdd;
     ListView listView;

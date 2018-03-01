@@ -38,6 +38,7 @@ import com.example.ranad.nodalsystems.usage.NetworkChecker;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Pattern;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class ChangePassword extends DialogFragment implements View.OnClickListen
     View view;
     Context context;
     @NotEmpty
+    @Pattern(regex = "^[^-\\s][a-zA-Z0-9_\\s-]+$", message = "Space Not Allowed as a First Charactor")
     EditText new_pwd, renter_pwd;
     Button cancel, change;
     protected Validator validator;

@@ -34,6 +34,7 @@ import com.example.ranad.nodalsystems.usage.NetworkChecker;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Pattern;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
     TextView noOfCustomers;
     EditText midName;
     @NotEmpty
+    @Pattern(regex = "^[^-\\s][a-zA-Z0-9_\\s-]+$", message = "Space Not Allowed as a First Charactor")
     EditText firstName, lastName, amount, email, addrs, alt_addrs, number, city, state, country, pincode;
     Button edit, btncancel;
     ArrayList<CustomerData> customerData = new ArrayList<>();

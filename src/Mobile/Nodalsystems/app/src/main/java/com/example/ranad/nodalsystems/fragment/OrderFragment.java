@@ -73,6 +73,7 @@ public class OrderFragment extends Fragment implements View.OnClickListener, Ord
     ImageView imgView ;
 
     AutoCompleteTextView cName, cNumber;
+    @Pattern(regex = "^[^-\\s][a-zA-Z0-9_\\s-]+$", message = "Space Not Allowed as a First Charactor")
     EditText quantity, discount, price, order_tax;
     Spinner material, customers;
     Button submit, cancel, add_prod, save_prod, viewOrders;
