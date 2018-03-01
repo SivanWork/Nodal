@@ -52,6 +52,7 @@ import com.example.ranad.nodalsystems.restapi.UserApi;
 import com.example.ranad.nodalsystems.usage.DialogUtils;
 import com.example.ranad.nodalsystems.usage.FragmentSwitch;
 import com.example.ranad.nodalsystems.usage.NetworkChecker;
+import com.example.ranad.nodalsystems.usage.TransparentProgressDialog;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Email;
@@ -104,7 +105,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
     UsersAdapter usersAdapter;
     List<UserList> userList = new ArrayList<UserList>();
     ProgressDialog progressDialog = null;
-    Spinner userType_spinner, userElement_spinner;
+    Spinner userElement_spinner;
     TextView noOfUsers;
     List<UserData> userDataList;
     GetAllGroupTypes gtAll;
@@ -153,7 +154,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         email = (EditText) view.findViewById(R.id.email);
 
         userElement_spinner = (Spinner) view.findViewById(R.id.userElement);
-        userType_spinner = (Spinner) view.findViewById(R.id.userType);
+      //  userType_spinner = (Spinner) view.findViewById(R.id.userType);
         city = (EditText) view.findViewById(R.id.city);
         country = (EditText) view.findViewById(R.id.country);
         state = (EditText) view.findViewById(R.id.state);
@@ -227,7 +228,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
             activity.showUpButton();
 
         }*/
-        getAllElementTypes();
+        //getAllElementTypes();
       //  NavUtils.navigateUpFromSameTask(this.getActivity());
       //  FragmentSwitch.switchTo(getActivity(), new UserFragment(), R.string.user_title);
         /*userDataList = readAllUsers();
@@ -263,24 +264,26 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
                 ivAdd.setVisibility(View.GONE);
                 outer_layout.setVisibility(View.GONE);
                 MainActivity.setAppTitle(R.string.add_user);
+
+
                 // getAllGroupTypes();
 
 
-                List<String> list = new ArrayList<String>();
+        /*        List<String> list = new ArrayList<String>();
                 list.add("USER");
                 ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                userType_spinner.setAdapter(dataAdapter);
+        */     //   userType_spinner.setAdapter(dataAdapter);
 
 
-              /*  List<String> list2 = new ArrayList<String>();
+                List<String> list2 = new ArrayList<String>();
 
                 list2.add(0, "Admin");
                 list2.add(1, "Agent");
                 ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list2);
-                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 userElement_spinner.setAdapter(dataAdapter2);
-*/
+
                 break;
             case R.id.add:
 
@@ -393,7 +396,8 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
             NetworkChecker.noNetworkDialog(getContext(), getActivity(), 2);
         } else {
 
-            showProgress("User Data Fetching.", "Loading...", 2);
+            //showProgress("User Data Fetching.", "Loading...", 2);
+            final TransparentProgressDialog progressDialog=DialogUtils.progressWheel(getContext());
             UserApi userApi =
                     ApiClient.createService(UserApi.class, Login.getInstance(getContext()).getAuthToken());
 
@@ -403,9 +407,13 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
                 @Override
                 public void onResponse(Call<USERGETALL> call, Response<USERGETALL> response) {
                     //         Log.i("responseDB", response.body().getUserList() + "");
-                    dismissProgress();
+                    /*dismissProgress();*/
+
+                    DialogUtils.dismissProgressWheel(progressDialog);
                     UserData userData1;
                     if(response!=null) {
+                        if(response.body().getUserList()!=null)
+                        {
                         noOfUsers.setText("Users:" + response.body().getUserList().size());
 
 
@@ -424,7 +432,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
                             userData.add(userData1);
 
-                        }
+                        }}
                         usersAdapter.notifyDataSetChanged();
                     }
 
@@ -473,8 +481,8 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
         user.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
         user.setLastUpdatedDate(getCurrentDate().toString());
 
-        user.setUserGroupType(userType_spinner.getSelectedItem().toString());
-
+        //user.setUserGroupType(userType_spinner.getSelectedItem().toString());
+        user.setUserGroupType("USER");
         user.setUserElementCode(userElement_spinner.getSelectedItem().toString());
         user.setUsername(name.getText().toString());
         //  user.setUserElementCode(userElementCode.getText().toString());
@@ -631,7 +639,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
 
                 List<String> list = new ArrayList<String>();
-                if (response.body().getGroupTypeList() != null) {
+                if (response!= null) {
                     for (int i = 0; i < response.body().getGroupTypeList().size(); i++) {
 
                         list.add(response.body().getGroupTypeList().get(i).getGroupCode());
@@ -643,10 +651,10 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
                 }
 
-                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
+       /*         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 userType_spinner.setAdapter(dataAdapter);
-
+*/
 
             }
 
@@ -671,7 +679,7 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
             @Override
             public void onResponse(Call<GetAllElementTypes> call, Response<GetAllElementTypes> response) {
                 List<String> list = new ArrayList<String>();
-                if (response.body().getGroupElementCodeList() != null) {
+                /*if (response!= null) {
 
 
                     for (int i = 0; i < response.body().getGroupElementCodeList().size(); i++) {
@@ -681,13 +689,13 @@ public class UserFragment extends Fragment implements View.OnClickListener, User
 
 
                 } else {
-
+*/
                     for (int i = 0; i < 2&&list.isEmpty(); i++) {
 
                         list.add("Admin");
                         list.add("Agent");
                     }
-                }
+  //              }
                 ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 userElement_spinner.setAdapter(dataAdapter);

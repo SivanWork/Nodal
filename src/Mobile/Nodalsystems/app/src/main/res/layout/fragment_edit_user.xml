@@ -373,19 +373,17 @@
             -->
 
 
+<!--
             <Spinner
                 android:id="@+id/userType"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
 
                 android:layout_marginTop="20dp"></Spinner>
+-->
 
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/black" />
+
             <!--
 
                         <android.support.design.widget.TextInputLayout

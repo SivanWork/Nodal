@@ -229,7 +229,13 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
         }
     };
 
-
+    private void loadFragment(Fragment fragment) {
+        // load fragment
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
    /* public void showUpButton() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -282,11 +288,11 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
 
         switch (target) {
             case FRAGMENT_HOME:
-                FragmentManager fragmentManager = this.getSupportFragmentManager();
+                /*FragmentManager fragmentManager = this.getSupportFragmentManager();
                 for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
                     fragmentManager.popBackStack();
-                }
-                fragment = HomeFragment.newInstance(this);
+                }*/
+                fragment = new HomeFragment();
                 break;
             case FRAGMENT_CUSTOMER:
                 fragment = new CustomerFragment();
@@ -295,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
                 fragment = new OrderTracking();
                 break;
             case FRAGMENT_USER:
-                fragment = UserFragment.newInstance(this);
+                fragment = new UserFragment();
                 break;
             case FRAGMENT_PRODUCT:
                 fragment = new ProductFragment();
@@ -331,15 +337,12 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
             FragmentManager fragmentManager = getSupportFragmentManager();
             String s = fragment.getClass().getName();
             boolean frag = fragmentManager.popBackStackImmediate(s, 0);
-            Log.d("fragment", s + " " + frag);
+            loadFragment(fragment);
+            toolbar.setTitle("Home");
+     }
 
-            if (!frag) {
-                FragmentTransaction fragmenttransaction = fragmentManager.beginTransaction();
-                fragmenttransaction.replace(R.id.content, fragment);
-                fragmenttransaction.addToBackStack(s);
-                fragmenttransaction.commit();
-            }
-        }
+
+    
     }
 
 

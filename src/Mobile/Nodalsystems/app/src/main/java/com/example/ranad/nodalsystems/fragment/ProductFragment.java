@@ -40,6 +40,7 @@ import com.example.ranad.nodalsystems.restapi.ProductApi;
 import com.example.ranad.nodalsystems.usage.DialogUtils;
 import com.example.ranad.nodalsystems.usage.FragmentSwitch;
 import com.example.ranad.nodalsystems.usage.NetworkChecker;
+import com.example.ranad.nodalsystems.usage.TransparentProgressDialog;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -118,6 +119,8 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
         ivadd = (ImageView) view.findViewById(R.id.ivAdd);
         add = (Button) view.findViewById(R.id.add);
         cancel = (Button) view.findViewById(R.id.btnCancel);
+
+        add.setOnClickListener(this);
         ivadd.setOnClickListener(this);
 
         cancel.setOnClickListener(this);
@@ -381,18 +384,21 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
         else {
 
 
-            final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Product Data fetching.", "Loading...");
-            progressDialog.show();
+        //    final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Product Data fetching.", "Loading...");
+          ///  progressDialog.show();
+           final  TransparentProgressDialog progressDialog=DialogUtils.progressWheel(getContext());
+
             ProductApi productApi =
                     ApiClient.createService(ProductApi.class, Login.getInstance(getContext()).getAuthToken());
 
             Call<ProductGetAll> call = productApi.getAllProductsAPI();
+
             call.enqueue(new Callback<ProductGetAll>() {
                 @Override
                 public void onResponse(Call<ProductGetAll> call, Response<ProductGetAll> response) {
                     // Log.i("responseDB", response.body().getProductList() + "");
 
-                    DialogUtils.dismissProgress(progressDialog);
+                    DialogUtils.dismissProgressWheel(progressDialog);
                     ProductData productData1 = null;
 
                     for (int i = 0; i < response.body().getProductList().size(); i++) {
@@ -493,13 +499,14 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
         validated = false;
+        DialogUtils.alertDialog(getContext(),"hi",""+validated,2);
 
         for (ValidationError error : errors) {
             View view = error.getView();
             String message = error.getCollatedErrorMessage(getContext());
 
 
-            // Display error messages
+            // Display error messag
             if (view instanceof Spinner) {
                 Spinner sp = (Spinner) view;
                 view = ((LinearLayout) sp.getSelectedView()).getChildAt(0);        // we are actually interested in the text view spinner has
@@ -512,6 +519,5 @@ public class ProductFragment extends Fragment implements View.OnClickListener, P
         }
 
     }
-
 
 }

@@ -42,6 +42,7 @@ import com.example.ranad.nodalsystems.restapi.CustomerApi;
 import com.example.ranad.nodalsystems.usage.DialogUtils;
 import com.example.ranad.nodalsystems.usage.FragmentSwitch;
 import com.example.ranad.nodalsystems.usage.NetworkChecker;
+import com.example.ranad.nodalsystems.usage.TransparentProgressDialog;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -236,7 +237,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
         customer.setCity(city.getText().toString());
         customer.setState(state.getText().toString());
         customer.setCountry(country.getText().toString());
-        customer.setPin(country.getText().toString());
+        customer.setPin(pincode.getText().toString());
         customer.setIsActive(true);
 
         customer.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
@@ -423,8 +424,10 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
         else {
 
 
-            final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Customer Data fetching.", "Loading...");
-            progressDialog.show();
+          //  final ProgressDialog progressDialog = DialogUtils.progressDialog(getContext(), "Customer Data fetching.", "Loading...");
+            //progressDialog.show();
+
+            final TransparentProgressDialog progressDialog=DialogUtils.progressWheel(getContext());
             CustomerApi customerApi =
                     ApiClient.createService(CustomerApi.class, Login.getInstance(getContext()).getAuthToken());
 
@@ -434,7 +437,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener, 
                 public void onResponse(Call<CustomerGetAll> call, Response<CustomerGetAll> response) {
                     Log.i("responseDB", response.body().getCustomerList() + "");
 
-                    DialogUtils.dismissProgress(progressDialog);
+                    DialogUtils.dismissProgressWheel(progressDialog);
                     CustomerData customerData1 = null;
 
                     for (int i = 0; i < response.body().getCustomerList().size(); i++) {

@@ -30,8 +30,9 @@
     <string name="close_nav">Close Nav</string>
 
 
-    <string name="radio_active">Active</string>
-    <string name="radio_passive">InActive</string>
+
+<string name="radio_active">Active</string>
+<string name="radio_passive">InActive</string>
 
 
     <string name="title_user">User</string>

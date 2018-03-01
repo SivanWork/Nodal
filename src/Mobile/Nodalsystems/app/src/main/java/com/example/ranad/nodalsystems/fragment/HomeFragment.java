@@ -25,7 +25,6 @@ import com.example.ranad.nodalsystems.model.Users;
 
 import java.util.ArrayList;
 
-import static com.example.ranad.nodalsystems.usage.Constants.FRAGEMNT_ORDER_TRACKING;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_CUSTOMER;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_ORDER;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_PRODUCT;

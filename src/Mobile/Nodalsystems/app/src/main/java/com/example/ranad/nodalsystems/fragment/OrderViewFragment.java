@@ -156,8 +156,8 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
             order.setOrderId(orderId);
             order.setCustomerId(ordersList.get(i).getCustomerId());
             order.setTotalOrderAmount(ordersList.get(i).getTotalOrderAmount());
-            order.setOrderStatusElementCode(0);
-            order.setOrderStatusGroup(0);
+            order.setOrderStatusElementCode("Created");
+            order.setOrderStatusGroup("OSTATUS");
 
             order.setCreatedById(Login.getInstance(getContext()).getUser().getUserId());
             order.setCreatedDate(getCurrentDate());

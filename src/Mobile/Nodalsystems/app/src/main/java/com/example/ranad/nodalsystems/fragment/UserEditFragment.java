@@ -92,7 +92,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener, 
     //UserAdapter userAdapter;
     ////UsersAdapter usersAdapter;
     ProgressDialog progressDialog = null;
-    Spinner userType_spinner, userElement_spinner;
+    Spinner  userElement_spinner;
     List<UserList> userList = new ArrayList<UserList>();
     private RadioGroup radioStatusGroup;
 
@@ -128,7 +128,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener, 
         validator.setValidationListener(this);
         progressDialog = new ProgressDialog(getContext());
         userElement_spinner = (Spinner) view.findViewById(R.id.userElement);
-        userType_spinner = (Spinner) view.findViewById(R.id.userType);
+       // userType_spinner = (Spinner) view.findViewById(R.id.userType);
         name = (EditText) view.findViewById(R.id.user_name);
         password = (EditText) view.findViewById(R.id.password);
         number = (EditText) view.findViewById(R.id.mobileNum);
@@ -158,7 +158,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener, 
         list.add("USER");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        userType_spinner.setAdapter(dataAdapter);
+      //  userType_spinner.setAdapter(dataAdapter);
 
         radioStatusGroup = (RadioGroup) view.findViewById(R.id.radioStatus);
 
@@ -379,7 +379,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener, 
         user.setLastUpdatedById(Login.getInstance(getContext()).getUser().getUserId());
         user.setLastUpdatedDate(getCurrentDate().toString());
 
-        user.setUserGroupType(userType_spinner.getSelectedItem().toString());
+        user.setUserGroupType("USER");
 
         user.setUserElementCode(userElement_spinner.getSelectedItem().toString());
         user.setUsername(name.getText().toString());
@@ -506,7 +506,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener, 
 
                 ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                userType_spinner.setAdapter(dataAdapter);
+             //   userType_spinner.setAdapter(dataAdapter);
 
 
             }

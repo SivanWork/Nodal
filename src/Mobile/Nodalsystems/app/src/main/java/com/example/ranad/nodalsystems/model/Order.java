@@ -38,10 +38,10 @@ public class Order implements Serializable, Parcelable {
     private double totalOrderAmount;
     @SerializedName("OrderStatusGroup")
     @Expose
-    private int orderStatusGroup;
+    private String orderStatusGroup;
     @SerializedName("OrderStatusElementCode")
     @Expose
-    private int orderStatusElementCode;
+    private String orderStatusElementCode;
     @SerializedName("OrderDetails")
     @Expose
     private List<OrderDetail> orderDetails = null;
@@ -62,8 +62,8 @@ public class Order implements Serializable, Parcelable {
         this.orderId = ((int) in.readValue((int.class.getClassLoader())));
         this.customerId = ((int) in.readValue((int.class.getClassLoader())));
         this.totalOrderAmount = ((double) in.readValue((double.class.getClassLoader())));
-        this.orderStatusGroup = ((int) in.readValue((int.class.getClassLoader())));
-        this.orderStatusElementCode = ((int) in.readValue((int.class.getClassLoader())));
+        this.orderStatusGroup = ((String) in.readValue((int.class.getClassLoader())));
+        this.orderStatusElementCode = ((String) in.readValue((int.class.getClassLoader())));
         in.readList(this.orderDetails, (com.example.ranad.nodalsystems.model.OrderDetail.class.getClassLoader()));
         this.createdById = ((int) in.readValue((int.class.getClassLoader())));
         this.createdDate = ((String) in.readValue((String.class.getClassLoader())));
@@ -89,7 +89,7 @@ public class Order implements Serializable, Parcelable {
      * @param lastUpdatedById
      * @param orderId
      */
-    public Order(int orderId, int customerId, double totalOrderAmount, int orderStatusGroup, int orderStatusElementCode, List<OrderDetail> orderDetails, int createdById, String createdDate, int lastUpdatedById, String lastUpdatedDate) {
+    public Order(int orderId, int customerId, double totalOrderAmount, String orderStatusGroup, String orderStatusElementCode, List<OrderDetail> orderDetails, int createdById, String createdDate, int lastUpdatedById, String lastUpdatedDate) {
         super();
         this.orderId = orderId;
         this.customerId = customerId;
@@ -127,19 +127,19 @@ public class Order implements Serializable, Parcelable {
         this.totalOrderAmount = totalOrderAmount;
     }
 
-    public int getOrderStatusGroup() {
+    public String getOrderStatusGroup() {
         return orderStatusGroup;
     }
 
-    public void setOrderStatusGroup(int orderStatusGroup) {
+    public void setOrderStatusGroup(String orderStatusGroup) {
         this.orderStatusGroup = orderStatusGroup;
     }
 
-    public int getOrderStatusElementCode() {
+    public String getOrderStatusElementCode() {
         return orderStatusElementCode;
     }
 
-    public void setOrderStatusElementCode(int orderStatusElementCode) {
+    public void setOrderStatusElementCode(String orderStatusElementCode) {
         this.orderStatusElementCode = orderStatusElementCode;
     }
 
