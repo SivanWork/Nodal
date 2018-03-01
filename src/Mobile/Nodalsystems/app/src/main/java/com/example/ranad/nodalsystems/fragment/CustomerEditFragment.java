@@ -54,7 +54,9 @@ public class CustomerEditFragment extends Fragment implements View.OnClickListen
     EditText midName;
     @NotEmpty
     @Pattern(regex = "^[^-\\s][a-zA-Z0-9_\\s-]+$", message = "Space Not Allowed as a First Charactor")
-    EditText firstName, lastName, amount, email, addrs, alt_addrs, number, city, state, country, pincode;
+    EditText firstName, lastName, amount, email, addrs, alt_addrs, city, state, country, pincode;
+    @Pattern(regex = "[789][0-9]{9}", message = "Please enter valid Phone number")
+    EditText  number;
     Button edit, btncancel;
     ArrayList<CustomerData> customerData = new ArrayList<>();
 

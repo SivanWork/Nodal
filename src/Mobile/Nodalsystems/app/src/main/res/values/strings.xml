@@ -18,6 +18,7 @@
     <string name="edit_customer">EDIT CUSTOMER</string>
     <string name="add_product">ADD PRODUCT</string>
     <string name="add_order">ADD ORDER</string>
+    <string name="order_tracking">ORDER TRACKING</string>
 
     <string name="discount_title">DISCOUNT</string>
     <string name="ok">OK</string>
@@ -29,9 +30,8 @@
     <string name="close_nav">Close Nav</string>
 
 
-
-<string name="radio_active">Active</string>
-<string name="radio_passive">InActive</string>
+    <string name="radio_active">Active</string>
+    <string name="radio_passive">InActive</string>
 
 
     <string name="title_user">User</string>

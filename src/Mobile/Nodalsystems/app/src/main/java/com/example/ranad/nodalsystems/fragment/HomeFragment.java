@@ -25,6 +25,7 @@ import com.example.ranad.nodalsystems.model.Users;
 
 import java.util.ArrayList;
 
+import static com.example.ranad.nodalsystems.usage.Constants.FRAGEMNT_ORDER_TRACKING;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_CUSTOMER;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_ORDER;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_PRODUCT;
@@ -80,6 +81,7 @@ public class HomeFragment extends Fragment {
             // homeGridElements.add(new HomeGridElement("REPORT", R.drawable.report, android.R.color.white, FRAGMENT_REPORT));
             // homeGridElements.add(new HomeGridElement("DISCOUNT", R.drawable.discount, android.R.color.white, FRAGMENT_DISCOUNT));
             homeGridElements.add(new HomeGridElement("ORDER", R.drawable.order_2, android.R.color.white, FRAGMENT_ORDER));
+            homeGridElements.add(new HomeGridElement("ORDER TRACKING", R.drawable.order_tracking, android.R.color.white, FRAGEMNT_ORDER_TRACKING));
             //  homeGridElements.add(new HomeGridElement("BILLING", R.drawable.biiling_2, android.R.color.white, FRAGMENT_BILLING));
             /*homeGridElements.add(new HomeGridElement("RETURN", R.drawable.return_2, android.R.color.white, FRAGMENT_RETURN));*/
 

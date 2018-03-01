@@ -65,8 +65,7 @@ public class ProductEditFragment extends Fragment implements View.OnClickListene
 
     @NotEmpty
     @Pattern(regex = "^[^-\\s][a-zA-Z0-9_\\s-]+$", message = "Space Not Allowed as a First Charactor")
-    EditText name, mrp, dealerprice, wholesaleprice;
-    EditText cgst, sgst, igst;
+    EditText name, mrp, dealerprice, wholesaleprice,cgst, sgst, igst;
     ListView list;
     ArrayList<ProductData> productData = new ArrayList<>();
     ProductAdapter productAdapter;

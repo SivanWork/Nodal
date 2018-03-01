@@ -32,6 +32,7 @@ import com.example.ranad.nodalsystems.fragment.CustomerFragment;
 import com.example.ranad.nodalsystems.fragment.DiscountFragment;
 import com.example.ranad.nodalsystems.fragment.HomeFragment;
 import com.example.ranad.nodalsystems.fragment.OrderFragment;
+import com.example.ranad.nodalsystems.fragment.OrderTracking;
 import com.example.ranad.nodalsystems.fragment.ProductFragment;
 import com.example.ranad.nodalsystems.fragment.ReportFragment;
 import com.example.ranad.nodalsystems.fragment.ReturnFragment;
@@ -59,6 +60,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.ranad.nodalsystems.usage.Constants.FRAGEMNT_ORDER_TRACKING;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_BILLING;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_CUSTOMER;
 import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_DISCOUNT;
@@ -288,6 +290,9 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
                 break;
             case FRAGMENT_CUSTOMER:
                 fragment = new CustomerFragment();
+                break;
+            case FRAGEMNT_ORDER_TRACKING:
+                fragment = new OrderTracking();
                 break;
             case FRAGMENT_USER:
                 fragment = UserFragment.newInstance(this);

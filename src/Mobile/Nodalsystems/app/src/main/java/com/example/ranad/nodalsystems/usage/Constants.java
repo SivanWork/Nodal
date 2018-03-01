@@ -18,7 +18,8 @@ public class Constants {
             FRAGMENT_PRODUCT_EDIT = 9,
             FRAGMENT_PRODUCT = 10,
             FRAGMENT_USER = 11,
-            FRAGMENT_CHANGE_PASSWORD = 12;
+            FRAGMENT_CHANGE_PASSWORD = 12,
+            FRAGEMNT_ORDER_TRACKING = 13;
 
 
 }
