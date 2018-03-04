@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="10dp"
     card_view:cardBackgroundColor="@android:color/white"
     card_view:cardCornerRadius="3dp">
 
@@ -104,7 +104,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Status: "
-                                android:textColor="@android:color/black"
+                                android:textColor="@color/hint_color"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -124,7 +124,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Code: "
-                                android:textColor="@android:color/black"
+                                android:textColor="@color/hint_color"
                                 android:textSize="15dp" />
 
                             <TextView

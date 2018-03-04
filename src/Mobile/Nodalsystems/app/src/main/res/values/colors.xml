@@ -10,5 +10,6 @@
     <color name="return_background">#d12608</color>
     <color name="btn_bg">#ed7702</color>
     <color name="colorPrimaryLight">#ff8000</color>
+    <color name="hint_color">#6d6c6c</color>
 
 </resources>

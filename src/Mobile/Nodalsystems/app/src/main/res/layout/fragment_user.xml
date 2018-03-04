@@ -8,6 +8,7 @@
 
     <LinearLayout
         android:id="@+id/outer_layout"
+        android:layout_margin="16dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -23,7 +24,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_margin="16dp"
                 android:background="@drawable/searchborder"
                 android:hint="search user here"
                 android:textAlignment="center"
@@ -35,17 +35,16 @@
             android:id="@+id/noOfUsers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="17dp"
+            android:layout_marginTop="8dp"
             android:textColor="@android:color/black"
             android:textSize="16dp"
             android:textStyle="bold" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/user_list"
-            android:layout_margin="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-             />
+             android:layout_marginTop="8dp"/>
     </LinearLayout>
 
     <ScrollView
