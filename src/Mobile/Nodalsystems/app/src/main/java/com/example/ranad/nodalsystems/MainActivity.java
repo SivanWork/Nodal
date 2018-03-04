@@ -33,6 +33,7 @@ import com.example.ranad.nodalsystems.fragment.DiscountFragment;
 import com.example.ranad.nodalsystems.fragment.HomeFragment;
 import com.example.ranad.nodalsystems.fragment.OrderFragment;
 import com.example.ranad.nodalsystems.fragment.OrderTracking;
+import com.example.ranad.nodalsystems.fragment.OrderTrackingFragment;
 import com.example.ranad.nodalsystems.fragment.ProductFragment;
 import com.example.ranad.nodalsystems.fragment.ReportFragment;
 import com.example.ranad.nodalsystems.fragment.ReturnFragment;
@@ -298,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements SwitchFragment, S
                 fragment = new CustomerFragment();
                 break;
             case FRAGEMNT_ORDER_TRACKING:
-                fragment = new OrderTracking();
+                fragment = new OrderTrackingFragment();
                 break;
             case FRAGMENT_USER:
                 fragment = new UserFragment();

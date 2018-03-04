@@ -29,6 +29,7 @@ import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.adapter.OrderAdapter;
 import com.example.ranad.nodalsystems.data_holder.CustomerData;
+import com.example.ranad.nodalsystems.data_holder.OrderData;
 import com.example.ranad.nodalsystems.data_holder.ProductData;
 import com.example.ranad.nodalsystems.database.CartItem;
 import com.example.ranad.nodalsystems.database.CartItemDao;
@@ -703,6 +704,11 @@ if(response.body().getCustomerList().get(i).isIsActive()) {
         makeOrder(bulkOrder);
 
 
+    }
+
+    @Override
+    public ArrayList<OrderData> readAllOrders() {
+        return null;
     }
 
     public void refreshTotal() {

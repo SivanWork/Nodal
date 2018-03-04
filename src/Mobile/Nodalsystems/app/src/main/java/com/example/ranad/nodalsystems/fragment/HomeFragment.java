@@ -34,7 +34,6 @@ import static com.example.ranad.nodalsystems.usage.Constants.FRAGMENT_USER;
 
 public class HomeFragment extends Fragment {
     ProgressDialog progressDialog = null;
-
     GridView home_grid;
     View view;
     ArrayList<HomeGridElement> homeGridElements = new ArrayList<>();

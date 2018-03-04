@@ -19,6 +19,7 @@ import com.example.ranad.nodalsystems.App;
 import com.example.ranad.nodalsystems.MainActivity;
 import com.example.ranad.nodalsystems.R;
 import com.example.ranad.nodalsystems.adapter.TotalOrdersAdapter;
+import com.example.ranad.nodalsystems.data_holder.OrderData;
 import com.example.ranad.nodalsystems.database.OrderDetailDB;
 import com.example.ranad.nodalsystems.database.OrderDetailDBDao;
 import com.example.ranad.nodalsystems.database.Orders;
@@ -197,6 +198,11 @@ public class OrderViewFragment extends Fragment implements View.OnClickListener,
         makeOrder(bulkOrder);
 
 
+    }
+
+    @Override
+    public ArrayList<OrderData> readAllOrders() {
+        return null;
     }
 
     public String getCurrentDate() {

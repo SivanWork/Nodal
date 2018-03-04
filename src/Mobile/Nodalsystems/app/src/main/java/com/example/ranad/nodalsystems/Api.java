@@ -31,4 +31,7 @@ public class Api {
 
     public final static String GETALL_ELEMENT_TYPES = HOST + "/api/GroupElementCode/GetAllGroupElementCodes";
 
+
+    public final static String GETALL_ORDERS = HOST + "/api/Order/GetAllOrders";
+
 }
