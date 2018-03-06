@@ -32,7 +32,6 @@ import com.example.ranad.nodalsystems.fragment.CustomerFragment;
 import com.example.ranad.nodalsystems.fragment.DiscountFragment;
 import com.example.ranad.nodalsystems.fragment.HomeFragment;
 import com.example.ranad.nodalsystems.fragment.OrderFragment;
-import com.example.ranad.nodalsystems.fragment.OrderTracking;
 import com.example.ranad.nodalsystems.fragment.OrderTrackingFragment;
 import com.example.ranad.nodalsystems.fragment.ProductFragment;
 import com.example.ranad.nodalsystems.fragment.ReportFragment;

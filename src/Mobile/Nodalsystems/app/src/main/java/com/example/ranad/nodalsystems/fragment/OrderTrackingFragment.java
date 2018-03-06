@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.ranad.nodalsystems.MainActivity;
@@ -45,6 +46,7 @@ public class OrderTrackingFragment extends Fragment implements View.OnClickListe
     ProgressDialog progressDialog;
     RecyclerView order_list;
     OrderTrackingAdapter orderTrackingAdapter;
+    ImageButton filter;
 
     List<OrderData> ordersDataList;
     public ArrayList<OrderData> ordersList;
@@ -77,7 +79,8 @@ public class OrderTrackingFragment extends Fragment implements View.OnClickListe
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_order_tracking, container, false);
-
+        filter = (ImageButton) view.findViewById(R.id.filter);
+        filter.setOnClickListener(this);
 
         ordersDataList = readAllOrders();
         // ordersList.addAll(orderCart);
@@ -90,6 +93,7 @@ public class OrderTrackingFragment extends Fragment implements View.OnClickListe
         orderTrackingAdapter = new OrderTrackingAdapter(ordersDataList, getContext(), this);
         order_list.setAdapter(orderTrackingAdapter);
         orderTrackingAdapter.notifyDataSetChanged();
+
 
         return view;
     }
@@ -219,7 +223,12 @@ public class OrderTrackingFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-
+        switch (view.getId()){
+            case R.id.filter:
+                OrderTrackingFilter orderTrackingFilter = new OrderTrackingFilter();
+                orderTrackingFilter.show(getFragmentManager(), "filter dialog");
+                break;
+        }
     }
 
     @Override
